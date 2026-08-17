@@ -1,23 +1,45 @@
 {
   "name": "unicornial-ui",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.0.1",
+  "private": false,
   "type": "module",
+  "main": "./dist/unicornial-ui.umd.js",
+  "module": "./dist/unicornial-ui.es.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/unicornial-ui.es.js",
+      "require": "./dist/unicornial-ui.umd.js",
+      "types": "./dist/types/index.d.ts"
+    },
+    "./style.css": "./dist/unicornial-ui.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "vite build && tsc -b",
     "lint": "oxlint",
     "preview": "vite preview",
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check"
   },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
   "dependencies": {
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7"
   },
   "devDependencies": {
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
     "@babel/core": "^7.29.7",
     "@rolldown/plugin-babel": "^0.2.3",
+    "@tailwindcss/vite": "^4.0.0",
     "@types/babel__core": "^7.20.5",
     "@types/node": "^24.13.2",
     "@types/react": "^19.2.17",
@@ -26,6 +48,7 @@
     "babel-plugin-react-compiler": "^1.0.0",
     "oxfmt": "^0.60.0",
     "oxlint": "^1.71.0",
+    "tailwindcss": "^4.0.0",
     "typescript": "~6.0.2",
     "vite": "^8.1.1"
   }
