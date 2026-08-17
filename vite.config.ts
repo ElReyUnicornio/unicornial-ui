@@ -24,6 +24,7 @@ export default defineConfig(({ mode }) => {
         formats: ["es", "umd"],
         fileName: (format) => `unicornial-ui.${format}.js`,
       },
+      cssCodeSplit: false,
       rollupOptions: {
         external: ["react", "react-dom", /^react\/.*$/],
         output: {
@@ -32,6 +33,10 @@ export default defineConfig(({ mode }) => {
             "react-dom": "ReactDOM",
           },
           interop: "auto",
+          // Embed CSS as an inline <style> tag injection at the top of the JS
+          // (UMD) or as a constructable stylesheet + document.adoptedStyleSheets
+          // (ESM). Only works reliably when cssCodeSplit: false + single entry.
+          inlineDynamicImports: true,
         },
       },
       sourcemap: true,

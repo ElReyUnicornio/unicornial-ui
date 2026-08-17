@@ -14,7 +14,6 @@ pnpm add unicornial-ui
 
 ```tsx
 import { Button } from "unicornial-ui";
-import "unicornial-ui/style.css";
 
 function App() {
   return <Button variant="primary">Hola mundo</Button>;
