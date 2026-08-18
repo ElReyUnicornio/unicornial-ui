@@ -4,6 +4,20 @@ import babel from "@rolldown/plugin-babel";
 import tailwindcss from "@tailwindcss/vite";
 import { resolve } from "node:path";
 
+// Inline plugin: prepends a relative CSS import at the very top of the ESM
+// output so bundlers auto-include styles without users importing them manually.
+function autoImportCssPlugin() {
+  const CSS_FILENAME = "unicornial-ui.css";
+  return {
+    name: "auto-import-css",
+    /** @param {{ format: string }} opts */
+    renderChunk(code, _chunk, opts) {
+      if (opts.format !== "es") return null;
+      return `import "./${CSS_FILENAME}";\n${code}`;
+    },
+  };
+}
+
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   const isDev = mode === "development";
@@ -15,6 +29,7 @@ export default defineConfig(({ mode }) => {
       // break ESM library consumers (Rolldown runtime error).
       isDev ? babel({ presets: [reactCompilerPreset()] }) : [],
       tailwindcss(),
+      autoImportCssPlugin(),
     ],
     publicDir: false,
     build: {
@@ -33,10 +48,6 @@ export default defineConfig(({ mode }) => {
             "react-dom": "ReactDOM",
           },
           interop: "auto",
-          // Embed CSS as an inline <style> tag injection at the top of the JS
-          // (UMD) or as a constructable stylesheet + document.adoptedStyleSheets
-          // (ESM). Only works reliably when cssCodeSplit: false + single entry.
-          inlineDynamicImports: true,
         },
       },
       sourcemap: true,
