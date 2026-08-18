@@ -10,8 +10,11 @@ function autoImportCssPlugin() {
   const CSS_FILENAME = "unicornial-ui.css";
   return {
     name: "auto-import-css",
-    /** @param {{ format: string }} opts */
-    renderChunk(code, _chunk, opts) {
+    renderChunk(
+      code: string,
+      _chunk: { fileName: string; modules: Record<string, unknown> },
+      opts: { format: string },
+    ): string | null {
       if (opts.format !== "es") return null;
       return `import "./${CSS_FILENAME}";\n${code}`;
     },
