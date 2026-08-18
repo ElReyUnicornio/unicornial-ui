@@ -3,6 +3,8 @@
   "version": "0.0.4",
   "private": false,
   "type": "module",
+  "style": "./dist/unicornial-ui.css",
+  "css": "./dist/unicornial-ui.css",
   "main": "./dist/unicornial-ui.umd.js",
   "module": "./dist/unicornial-ui.es.js",
   "types": "./dist/types/index.d.ts",
@@ -16,6 +18,12 @@
   },
   "files": [
     "dist"
+  ],
+  "sideEffects": [
+    "**/*.css",
+    "**/*.js",
+    "./dist/unicornial-ui.es.js",
+    "./dist/**/*.css"
   ],
   "sideEffects": [
     "./dist/**/*.css",
