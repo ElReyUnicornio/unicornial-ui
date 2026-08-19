@@ -1,11 +1,21 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { Button } from "./components/Button";
+import Header from "./components/Header";
 import "./index.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <div className="min-h-screen bg-bg flex flex-col items-center justify-center gap-6 p-8">
+    <div>
+      <Header behaviour="blur">
+        <Header.Logo src="/logo.svg" alt="Logo" />
+        <nav className="flex items-center gap-2">
+          <Header.NavButton href="/">Inicio</Header.NavButton>
+          <Header.NavButton href="/docs">Docs</Header.NavButton>
+          <Header.NavButton href="/contacto">Contacto</Header.NavButton>
+        </nav>
+      </Header>
+      <div className="min-h-screen bg-black flex flex-col items-center justify-center gap-6">
       <h1 className="text-4xl font-heading font-bold text-text-h">
         Unicornial UI
       </h1>
@@ -42,6 +52,7 @@ createRoot(document.getElementById("root")!).render(
           Disabled
         </Button>
       </div>
+    </div>
     </div>
   </StrictMode>,
 );
