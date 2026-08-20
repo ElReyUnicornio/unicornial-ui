@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { Button } from "./components/Button";
 import Header from "./components/Header";
 import "./index.css";
+import Background from "./components/Background";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -15,7 +16,7 @@ createRoot(document.getElementById("root")!).render(
           <Header.NavButton href="/contacto">Contacto</Header.NavButton>
         </nav>
       </Header>
-      <div className="min-h-screen bg-black flex flex-col items-center justify-center gap-6">
+      <Background className="min-h-screen flex flex-col items-center justify-center gap-6" color="rgba(0,0,0,0.2)" variant="dots-grid">
       <h1 className="text-4xl font-heading font-bold text-text-h">
         Unicornial UI
       </h1>
@@ -52,7 +53,7 @@ createRoot(document.getElementById("root")!).render(
           Disabled
         </Button>
       </div>
-    </div>
+    </Background>
     </div>
   </StrictMode>,
 );
