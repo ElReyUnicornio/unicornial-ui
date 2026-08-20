@@ -1,0 +1,12 @@
+{
+  "colors": {
+    "primary": "#aa3bff",
+    "secondary": "#f4f3ec"
+  },
+  "darkMode": false,
+  "text": {
+    "title": "text-3xl font-bold text-text-h",
+    "subtitle": "text-xl font-semibold text-text-h",
+    "normal": "text-base font-normal text-text"
+  }
+}

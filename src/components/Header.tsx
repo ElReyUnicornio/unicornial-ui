@@ -5,7 +5,9 @@ import {
   useEffect,
   useState,
   forwardRef,
+  useMemo,
 } from "react";
+import { useTheme } from "../theme/ThemeProvider";
 
 type Behaviour = "default" | "sticky" | "blur";
 
@@ -24,10 +26,27 @@ const behaviourContainerClasses: Record<Behaviour, string> = {
   blur: "sticky top-0 z-50 transition-all duration-300",
 };
 
+function hexToRgba(hex: string, alpha: number): string {
+  const cleaned = hex.replace("#", "");
+  const full =
+    cleaned.length === 3
+      ? cleaned
+          .split("")
+          .map((c) => c + c)
+          .join("")
+      : cleaned;
+  const num = parseInt(full, 16);
+  const r = (num >> 16) & 0xff;
+  const g = (num >> 8) & 0xff;
+  const b = num & 0xff;
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
 export const Header = forwardRef<HTMLElement, HeaderProps>(function Header(
-  { behaviour = "default", className = "", children, ...props },
+  { behaviour = "default", className = "", style, children, ...props },
   ref,
 ) {
+  const theme = useTheme();
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -52,6 +71,31 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header(
           ? "bg-bg border-b border-border"
           : "bg-bg border-b border-border";
 
+  const themeStyle = useMemo<React.CSSProperties | undefined>(() => {
+    if (!theme.enabled) return undefined;
+    const bg = theme.darkMode ? "#0b0912" : "#ffffff";
+    const border = theme.darkMode ? "#2a2535" : "#e5e4e7";
+    const blurBg = hexToRgba(theme.darkMode ? "#0b0912" : "#ffffff", 0.7);
+    const shadow = scrolled
+      ? "rgba(0, 0, 0, 0.1) 0 4px 12px -2px"
+      : undefined;
+
+    if (behaviour === "blur" && scrolled) {
+      return {
+        backgroundColor: blurBg,
+        borderBottom: `1px solid ${border}`,
+        boxShadow: shadow,
+        color: theme.darkMode ? "#e8e4f0" : "#08060d",
+      };
+    }
+    return {
+      backgroundColor: bg,
+      borderBottom:
+        behaviour !== "default" ? `1px solid ${border}` : undefined,
+      color: theme.darkMode ? "#e8e4f0" : "#08060d",
+    };
+  }, [theme, behaviour, scrolled]);
+
   return (
     <header
       ref={ref}
@@ -61,6 +105,7 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header(
         blurClasses,
         className,
       ].join(" ")}
+      style={{ ...themeStyle, ...style }}
       {...props}
     >
       {children}
@@ -87,19 +132,44 @@ export const HeaderLogo = forwardRef<HTMLImageElement, HeaderLogoProps>(
 export const HeaderNavButton = forwardRef<
   HTMLAnchorElement,
   HeaderNavButtonProps
->(function HeaderNavButton({ className = "", children, ...props }, ref) {
+>(function HeaderNavButton(
+  { className = "", style, children, ...props },
+  ref,
+) {
+  const theme = useTheme();
+
+  const themeStyle = useMemo<React.CSSProperties | undefined>(() => {
+    if (!theme.enabled) return undefined;
+    const ringColor = hexToRgba(theme.colors.primary, 0.5);
+    return {
+      color: theme.darkMode ? "#e8e4f0" : "#08060d",
+      ["--tw-ring-color" as any]: ringColor,
+      ["--hover-color" as any]: theme.colors.primary,
+    };
+  }, [theme]);
+
+  const themeHoverClass = theme.enabled ? "hover:text-[var(--hover-color)]" : "";
+
+  const originalClass = theme.enabled ? "" : "text-text-h hover:text-accent";
+  const originalRing = theme.enabled
+    ? ""
+    : "focus-visible:ring-accent/50";
+
   return (
     <a
       ref={ref}
       className={[
         "inline-flex items-center justify-center",
         "px-3 py-2 text-sm font-medium",
-        "text-text-h hover:text-accent",
+        originalClass,
+        themeHoverClass,
         "transition-colors duration-200 ease-in-out",
-        "focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-2 rounded-md",
+        "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-md",
+        originalRing,
         "select-none",
         className,
       ].join(" ")}
+      style={{ ...themeStyle, ...style }}
       {...props}
     >
       {children}
