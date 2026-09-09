@@ -7,10 +7,11 @@ import Background from "./components/Background";
 import Separator from "./components/Separator";
 import { ThemeProvider } from "./theme/ThemeProvider";
 import themeConfig from "./theme/theme.config.json";
+import { Input } from "./components/Input";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ThemeProvider config={{...themeConfig, darkMode: true}}>
+    <ThemeProvider config={{...themeConfig}}>
       <div>
       <Header behaviour="blur">
         <Header.Logo src="/logo.svg" alt="Logo" />
@@ -60,6 +61,9 @@ createRoot(document.getElementById("root")!).render(
       </div>
       </div>
       <Separator className="max-w-11/12" thickness={2} spacing={75}/>
+      <div className="flex flex-wrap gap-2 justify-center items-center">
+        <Input placeholder="Enter your email" />
+      </div>
     </Background>
     </div>
     </ThemeProvider>
