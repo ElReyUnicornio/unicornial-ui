@@ -3,13 +3,21 @@
     "primary": "#aa3bff",
     "secondary": "#f4f3ec",
     "text": "#000000",
-    "background": "#ffffff"
+    "background": "#ffffff",
+    "header": {
+      "background": "#ffffff",
+      "border": "#e5e4e7"
+    }
   },
   "darkColors": {
     "primary": "#aa3bff",
     "secondary": "#f4f3ec",
     "text": "#ffffff",
-    "background": "#0b0912"
+    "background": "#0b0912",
+    "header": {
+      "background": "#0b0912",
+      "border": "#2a2535"
+    }
   },
   "darkMode": false,
   "text": {

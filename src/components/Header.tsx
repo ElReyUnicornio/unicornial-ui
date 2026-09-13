@@ -8,11 +8,15 @@ import {
   useMemo,
 } from "react";
 import { useTheme } from "../theme/ThemeProvider";
+import { hexToRgba } from "../utils/utils";
 
-type Behaviour = "default" | "sticky" | "blur";
+//types -----------------------------------------------------------------------------
+type Behaviour = "default" | "sticky" | "hide";
+type Variant = "default" | "blur";
 
 export interface HeaderProps extends HTMLAttributes<HTMLElement> {
   behaviour?: Behaviour;
+  variant?: Variant;
 }
 
 export interface HeaderLogoProps extends ImgHTMLAttributes<HTMLImageElement> {}
@@ -20,40 +24,32 @@ export interface HeaderLogoProps extends ImgHTMLAttributes<HTMLImageElement> {}
 export interface HeaderNavButtonProps
   extends AnchorHTMLAttributes<HTMLAnchorElement> {}
 
+//Header container -----------------------------------------------------------------------------
+
 const behaviourContainerClasses: Record<Behaviour, string> = {
   default: "",
   sticky: "sticky top-0 z-50",
-  blur: "sticky top-0 z-50 transition-all duration-300",
+  hide: "transition-transform duration-300 absolute top-0 left-0",
 };
 
-function hexToRgba(hex: string, alpha: number): string {
-  const cleaned = hex.replace("#", "");
-  const full =
-    cleaned.length === 3
-      ? cleaned
-          .split("")
-          .map((c) => c + c)
-          .join("")
-      : cleaned;
-  const num = parseInt(full, 16);
-  const r = (num >> 16) & 0xff;
-  const g = (num >> 8) & 0xff;
-  const b = num & 0xff;
-  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-}
+const headerVariantClasses: Record<Variant, string> = {
+  default: "",
+  blur: "bg-white/10 backdrop-blur-sm",
+};
 
 export const Header = forwardRef<HTMLElement, HeaderProps>(function Header(
-  { behaviour = "default", className = "", style, children, ...props },
+  { behaviour = "default", className = "", style, children, variant = "default", ...props },
   ref,
 ) {
   const theme = useTheme();
   const [scrolled, setScrolled] = useState(false);
-
+  const translateY = behaviour === "hide" && scrolled ? "-100%" : "0";
+  //scroll event
   useEffect(() => {
-    if (behaviour !== "blur") return;
+    if (behaviour !== "hide") return;
 
     const handleScroll = () => {
-      setScrolled(window.scrollY > 0);
+      setScrolled(window.scrollY > 10);
     };
 
     handleScroll();
@@ -62,39 +58,18 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header(
     return () => window.removeEventListener("scroll", handleScroll);
   }, [behaviour]);
 
-  const blurClasses =
-    behaviour === "blur" && scrolled
-      ? "backdrop-blur-md bg-bg/70 border-b border-border shadow"
-      : behaviour === "blur"
-        ? "bg-bg"
-        : behaviour === "sticky"
-          ? "bg-bg border-b border-border"
-          : "bg-bg border-b border-border";
-
+  //get theme
   const themeStyle = useMemo<React.CSSProperties | undefined>(() => {
     if (!theme.enabled) return undefined;
-    const bg = theme.darkMode ? "#0b0912" : "#ffffff";
-    const border = theme.darkMode ? "#2a2535" : "#e5e4e7";
-    const blurBg = hexToRgba(theme.darkMode ? "#0b0912" : "#ffffff", 0.7);
-    const shadow = scrolled
-      ? "rgba(0, 0, 0, 0.1) 0 4px 12px -2px"
-      : undefined;
+    const bg = theme.darkMode ? theme.darkColors.header.background : theme.colors.header.background;
+    const border = theme.darkMode ? theme.darkColors.header.border : theme.colors.header.border;
 
-    if (behaviour === "blur" && scrolled) {
-      return {
-        backgroundColor: blurBg,
-        borderBottom: `1px solid ${border}`,
-        boxShadow: shadow,
-        color: theme.darkMode ? "#e8e4f0" : "#08060d",
-      };
-    }
     return {
       backgroundColor: bg,
-      borderBottom:
-        behaviour !== "default" ? `1px solid ${border}` : undefined,
-      color: theme.darkMode ? "#e8e4f0" : "#08060d",
+      borderBottom: `1px solid ${border}`,
+      color: theme.darkMode ? theme.darkColors.text : theme.colors.text,
     };
-  }, [theme, behaviour, scrolled]);
+  }, [theme]);
 
   return (
     <header
@@ -102,10 +77,10 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header(
       className={[
         "w-full px-6 py-4 flex items-center justify-between",
         behaviourContainerClasses[behaviour],
-        blurClasses,
+        headerVariantClasses[variant],
         className,
       ].join(" ")}
-      style={{ ...themeStyle, ...style }}
+      style={{ ...themeStyle, ...style, transform: `translateY(${translateY})` }}
       {...props}
     >
       {children}

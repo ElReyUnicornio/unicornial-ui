@@ -1,3 +1,5 @@
+// Deep merge two objects, handling nested objects and arrays.
+// If a property is undefined in the overrides, it is not merged.
 export const deepMerge = <T extends object>(base: T, overrides: Partial<T>): T => {
   const result: any = { ...base };
   for (const key of Object.keys(overrides) as (keyof T)[]) {

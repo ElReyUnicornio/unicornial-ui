@@ -5,6 +5,10 @@ export interface ThemeColors {
   secondary: string;
   text: string;
   background: string;
+  header: {
+    background: string;
+    border: string;
+  }
 }
 
 export interface ThemeTextClasses {
