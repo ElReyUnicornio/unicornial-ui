@@ -10,9 +10,6 @@ export {
   ThemeProvider,
   useTheme,
   themeConfig,
-  type ThemeConfig,
-  type ThemeColors,
-  type ThemeTextClasses,
-  type ThemeContextValue,
 } from "./theme/ThemeProvider";
+
 

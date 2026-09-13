@@ -1,12 +1,22 @@
 {
   "colors": {
     "primary": "#aa3bff",
-    "secondary": "#f4f3ec"
+    "secondary": "#f4f3ec",
+    "text": "#000000",
+    "background": "#ffffff"
+  },
+  "darkColors": {
+    "primary": "#aa3bff",
+    "secondary": "#f4f3ec",
+    "text": "#ffffff",
+    "background": "#0b0912"
   },
   "darkMode": false,
   "text": {
     "title": "text-3xl font-bold text-text-h",
     "subtitle": "text-xl font-semibold text-text-h",
-    "normal": "text-base font-normal text-text"
+    "normal": "text-base font-normal text-text",
+    "color": "text-text",
+    "darkColor": "text-text-d"
   }
 }

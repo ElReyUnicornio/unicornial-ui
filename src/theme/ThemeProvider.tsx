@@ -1,78 +1,35 @@
 import {
   createContext,
   useContext,
-  type ReactNode,
   useMemo,
   useState,
   useCallback,
   useEffect,
 } from "react";
 import defaultConfig from "./theme.config.json";
-
-export interface ThemeColors {
-  primary: string;
-  secondary: string;
-}
-
-export interface ThemeTextClasses {
-  title: string;
-  subtitle: string;
-  normal: string;
-}
-
-export interface ThemeConfig {
-  colors: ThemeColors;
-  darkMode: boolean;
-  text: ThemeTextClasses;
-}
-
-export interface ThemeContextValue extends ThemeConfig {
-  enabled: boolean;
-  setColors: (colors: Partial<ThemeColors>) => void;
-  setDarkMode: (enabled: boolean) => void;
-  setText: (text: Partial<ThemeTextClasses>) => void;
-  setTheme: (config: Partial<ThemeConfig>) => void;
-}
+import type { ThemeConfig, ThemeContextValue, ThemeColors, ThemeTextClasses, ThemeProviderProps } from "./types";
+import { deepMerge } from "../utils/typeUtils";
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
-
-export interface ThemeProviderProps {
-  children: ReactNode;
-  config?: Partial<ThemeConfig>;
-}
-
-const deepMerge = <T extends object>(base: T, overrides: Partial<T>): T => {
-  const result: any = { ...base };
-  for (const key of Object.keys(overrides) as (keyof T)[]) {
-    const value = overrides[key];
-    if (
-      value &&
-      typeof value === "object" &&
-      !Array.isArray(value) &&
-      base[key] &&
-      typeof base[key] === "object" &&
-      !Array.isArray(base[key])
-    ) {
-      result[key] = deepMerge(base[key] as any, value as any);
-    } else if (value !== undefined) {
-      result[key] = value;
-    }
-  }
-  return result as T;
-};
 
 export function ThemeProvider({ children, config }: ThemeProviderProps) {
   const mergedInitial = useMemo(
     () => deepMerge(defaultConfig as ThemeConfig, config ?? {}),
     [config],
-  );
+  ); 
 
   const [colors, setColorsState] = useState<ThemeColors>(mergedInitial.colors);
+  const [darkColors, setDarkColorsState] = useState<ThemeColors>(mergedInitial.darkColors);
+
   const [darkMode, setDarkModeState] = useState<boolean>(mergedInitial.darkMode);
   const [text, setTextState] = useState<ThemeTextClasses>(mergedInitial.text);
 
   const setColors = useCallback((partial: Partial<ThemeColors>) => {
     setColorsState((prev) => ({ ...prev, ...partial }));
+  }, []);
+
+  const setDarkColors = useCallback((partial: Partial<ThemeColors>) => {
+    setDarkColorsState((prev) => ({ ...prev, ...partial }));
   }, []);
 
   const setDarkMode = useCallback((enabled: boolean) => {
@@ -85,6 +42,7 @@ export function ThemeProvider({ children, config }: ThemeProviderProps) {
 
   const setTheme = useCallback((partial: Partial<ThemeConfig>) => {
     if (partial.colors) setColorsState((prev) => ({ ...prev, ...partial.colors! }));
+    if (partial.darkColors) setDarkColorsState((prev) => ({ ...prev, ...partial.darkColors! }));
     if (partial.darkMode !== undefined) setDarkModeState(partial.darkMode);
     if (partial.text) setTextState((prev) => ({ ...prev, ...partial.text! }));
   }, []);
@@ -97,17 +55,19 @@ export function ThemeProvider({ children, config }: ThemeProviderProps) {
     } else {
       root.classList.remove("dark");
     }
-    root.style.setProperty("--theme-primary", colors.primary);
-    root.style.setProperty("--theme-secondary", colors.secondary);
+    root.style.setProperty("--theme-primary", darkMode ? darkColors.primary : colors.primary);
+    root.style.setProperty("--theme-secondary", darkMode ? darkColors.secondary : colors.secondary);
   }, [colors, darkMode]);
 
   const value = useMemo<ThemeContextValue>(
     () => ({
       enabled: true,
       colors,
+      darkColors,
       darkMode,
       text,
       setColors,
+      setDarkColors,
       setDarkMode,
       setText,
       setTheme,
@@ -126,12 +86,14 @@ export function useTheme(): ThemeContextValue {
     return {
       enabled: false,
       colors: defaultConfig.colors as ThemeColors,
+      darkColors: defaultConfig.darkColors as ThemeColors,
       darkMode: defaultConfig.darkMode,
       text: defaultConfig.text as ThemeTextClasses,
       setColors: () => {},
       setDarkMode: () => {},
       setText: () => {},
       setTheme: () => {},
+      setDarkColors: () => {},
     };
   }
   return ctx;
