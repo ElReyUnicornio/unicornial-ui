@@ -19,7 +19,9 @@ export interface HeaderProps extends HTMLAttributes<HTMLElement> {
   variant?: Variant;
 }
 
-export interface HeaderLogoProps extends ImgHTMLAttributes<HTMLImageElement> {}
+export interface HeaderLogoProps extends ImgHTMLAttributes<HTMLImageElement> {
+  darkSrc?: string;
+}
 
 export interface HeaderNavButtonProps
   extends AnchorHTMLAttributes<HTMLAnchorElement> {}
@@ -75,7 +77,7 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header(
     <header
       ref={ref}
       className={[
-        "w-full px-6 py-4 flex items-center justify-between",
+        "w-full h-16 px-12 py-2 flex items-center justify-between shadow-sm shadow-black/50",
         behaviourContainerClasses[behaviour],
         headerVariantClasses[variant],
         className,
@@ -89,15 +91,20 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header(
 });
 
 export const HeaderLogo = forwardRef<HTMLImageElement, HeaderLogoProps>(
-  function HeaderLogo({ className = "", style, alt = "", ...props }, ref) {
+  function HeaderLogo({ className = "", style, alt = "", darkSrc, ...props }, ref) {
+    const theme = useTheme();
+
+    const src = theme.darkMode && darkSrc ? darkSrc : props.src;
+
     return (
       <div className="h-full flex items-center justify-center shrink-0">
         <img
           ref={ref}
           alt={alt}
-          className="h-full max-h-[48px] w-auto object-contain"
+          className="h-full max-h-12 w-auto object-contain"
           style={{ aspectRatio: "auto", ...style }}
           {...props}
+          src={src}
         />
       </div>
     );

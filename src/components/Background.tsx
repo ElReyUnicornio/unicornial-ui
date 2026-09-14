@@ -1,12 +1,14 @@
 import { type HTMLAttributes, forwardRef, useMemo } from "react";
 import { useTheme } from "../theme/ThemeProvider";
+import { hexToRgba, rgbaToString } from "../utils/utils";
 
+// types ----------------------------------------------------------------------------------------------
 type Variant =
   | "dots-grid"
-  | "isometric-dot-paper"
-  | "paper"
-  | "diamond-grid"
-  | "paper-45"
+  | "dots-isometric"
+  | "grid"
+  | "diamond"
+  | "grid-45"
   | "lines"
   | "falling-stars";
 
@@ -16,22 +18,7 @@ export interface BackgroundProps extends HTMLAttributes<HTMLDivElement> {
   size?: number;
 }
 
-function hexToRgba(hex: string, alpha: number): string {
-  const cleaned = hex.replace("#", "");
-  const full =
-    cleaned.length === 3
-      ? cleaned
-          .split("")
-          .map((c) => c + c)
-          .join("")
-      : cleaned;
-  const num = parseInt(full, 16);
-  const r = (num >> 16) & 0xff;
-  const g = (num >> 8) & 0xff;
-  const b = num & 0xff;
-  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-}
-
+// styles ----------------------------------------------------------------------------------------------
 const variantStyles: Record<
   Variant,
   (color: string, size: number) => React.CSSProperties
@@ -40,22 +27,64 @@ const variantStyles: Record<
     backgroundImage: `radial-gradient(${c} 1px, transparent 1px)`,
     backgroundSize: `${s}px ${s}px`,
   }),
-  "isometric-dot-paper": (c, s) => ({
-    backgroundImage: `radial-gradient(${c} 1px, transparent 1px)`,
-    backgroundSize: `${s}px ${s * 1.732}px`,
-    backgroundPosition: `0 0, ${s / 2}px ${(s * 1.732) / 2}px`,
+  "dots-isometric": (c, s) => ({
+  backgroundImage: `
+    radial-gradient(circle, ${c} 1px, transparent 1px),
+    radial-gradient(circle, ${c} 1px, transparent 1px)
+  `,
+  backgroundSize: `${s}px ${s * 0.866}px`,
+  backgroundPosition: `
+    0 0,
+    ${s / 2}px ${s * 0.433}px
+  `,
   }),
-  paper: (c, s) => ({
+  grid: (c, s) => ({
     backgroundImage: `linear-gradient(${c} 1px, transparent 1px), linear-gradient(90deg, ${c} 1px, transparent 1px)`,
     backgroundSize: `${s}px ${s}px`,
   }),
-  "diamond-grid": (c, s) => ({
-    backgroundImage: `linear-gradient(45deg, ${c} 1px, transparent 1px), linear-gradient(-45deg, ${c} 1px, transparent 1px)`,
-    backgroundSize: `${s}px ${s}px`,
-  }),
-  "paper-45": (c, s) => ({
-    backgroundImage: `linear-gradient(45deg, ${c} 1px, transparent 1px), linear-gradient(-45deg, ${c} 1px, transparent 1px)`,
-    backgroundSize: `${s}px ${s}px`,
+  "diamond": (c, s) => {
+  const diamondSize = 2.2;
+
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg"
+         width="${s}"
+         height="${s * 0.866}"
+         viewBox="0 0 ${s} ${s * 0.866}">
+      <polygon
+        points="
+          ${s / 2},0
+          ${s / 2 + diamondSize},${diamondSize}
+          ${s / 2},${diamondSize * 2}
+          ${s / 2 - diamondSize},${diamondSize}
+        "
+        fill="${c}"
+      />
+    </svg>
+  `;
+
+  return {
+    backgroundImage: `url("data:image/svg+xml,${encodeURIComponent(svg)}")`,
+    backgroundSize: `${s}px ${s * 0.866}px`,
+  };
+},
+  "grid-45": (c, s) => ({
+    backgroundImage: `
+    linear-gradient(
+      45deg,
+      transparent 49%,
+      ${c} 49%,
+      ${c} 51%,
+      transparent 51%
+    ),
+    linear-gradient(
+      -45deg,
+      transparent 49%,
+      ${c} 49%,
+      ${c} 51%,
+      transparent 51%
+    )
+  `,
+  backgroundSize: `${s}px ${s}px`,
   }),
   lines: (c, s) => ({
     backgroundImage: `linear-gradient(${c} 1px, transparent 1px)`,
@@ -74,6 +103,7 @@ const variantStyles: Record<
   }),
 };
 
+// component ----------------------------------------------------------------------------------------------
 export const Background = forwardRef<HTMLDivElement, BackgroundProps>(
   function Background(
     {
@@ -91,7 +121,7 @@ export const Background = forwardRef<HTMLDivElement, BackgroundProps>(
 
     const resolvedColor = useMemo(() => {
       if (color) return color;
-      if (theme.enabled) return hexToRgba(theme.colors.primary, 0.25);
+      if (theme.enabled) return rgbaToString(hexToRgba(theme.colors.primary, 0.25));
       return "rgba(170, 59, 255, 0.25)";
     }, [color, theme]);
 
