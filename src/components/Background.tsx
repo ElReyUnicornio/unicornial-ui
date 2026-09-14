@@ -9,11 +9,13 @@ type Variant =
   | "grid"
   | "diamond"
   | "grid-45"
-  | "lines"
-  | "falling-stars";
+  | "lines";
+
+  type Mask = "fade-in" | "fade-out" | "none";
 
 export interface BackgroundProps extends HTMLAttributes<HTMLDivElement> {
   variant?: Variant;
+  mask?: Mask;
   color?: string;
   size?: number;
 }
@@ -90,16 +92,51 @@ const variantStyles: Record<
     backgroundImage: `linear-gradient(${c} 1px, transparent 1px)`,
     backgroundSize: `${s}px ${s}px`,
   }),
-  "falling-stars": (c, s) => ({
-    backgroundImage: `
-      radial-gradient(${c} 1px, transparent 1px),
-      radial-gradient(${c} 1px, transparent 1px),
-      radial-gradient(${c} 1.5px, transparent 1.5px),
-      radial-gradient(${c} 1px, transparent 1px)
+};
+
+const maskStyles: Record<Mask, () => React.CSSProperties> = {
+  "fade-in": () => ({
+    maskImage: `
+      radial-gradient(
+        ellipse at center,
+        rgba(0, 0, 0, 0.7) 0%,
+        rgba(0, 0, 0, 0) 75%
+      )
     `,
-    backgroundSize: `${s * 5}px ${s * 5}px, ${s * 3}px ${s * 3}px, ${s * 7}px ${s * 7}px, ${s * 4}px ${s * 4}px`,
-    backgroundPosition: `0 0, ${s}px ${s * 2}px, ${s * 3}px ${s}px, ${s * 2}px ${s * 4}px`,
-    animation: "falling-stars 20s linear infinite",
+    WebkitMaskImage: `
+      radial-gradient(
+        ellipse at center,
+        rgba(0, 0, 0, 0.7) 0%,
+        rgba(0, 0, 0, 0) 75%
+      )
+    `,
+    maskSize: "100% 100%",
+    WebkitMaskSize: "100% 100%",
+    maskRepeat: "no-repeat",
+    WebkitMaskRepeat: "no-repeat",
+  }),
+
+  "fade-out": () => ({
+    maskImage: `
+      radial-gradient(
+        ellipse at center,
+        rgba(0, 0, 0, 0) 40%,
+        rgba(0, 0, 0, 0.6) 100%
+      )
+    `,
+    WebkitMaskImage: `
+      radial-gradient(
+        ellipse at center,
+        rgba(0, 0, 0, 0) 40%,
+        rgba(0, 0, 0, 0.6) 100%
+      )
+    `,
+    maskSize: "100% 100%",
+    WebkitMaskSize: "100% 100%",
+    maskRepeat: "no-repeat",
+    WebkitMaskRepeat: "no-repeat",
+  }),
+  none: () => ({
   }),
 };
 
@@ -108,6 +145,7 @@ export const Background = forwardRef<HTMLDivElement, BackgroundProps>(
   function Background(
     {
       variant = "dots-grid",
+      mask = "none",
       color,
       size = 24,
       className = "",
@@ -126,8 +164,8 @@ export const Background = forwardRef<HTMLDivElement, BackgroundProps>(
     }, [color, theme]);
 
     const bgStyles = useMemo<React.CSSProperties>(
-      () => variantStyles[variant](resolvedColor, size),
-      [variant, resolvedColor, size],
+      () => ({...variantStyles[variant](resolvedColor, size), ...maskStyles[mask]()}),
+      [variant, mask, resolvedColor, size],
     );
 
     return (

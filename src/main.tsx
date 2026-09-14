@@ -11,7 +11,7 @@ import darkLogo from "./assets/darklogo.png";
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ThemeProvider config={{...themeConfig, darkMode: false}}>
-      <Background variant="grid-45" color="#00000055" className="min-h-screen">
+      <Background variant="diamond" size={40} color="#00000066" className="min-h-screen" mask="fade-in">
         <Header variant="default" behaviour="default">
           <Header.Logo src={logo} darkSrc={darkLogo} />
         </Header>
