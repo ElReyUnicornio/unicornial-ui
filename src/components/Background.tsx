@@ -26,7 +26,7 @@ const variantStyles: Record<
   (color: string, size: number) => React.CSSProperties
 > = {
   "dots-grid": (c, s) => ({
-    backgroundImage: `radial-gradient(${c} 1px, transparent 1px)`,
+    backgroundImage: `radial-gradient(${c} 1.5px, transparent 1.5px)`,
     backgroundSize: `${s}px ${s}px`,
   }),
   "dots-isometric": (c, s) => ({
@@ -41,7 +41,7 @@ const variantStyles: Record<
   `,
   }),
   grid: (c, s) => ({
-    backgroundImage: `linear-gradient(${c} 1px, transparent 1px), linear-gradient(90deg, ${c} 1px, transparent 1px)`,
+    backgroundImage: `linear-gradient(${c} 2px, transparent 2px), linear-gradient(90deg, ${c} 2px, transparent 2px)`,
     backgroundSize: `${s}px ${s}px`,
   }),
   "diamond": (c, s) => {
@@ -171,7 +171,7 @@ export const Background = forwardRef<HTMLDivElement, BackgroundProps>(
     return (
       <div
         ref={ref}
-        className={["w-full h-full relative overflow-hidden", className].join(
+        className={["w-full h-full relative overflow-hidden flex flex-col", className].join(
           " ",
         )}
         style={style}

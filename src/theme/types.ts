@@ -5,6 +5,7 @@ export interface ThemeColors {
   secondary: string;
   text: string;
   background: string;
+  border: string;
   header: {
     background: string;
     border: string;

@@ -4,6 +4,7 @@
     "secondary": "#f4f3ec",
     "text": "#000000",
     "background": "#ffffff",
+    "border": "#e5e4e7",
     "header": {
       "background": "#ffffff",
       "border": "#e5e4e7"
@@ -14,6 +15,7 @@
     "secondary": "#f4f3ec",
     "text": "#ffffff",
     "background": "#0b0912",
+    "border": "#2a2535",
     "header": {
       "background": "#0b0912",
       "border": "#2a2535"
