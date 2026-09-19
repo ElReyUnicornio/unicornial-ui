@@ -77,7 +77,7 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header(
     <header
       ref={ref}
       className={[
-        "w-full h-16 px-12 py-2 flex items-center justify-between shadow-sm shadow-black/50",
+        "w-full h-16 px-12 py-2 flex items-center justify-between shadow-md shadow-gray-500/25",
         behaviourContainerClasses[behaviour],
         headerVariantClasses[variant],
         className,
