@@ -22,4 +22,4 @@ const MobileOnly = ({ children }: MobilePortraitOnlyProps) => {
   return isMobilePortrait ? <>{children}</> : null;
 };
 
-export default MobileOnly;
+export { MobileOnly };

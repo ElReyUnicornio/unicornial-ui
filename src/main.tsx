@@ -8,8 +8,8 @@ import themeConfig from "./theme/theme.config.json";
 import logo from "./assets/logo.png";
 import darkLogo from "./assets/darklogo.png";
 import { Surface } from "./components/Surface";
-import MobileOnly from "./components/Mobile";
-import DesktopOnly from "./components/Desktop";
+import { MobileOnly } from "./components/Mobile";
+import { DesktopOnly } from "./components/Desktop";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

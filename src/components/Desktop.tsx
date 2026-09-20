@@ -23,4 +23,4 @@ const DesktopOnly = ({ children }: NonMobilePortraitOnlyProps) => {
   return isNonMobilePortrait ? <>{children}</> : null;
 };
 
-export default DesktopOnly;
+export { DesktopOnly };

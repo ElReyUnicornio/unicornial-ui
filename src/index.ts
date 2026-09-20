@@ -12,5 +12,7 @@ export {
   useTheme,
   themeConfig,
 } from "./theme/ThemeProvider";
+export {MobileOnly} from "./components/Mobile";
+export {DesktopOnly} from "./components/Desktop";
 
 
