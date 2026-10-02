@@ -14,5 +14,7 @@ export {
 } from "./theme/ThemeProvider";
 export {MobileOnly} from "./components/Mobile";
 export {DesktopOnly} from "./components/Desktop";
+export {Surface} from "./components/Surface";
+
 
 
