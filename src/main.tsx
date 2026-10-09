@@ -5,7 +5,8 @@ import Background from "./components/Background";
 import { ThemeProvider } from "./theme/ThemeProvider";
 import themeConfig from "./theme/theme.config.json";
 import { Surface } from "./components/Surface";
-import { Input } from "./components/Input";
+import { UnicornialInput } from "./components/UnicornialInput";
+import Validate from "./utils/validation";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -18,8 +19,8 @@ createRoot(document.getElementById("root")!).render(
         mask="fade-in"
       >
         <Surface className="w-96">
-          <Input placeholder="Enter text..." label="Username" />
-          <Input placeholder="Enter text..." label="Password" />
+          <UnicornialInput label="Username" validator={Validate.email()} />
+          <UnicornialInput label="Password" validator={Validate.min(6).onlyNumbers()} />
         </Surface>
       </Background>
     </ThemeProvider>

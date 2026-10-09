@@ -1,13 +1,12 @@
-import {
-  createContext,
-  useContext,
-  useMemo,
-  useState,
-  useCallback,
-  useEffect,
-} from "react";
+import { createContext, useContext, useMemo, useState, useCallback, useEffect } from "react";
 import defaultConfig from "./theme.config.json";
-import type { ThemeConfig, ThemeContextValue, ThemeColors, ThemeTextClasses, ThemeProviderProps } from "./types";
+import type {
+  ThemeConfig,
+  ThemeContextValue,
+  ThemeColors,
+  ThemeTextClasses,
+  ThemeProviderProps,
+} from "./types";
 import { deepMerge } from "../utils/typeUtils";
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
@@ -16,7 +15,7 @@ export function ThemeProvider({ children, config }: ThemeProviderProps) {
   const mergedInitial = useMemo(
     () => deepMerge(defaultConfig as ThemeConfig, config ?? {}),
     [config],
-  ); 
+  );
 
   const [colors, setColorsState] = useState<ThemeColors>(mergedInitial.colors);
   const [darkColors, setDarkColorsState] = useState<ThemeColors>(mergedInitial.darkColors);
@@ -57,7 +56,7 @@ export function ThemeProvider({ children, config }: ThemeProviderProps) {
     }
     root.style.setProperty("--theme-primary", darkMode ? darkColors.primary : colors.primary);
     root.style.setProperty("--theme-secondary", darkMode ? darkColors.secondary : colors.secondary);
-  }, [colors, darkMode]);
+  }, [colors, darkMode, darkColors]);
 
   const value = useMemo<ThemeContextValue>(
     () => ({
@@ -72,12 +71,10 @@ export function ThemeProvider({ children, config }: ThemeProviderProps) {
       setText,
       setTheme,
     }),
-    [colors, darkMode, text, setColors, setDarkMode, setText, setTheme],
+    [colors, darkMode, darkColors, text, setColors, setDarkMode, setDarkColors, setText, setTheme],
   );
 
-  return (
-    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
-  );
+  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 }
 
 export function useTheme(): ThemeContextValue {
