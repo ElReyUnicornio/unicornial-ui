@@ -31,9 +31,6 @@ export const UnicornialInput = forwardRef<HTMLInputElement, InputProps>(function
 
   const debouncedChangeHandler = useDebounce((event: React.ChangeEvent<HTMLInputElement>) => {
     validate(event.target.value);
-    if (name) {
-      setValues({ ...values, [name]: event.target.value });
-    }
     if (props.onChange) {
       props.onChange(event);
     }
@@ -41,7 +38,7 @@ export const UnicornialInput = forwardRef<HTMLInputElement, InputProps>(function
 
   const validate = (value: unknown) => {
     if (props.validator) {
-      const result = props.validator.validate(value);
+      const result = props.validator.validate(value, (v) => setValues({ ...values, [name!]: v }));
       if (!result.valid) {
         setMessage(result.message);
       } else {
@@ -57,6 +54,13 @@ export const UnicornialInput = forwardRef<HTMLInputElement, InputProps>(function
     }
   };
 
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (name) {
+      setValues({ ...values, [name]: event.target.value });
+    }
+    debouncedChangeHandler(event);
+  };
+
   return (
     <>
       <Input
@@ -66,7 +70,7 @@ export const UnicornialInput = forwardRef<HTMLInputElement, InputProps>(function
         value={name && ((values[name] as string) || "")}
         disabled={isSubmitting}
         {...props}
-        onChange={debouncedChangeHandler}
+        onChange={handleChange}
         onBlur={handleBlur}
       />
       {message && <p className="text-sm text-red-500 mt-1">{message}</p>}
