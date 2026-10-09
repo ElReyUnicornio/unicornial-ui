@@ -45,6 +45,10 @@ export class Validate {
     return new Validate().add(validators.truncate());
   }
 
+  static toFixed(n: number): Validate {
+    return new Validate().add(validators.toFixed(n));
+  }
+
   // Strings ---------------------------------------------------------------------------------------------------------
   static email(): Validate {
     return new Validate().email();
@@ -119,6 +123,10 @@ export class Validate {
 
   truncate(): this {
     return this.add(validators.truncate());
+  }
+
+  toFixed(n: number): this {
+    return this.add(validators.toFixed(n));
   }
 
   // Strings ---------------------------------------------------------------------------------------------------------

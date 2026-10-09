@@ -82,6 +82,15 @@ export const validators: Record<string, (...args: any[]) => Validator> = {
       const num = Number(value);
       return { valid: true, message: Math.trunc(num).toString() };
     },
+  toFixed:
+    (n: number) =>
+    (value: unknown): ValidationResult => {
+      if (isNaN(n)) {
+        throw new Error("El valor debe ser un número");
+      }
+      const num = Number(value);
+      return { valid: true, message: num.toFixed(n) };
+    },
   // Strings ---------------------------------------------------------------------------------------------------------
   email:
     (message: string) =>
