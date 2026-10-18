@@ -179,7 +179,7 @@ export const Background = forwardRef<HTMLDivElement, BackgroundProps>(
       >
         <div
           aria-hidden
-          className="absolute inset-0 -z-10 pointer-events-none"
+          className="fixed inset-0 -z-10 pointer-events-none"
           style={bgStyles}
         />
         {children}

@@ -21,10 +21,11 @@ export interface HeaderProps extends HTMLAttributes<HTMLElement> {
 
 export interface HeaderLogoProps extends ImgHTMLAttributes<HTMLImageElement> {
   darkSrc?: string;
+  alt?: string;
+  title?: string;
 }
 
-export interface HeaderNavButtonProps
-  extends AnchorHTMLAttributes<HTMLAnchorElement> {}
+export interface HeaderNavButtonProps extends AnchorHTMLAttributes<HTMLAnchorElement> {}
 
 //Header container -----------------------------------------------------------------------------
 
@@ -77,7 +78,7 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header(
     <header
       ref={ref}
       className={[
-        "w-full h-16 px-12 py-2 flex items-center justify-between shadow-md shadow-gray-500/25",
+        "w-full h-16 px-12 flex items-center gap-4 shadow-md shadow-gray-500/25 absolute top-0 left-0",
         behaviourContainerClasses[behaviour],
         headerVariantClasses[variant],
         className,
@@ -90,76 +91,74 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header(
   );
 });
 
-export const HeaderLogo = forwardRef<HTMLImageElement, HeaderLogoProps>(
-  function HeaderLogo({ className = "", style, alt = "", darkSrc, ...props }, ref) {
-    const theme = useTheme();
-
-    const src = theme.darkMode && darkSrc ? darkSrc : props.src;
-
-    return (
-      <div className="h-full flex items-center justify-center shrink-0">
-        <img
-          ref={ref}
-          alt={alt}
-          className="h-full max-h-12 w-auto object-contain"
-          style={{ aspectRatio: "auto", ...style }}
-          {...props}
-          src={src}
-        />
-      </div>
-    );
-  },
-);
-
-export const HeaderNavButton = forwardRef<
-  HTMLAnchorElement,
-  HeaderNavButtonProps
->(function HeaderNavButton(
-  { className = "", style, children, ...props },
+const HeaderLogo = forwardRef<HTMLImageElement, HeaderLogoProps>(function HeaderLogo(
+  { className = "", style, alt = "", title = "", darkSrc, ...props },
   ref,
 ) {
   const theme = useTheme();
 
-  const themeStyle = useMemo<React.CSSProperties | undefined>(() => {
-    if (!theme.enabled) return undefined;
-    const ringColor = hexToRgba(theme.colors.primary, 0.5);
-    return {
-      color: theme.darkMode ? "#e8e4f0" : "#08060d",
-      ["--tw-ring-color" as any]: ringColor,
-      ["--hover-color" as any]: theme.colors.primary,
-    };
-  }, [theme]);
-
-  const themeHoverClass = theme.enabled ? "hover:text-[var(--hover-color)]" : "";
-
-  const originalClass = theme.enabled ? "" : "text-text-h hover:text-accent";
-  const originalRing = theme.enabled
-    ? ""
-    : "focus-visible:ring-accent/50";
+  const src = theme.darkMode && darkSrc ? darkSrc : props.src;
 
   return (
-    <a
-      ref={ref}
-      className={[
-        "inline-flex items-center justify-center",
-        "px-3 py-2 text-sm font-medium",
-        originalClass,
-        themeHoverClass,
-        "transition-colors duration-200 ease-in-out",
-        "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-md",
-        originalRing,
-        "select-none",
-        className,
-      ].join(" ")}
-      style={{ ...themeStyle, ...style }}
-      {...props}
-    >
-      {children}
-    </a>
+    <div className="h-full flex items-center justify-center shrink-0">
+      {src && <img
+        ref={ref}
+        alt={alt}
+        className="h-full max-h-12 w-auto object-contain"
+        style={{ aspectRatio: "auto", ...style }}
+        {...props}
+        src={src}
+      />}
+      <h1 className="ml-2 text-lg font-bold" title={title}>
+        {title}
+      </h1>
+    </div>
   );
 });
 
-export const HeaderNamespace = Object.assign(Header, {
+const HeaderNavButton = forwardRef<HTMLAnchorElement, HeaderNavButtonProps>(
+  function HeaderNavButton({ className = "", style, children, ...props }, ref) {
+    const theme = useTheme();
+
+    const themeStyle = useMemo<React.CSSProperties | undefined>(() => {
+      if (!theme.enabled) return undefined;
+      const ringColor = hexToRgba(theme.colors.primary, 0.5);
+      return {
+        color: theme.darkMode ? "#e8e4f0" : "#08060d",
+        ["--tw-ring-color" as any]: ringColor,
+        ["--hover-color" as any]: theme.colors.primary,
+      };
+    }, [theme]);
+
+    const themeHoverClass = theme.enabled ? "hover:text-[var(--hover-color)]" : "";
+
+    const originalClass = theme.enabled ? "" : "text-text-h hover:text-accent";
+    const originalRing = theme.enabled ? "" : "focus-visible:ring-accent/50";
+
+    return (
+      <a
+        ref={ref}
+        className={[
+          "inline-flex items-center justify-center",
+          "px-3 py-2 text-sm font-medium",
+          originalClass,
+          themeHoverClass,
+          "transition-colors duration-200 ease-in-out",
+          "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-md",
+          originalRing,
+          "select-none",
+          className,
+        ].join(" ")}
+        style={{ ...themeStyle, ...style }}
+        {...props}
+      >
+        {children}
+      </a>
+    );
+  },
+);
+
+const HeaderNamespace = Object.assign(Header, {
   Logo: HeaderLogo,
   NavButton: HeaderNavButton,
 });
