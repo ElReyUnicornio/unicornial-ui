@@ -4,6 +4,7 @@ import { Input } from "./Input";
 import { useDebounce } from "../hooks/useDebounce";
 import React from "react";
 import { useForm } from "./Form";
+import Alert from "./Alert";
 
 type Variant = "default" | "filled" | "underline";
 
@@ -62,7 +63,7 @@ export const UnicornialInput = forwardRef<HTMLInputElement, InputProps>(function
   };
 
   return (
-    <>
+    <div>
       <Input
         variant={variant}
         label={label}
@@ -73,7 +74,11 @@ export const UnicornialInput = forwardRef<HTMLInputElement, InputProps>(function
         onChange={handleChange}
         onBlur={handleBlur}
       />
-      {message && <p className="text-sm text-red-500 mt-1">{message}</p>}
-    </>
+      {message && (
+        <Alert variant="error" className="mt-2">
+          {message}
+        </Alert>
+      )}
+    </div>
   );
 });

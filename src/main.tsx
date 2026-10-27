@@ -10,6 +10,10 @@ import Validate from "./utils/validation";
 import { Form } from "./components/Form";
 import Tabs from "./components/Tab";
 import Header from "./components/Header";
+import { Alert } from "./components/Alert";
+import { Modal } from "./components/Modal";
+import { Button } from "./components/Button";
+import { instantiate } from "./utils/portal";
 import Logo from "./assets/logo.png";
 
 createRoot(document.getElementById("root")!).render(
@@ -43,6 +47,27 @@ function Main() {
             <Tabs.Item>Register</Tabs.Item>
           </Tabs>
         </Header>
+        <div className="flex flex-col gap-2 mb-4">
+          <Alert variant="info">This is an informational message.</Alert>
+          <Alert variant="warning">This is a warning message.</Alert>
+          <Alert variant="error">This is an error message.</Alert>
+        </div>
+        <Button
+          type="button"
+          className="mb-4"
+          onClick={() =>
+            instantiate(({ close }) => (
+              <Modal title="Hello from the portal" onClose={close}>
+                <p className="mb-4">This modal was created with instantiate().</p>
+                <Button type="button" onClick={close}>
+                  Close
+                </Button>
+              </Modal>
+            ))
+          }
+        >
+          Open modal
+        </Button>
         <Form
           initialValues={{ username: "", password: "" }}
           onSubmit={(values, hasErrors) => {

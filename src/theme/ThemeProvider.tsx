@@ -1,5 +1,7 @@
 import { createContext, useContext, useMemo, useState, useCallback, useEffect } from "react";
+import { createPortal } from "react-dom";
 import defaultConfig from "./theme.config.json";
+import { PortalHost } from "../utils/portal";
 import type {
   ThemeConfig,
   ThemeContextValue,
@@ -9,7 +11,9 @@ import type {
 } from "./types";
 import { deepMerge } from "../utils/typeUtils";
 
-const ThemeContext = createContext<ThemeContextValue | null>(null);
+const PORTAL_ID = "unicornial-portal";
+
+const ThemeContext =createContext<ThemeContextValue | null>(null);
 
 export function ThemeProvider({ children, config }: ThemeProviderProps) {
   const mergedInitial = useMemo(
@@ -74,7 +78,31 @@ export function ThemeProvider({ children, config }: ThemeProviderProps) {
     [colors, darkMode, darkColors, text, setColors, setDarkMode, setDarkColors, setText, setTheme],
   );
 
-  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
+  const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const container = document.createElement("div");
+    container.id = PORTAL_ID;
+    Object.assign(container.style, {
+      position: "fixed",
+      inset: "0",
+      zIndex: "9999",
+      pointerEvents: "none",
+    });
+    document.body.appendChild(container);
+    setPortalContainer(container);
+    return () => {
+      container.remove();
+      setPortalContainer(null);
+    };
+  }, []);
+
+  return (
+    <ThemeContext.Provider value={value}>
+      {children}
+      {portalContainer && createPortal(<PortalHost />, portalContainer)}
+    </ThemeContext.Provider>
+  );
 }
 
 export function useTheme(): ThemeContextValue {
