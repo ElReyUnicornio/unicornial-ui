@@ -1,14 +1,14 @@
 import type React from "react";
 import type { HTMLAttributes } from "react";
 
-type AlertVariant = "warning" | "info" | "error";
+export type AlertVariant = "warning" | "info" | "error";
 
 interface AlertProps extends HTMLAttributes<HTMLDivElement> {
   variant?: AlertVariant;
   children?: React.ReactNode;
 }
 
-const alertColors: Record<AlertVariant, { color: string; background: string; border: string }> = {
+export const alertColors: Record<AlertVariant, { color: string; background: string; border: string }> = {
   warning: { color: "#92400e", background: "#fffbeb", border: "#f59e0b" },
   info: { color: "#1e40af", background: "#eff6ff", border: "#3b82f6" },
   error: { color: "#991b1b", background: "#fef2f2", border: "#ef4444" },
@@ -35,11 +35,11 @@ const iconPaths: Record<AlertVariant, React.ReactNode> = {
   ),
 };
 
-function AlertIcon({ variant }: { variant: AlertVariant }) {
+export function AlertIcon({ variant, size = 20 }: { variant: AlertVariant; size?: number }) {
   return (
     <svg
-      width="20"
-      height="20"
+      width={size}
+      height={size}
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"

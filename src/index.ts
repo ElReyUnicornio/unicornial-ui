@@ -12,6 +12,7 @@ export { default as Tabs } from "./components/Tab";
 
 export { Alert } from "./components/Alert";
 export { Modal } from "./components/Modal";
+export { AlertDialog } from "./components/AlertDialog";
 
 //forms
 export { Form, useForm } from "./components/Form";
@@ -23,6 +24,8 @@ export { Button } from "./components/Button";
 export { MobileOnly } from "./components/Mobile";
 export { DesktopOnly } from "./components/Desktop";
 export { instantiate } from "./utils/portal";
+export { showModal, showAlert } from "./utils/dialogs";
+export type { AlertHandle } from "./utils/dialogs";
 export type { Instance, InstanceApi, InstanceContent } from "./utils/portal";
 export { Validate } from "./utils/validation";
 export { validators } from "./utils/validators";
