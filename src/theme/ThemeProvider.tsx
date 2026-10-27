@@ -7,6 +7,7 @@ import type {
   ThemeContextValue,
   ThemeColors,
   ThemeTextClasses,
+  ThemeNotifications,
   ThemeProviderProps,
 } from "./types";
 import { deepMerge } from "../utils/typeUtils";
@@ -26,6 +27,14 @@ export function ThemeProvider({ children, config }: ThemeProviderProps) {
 
   const [darkMode, setDarkModeState] = useState<boolean>(mergedInitial.darkMode);
   const [text, setTextState] = useState<ThemeTextClasses>(mergedInitial.text);
+
+  const [notifications, setNotificationsState] = useState<ThemeNotifications>(
+    mergedInitial.notifications,
+  );
+
+  const setNotifications = useCallback((partial: Partial<ThemeNotifications>) => {
+    setNotificationsState((prev) => ({ ...prev, ...partial }));
+  }, []);
 
   const setColors = useCallback((partial: Partial<ThemeColors>) => {
     setColorsState((prev) => ({ ...prev, ...partial }));
@@ -48,6 +57,9 @@ export function ThemeProvider({ children, config }: ThemeProviderProps) {
     if (partial.darkColors) setDarkColorsState((prev) => ({ ...prev, ...partial.darkColors! }));
     if (partial.darkMode !== undefined) setDarkModeState(partial.darkMode);
     if (partial.text) setTextState((prev) => ({ ...prev, ...partial.text! }));
+    if (partial.notifications) {
+      setNotificationsState((prev) => ({ ...prev, ...partial.notifications! }));
+    }
   }, []);
 
   useEffect(() => {
@@ -69,13 +81,15 @@ export function ThemeProvider({ children, config }: ThemeProviderProps) {
       darkColors,
       darkMode,
       text,
+      notifications,
+      setNotifications,
       setColors,
       setDarkColors,
       setDarkMode,
       setText,
       setTheme,
     }),
-    [colors, darkMode, darkColors, text, setColors, setDarkMode, setDarkColors, setText, setTheme],
+    [colors, darkMode, darkColors, text, notifications, setNotifications, setColors, setDarkMode, setDarkColors, setText, setTheme],
   );
 
   const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(null);
@@ -114,6 +128,8 @@ export function useTheme(): ThemeContextValue {
       darkColors: defaultConfig.darkColors as ThemeColors,
       darkMode: defaultConfig.darkMode,
       text: defaultConfig.text as ThemeTextClasses,
+      notifications: defaultConfig.notifications as ThemeNotifications,
+      setNotifications: () => {},
       setColors: () => {},
       setDarkMode: () => {},
       setText: () => {},

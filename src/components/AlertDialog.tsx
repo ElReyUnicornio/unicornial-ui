@@ -13,6 +13,7 @@ interface AlertDialogProps {
 
 const dialogButtons: Record<AlertVariant, { confirm: string; reject?: string }> = {
   info: { confirm: "Accept" },
+  success: { confirm: "Accept" },
   warning: { confirm: "Continue", reject: "Cancel" },
   error: { confirm: "Retry", reject: "Close" },
 };

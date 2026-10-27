@@ -1,7 +1,7 @@
 import type React from "react";
 import type { HTMLAttributes } from "react";
 
-export type AlertVariant = "warning" | "info" | "error";
+export type AlertVariant = "warning" | "info" | "error" | "success";
 
 interface AlertProps extends HTMLAttributes<HTMLDivElement> {
   variant?: AlertVariant;
@@ -12,6 +12,7 @@ export const alertColors: Record<AlertVariant, { color: string; background: stri
   warning: { color: "#92400e", background: "#fffbeb", border: "#f59e0b" },
   info: { color: "#1e40af", background: "#eff6ff", border: "#3b82f6" },
   error: { color: "#991b1b", background: "#fef2f2", border: "#ef4444" },
+  success: { color: "#166534", background: "#f0fdf4", border: "#22c55e" },
 };
 
 const iconPaths: Record<AlertVariant, React.ReactNode> = {
@@ -31,6 +32,12 @@ const iconPaths: Record<AlertVariant, React.ReactNode> = {
     <>
       <circle cx="12" cy="12" r="10" />
       <path d="m15 9-6 6M9 9l6 6" />
+    </>
+  ),
+  success: (
+    <>
+      <circle cx="12" cy="12" r="10" />
+      <path d="m8 12 3 3 5-6" />
     </>
   ),
 };

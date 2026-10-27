@@ -4,7 +4,18 @@ import { AlertDialog } from "../components/AlertDialog";
 import type { AlertVariant } from "../components/Alert";
 import { instantiate, type Instance } from "./portal";
 
-export function showModal(title: ReactNode, onClose: (() => void) | undefined, child: ReactNode): Instance {
+export function showModal(title: ReactNode, child: ReactNode, onClose?: () => void): Instance;
+export function showModal(title: ReactNode, onClose: (() => void) | undefined, child: ReactNode): Instance;
+export function showModal(
+  title: ReactNode,
+  second: ReactNode | (() => void) | undefined,
+  third?: ReactNode | (() => void),
+): Instance {
+  // onClose is optional: showModal(title, child) or showModal(title, onClose, child)
+  const [child, onClose] =
+    typeof second === "function" || (second === undefined && third !== undefined)
+      ? [third as ReactNode, second as (() => void) | undefined]
+      : [second as ReactNode, third as (() => void) | undefined];
   return instantiate(({ close }) => (
     <Modal
       title={title}

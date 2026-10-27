@@ -1,4 +1,4 @@
-import { StrictMode, useState } from "react";
+import { StrictMode, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import Background from "./components/Background";
@@ -12,12 +12,15 @@ import Tabs from "./components/Tab";
 import Header from "./components/Header";
 import { Alert } from "./components/Alert";
 import { Button } from "./components/Button";
+import { Tooltip } from "./components/Tooltip";
 import { showAlert, showModal } from "./utils/dialogs";
+import { showToast } from "./utils/toasts";
+import type { ThemeConfig } from "./theme/types";
 import Logo from "./assets/logo.png";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ThemeProvider config={{ ...themeConfig, darkMode: false }}>
+    <ThemeProvider config={{ ...(themeConfig as ThemeConfig), darkMode: false }}>
       <Main />
     </ThemeProvider>
   </StrictMode>,
@@ -30,6 +33,8 @@ const TabsEnum = {
 
 function Main() {
   const [selectedTab, setSelectedTab] = useState(TabsEnum.Login);
+  const tooltipAnchor = useRef<HTMLButtonElement>(null);
+  const [tooltipOpen, setTooltipOpen] = useState(false);
 
   return (
     <Background
@@ -59,11 +64,7 @@ function Main() {
         type="button"
         className="mb-4"
         onClick={() =>
-          showModal(
-            "Hello from the portal",
-            () => console.log("modal closed"),
-            <p>This modal was created with showModal().</p>,
-          )
+          showModal("Hello from the portal", <p>This modal was created with showModal().</p>)
         }
       >
         Open modal
@@ -84,6 +85,33 @@ function Main() {
           </Button>
         ))}
       </div>
+      <div className="flex gap-2 mb-4">
+        {(["info", "success", "warning", "error"] as const).map((color) => (
+          <Button
+            key={color}
+            type="button"
+            variant="ghost"
+            onClick={() =>
+              showToast(`This is a ${color} toast.`, color, () => console.log(`${color} toast clicked`))
+            }
+          >
+            {color} toast
+          </Button>
+        ))}
+      </div>
+      <Button
+        ref={tooltipAnchor}
+        type="button"
+        variant="secondary"
+        className="mb-4"
+        onMouseEnter={() => setTooltipOpen(true)}
+        onMouseLeave={() => setTooltipOpen(false)}
+      >
+        Hover me
+      </Button>
+      <Tooltip anchorRef={tooltipAnchor} position="top" arrow open={tooltipOpen}>
+        This is a tooltip
+      </Tooltip>
       <Form
         initialValues={{ username: "", password: "" }}
         onSubmit={(values, hasErrors) => {

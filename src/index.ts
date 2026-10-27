@@ -5,14 +5,21 @@ export { default as Header } from "./components/Header";
 export { default as Background } from "./components/Background";
 export { default as Separator } from "./components/Separator";
 export { ThemeProvider, useTheme, themeConfig } from "./theme/ThemeProvider";
+export type { ThemeConfig, NotificationPosition } from "./theme/types";
 
 //Layout
 export { Surface } from "./components/Surface";
 export { default as Tabs } from "./components/Tab";
 
+//feedback
 export { Alert } from "./components/Alert";
+export type { AlertVariant } from "./components/Alert";
 export { Modal } from "./components/Modal";
 export { AlertDialog } from "./components/AlertDialog";
+export { Toast } from "./components/Toast";
+export type { ToastColor } from "./components/Toast";
+export { Tooltip } from "./components/Tooltip";
+export type { TooltipPosition } from "./components/Tooltip";
 
 //forms
 export { Form, useForm } from "./components/Form";
@@ -25,6 +32,8 @@ export { MobileOnly } from "./components/Mobile";
 export { DesktopOnly } from "./components/Desktop";
 export { instantiate } from "./utils/portal";
 export { showModal, showAlert } from "./utils/dialogs";
+export { showToast } from "./utils/toasts";
+export type { ToastHandle } from "./utils/toasts";
 export type { AlertHandle } from "./utils/dialogs";
 export type { Instance, InstanceApi, InstanceContent } from "./utils/portal";
 export { Validate } from "./utils/validation";

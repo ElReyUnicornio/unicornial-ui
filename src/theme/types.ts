@@ -18,11 +18,24 @@ export interface ThemeTextClasses {
   normal: string;
 }
 
+export type NotificationPosition =
+  | "top-left"
+  | "top"
+  | "top-right"
+  | "bottom-left"
+  | "bottom"
+  | "bottom-right";
+
+export interface ThemeNotifications {
+  position: NotificationPosition;
+}
+
 export interface ThemeConfig {
   colors: ThemeColors;
   darkColors: ThemeColors;
   darkMode: boolean;
   text: ThemeTextClasses;
+  notifications: ThemeNotifications;
 }
 
 export interface ThemeContextValue extends ThemeConfig {
@@ -31,6 +44,7 @@ export interface ThemeContextValue extends ThemeConfig {
   setDarkColors: (colors: Partial<ThemeColors>) => void;
   setDarkMode: (enabled: boolean) => void;
   setText: (text: Partial<ThemeTextClasses>) => void;
+  setNotifications: (notifications: Partial<ThemeNotifications>) => void;
   setTheme: (config: Partial<ThemeConfig>) => void;
 }
 

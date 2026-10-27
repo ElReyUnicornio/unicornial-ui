@@ -1,4 +1,5 @@
 import { useSyncExternalStore, type ReactNode } from "react";
+import { ToastContainer } from "./toasts";
 
 export interface InstanceApi {
   id: number;
@@ -67,6 +68,7 @@ export function PortalHost() {
           {typeof content === "function" ? content(api) : content}
         </div>
       ))}
+      <ToastContainer />
     </>
   );
 }

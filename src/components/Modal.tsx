@@ -1,4 +1,4 @@
-import { useEffect, type HTMLAttributes, type ReactNode } from "react";
+import { useEffect, type HTMLAttributes, type MouseEvent, type ReactNode } from "react";
 import { Surface } from "./Surface";
 
 interface ModalProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
@@ -7,7 +7,7 @@ interface ModalProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
   children?: ReactNode;
 }
 
-export function CloseButton({ onClick }: { onClick?: () => void }) {
+export function CloseButton({ onClick }: { onClick?: (event: MouseEvent<HTMLButtonElement>) => void }) {
   return (
     <button
       type="button"
