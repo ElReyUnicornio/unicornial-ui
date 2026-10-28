@@ -159,8 +159,7 @@ export const Background = forwardRef<HTMLDivElement, BackgroundProps>(
 
     const resolvedColor = useMemo(() => {
       if (color) return color;
-      if (theme.enabled) return rgbaToString(hexToRgba(theme.colors.primary, 0.25));
-      return "rgba(170, 59, 255, 0.25)";
+      return rgbaToString(hexToRgba(theme.currentColors.primary, 0.25));
     }, [color, theme]);
 
     const bgStyles = useMemo<React.CSSProperties>(
@@ -171,7 +170,7 @@ export const Background = forwardRef<HTMLDivElement, BackgroundProps>(
     return (
       <div
         ref={ref}
-        className={["w-full h-full relative overflow-hidden flex flex-col", className].join(
+        className={["w-full h-full relative overflow-x-hidden overflow-y-auto flex flex-col", className].join(
           " ",
         )}
         style={style}

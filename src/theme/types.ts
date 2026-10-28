@@ -1,4 +1,5 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
+import type { DeepPartial } from "../utils/typeUtils";
 
 export interface ThemeColors {
   primary: string;
@@ -9,13 +10,19 @@ export interface ThemeColors {
   header: {
     background: string;
     border: string;
-  }
+  };
 }
 
-export interface ThemeTextClasses {
+export interface ThemeDark {
+  enabled: boolean;
+  colors: ThemeColors;
+}
+
+/** Tailwind classes applied to each kind of text. */
+export interface ThemeText {
   title: string;
   subtitle: string;
-  normal: string;
+  paragraph: string;
 }
 
 export type NotificationPosition =
@@ -30,25 +37,67 @@ export interface ThemeNotifications {
   position: NotificationPosition;
 }
 
+/** Components that can be restyled by a variant. */
+export type ComponentName =
+  | "surface"
+  | "button"
+  | "input"
+  | "header"
+  | "modal"
+  | "alertDialog"
+  | "alert"
+  | "toast"
+  | "tooltip"
+  | "tab"
+  | "separator"
+  | "dropdown"
+  | "select"
+  | "switch"
+  | "spinner"
+  | "slider"
+  | "radio"
+  | "progressBar"
+  | "imageInput"
+  | "datePicker"
+  | "colorPicker";
+
+/** Tailwind classes and/or inline CSS for one part of a component. */
+export interface StyleDef {
+  className?: string;
+  style?: CSSProperties;
+}
+
+/** Part name (e.g. "root", "label", "field") -> its styles. */
+export type ComponentVariant = Record<string, StyleDef>;
+
+/** variants[name][component][part], e.g. variants.glass.input.label */
+export type ThemeVariant = Partial<Record<ComponentName, ComponentVariant>>;
+
 export interface ThemeConfig {
   colors: ThemeColors;
-  darkColors: ThemeColors;
-  darkMode: boolean;
-  text: ThemeTextClasses;
+  dark: ThemeDark;
+  text: ThemeText;
   notifications: ThemeNotifications;
+  variants: Record<string, ThemeVariant>;
+  /** Reserved for variables read from a .env file. */
+  env: Record<string, string>;
 }
 
 export interface ThemeContextValue extends ThemeConfig {
+  /** True when a ThemeProvider is mounted. */
   enabled: boolean;
-  setColors: (colors: Partial<ThemeColors>) => void;
-  setDarkColors: (colors: Partial<ThemeColors>) => void;
+  /** Colors for the active mode (light or dark). */
+  currentColors: ThemeColors;
+  setColors: (colors: DeepPartial<ThemeColors>) => void;
+  setDark: (dark: DeepPartial<ThemeDark>) => void;
   setDarkMode: (enabled: boolean) => void;
-  setText: (text: Partial<ThemeTextClasses>) => void;
+  setText: (text: Partial<ThemeText>) => void;
   setNotifications: (notifications: Partial<ThemeNotifications>) => void;
-  setTheme: (config: Partial<ThemeConfig>) => void;
+  setVariant: (name: string, variant: ThemeVariant) => void;
+  setTheme: (config: DeepPartial<ThemeConfig>) => void;
 }
 
 export interface ThemeProviderProps {
   children: ReactNode;
-  config?: Partial<ThemeConfig>;
+  config?: DeepPartial<ThemeConfig>;
 }

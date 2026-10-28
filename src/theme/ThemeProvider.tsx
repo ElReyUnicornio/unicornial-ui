@@ -1,95 +1,100 @@
 import { createContext, useContext, useMemo, useState, useCallback, useEffect } from "react";
 import { createPortal } from "react-dom";
-import defaultConfig from "./theme.config.json";
+import defaultJson from "./theme.config.json";
 import { PortalHost } from "../utils/portal";
 import type {
   ThemeConfig,
   ThemeContextValue,
   ThemeColors,
-  ThemeTextClasses,
+  ThemeDark,
+  ThemeText,
   ThemeNotifications,
+  ThemeVariant,
   ThemeProviderProps,
 } from "./types";
-import { deepMerge } from "../utils/typeUtils";
+import { deepMerge, type DeepPartial } from "../utils/typeUtils";
 
 const PORTAL_ID = "unicornial-portal";
 
-const ThemeContext =createContext<ThemeContextValue | null>(null);
+const defaultConfig = defaultJson as unknown as ThemeConfig;
+
+const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 export function ThemeProvider({ children, config }: ThemeProviderProps) {
-  const mergedInitial = useMemo(
-    () => deepMerge(defaultConfig as ThemeConfig, config ?? {}),
-    [config],
+  const [theme, setThemeState] = useState<ThemeConfig>(() =>
+    deepMerge<ThemeConfig>(defaultConfig, config ?? {}),
   );
 
-  const [colors, setColorsState] = useState<ThemeColors>(mergedInitial.colors);
-  const [darkColors, setDarkColorsState] = useState<ThemeColors>(mergedInitial.darkColors);
+  const setTheme = useCallback((partial: DeepPartial<ThemeConfig>) => {
+    setThemeState((prev) => deepMerge<ThemeConfig>(prev, partial));
+  }, []);
 
-  const [darkMode, setDarkModeState] = useState<boolean>(mergedInitial.darkMode);
-  const [text, setTextState] = useState<ThemeTextClasses>(mergedInitial.text);
-
-  const [notifications, setNotificationsState] = useState<ThemeNotifications>(
-    mergedInitial.notifications,
+  const setColors = useCallback(
+    (colors: DeepPartial<ThemeColors>) => setTheme({ colors }),
+    [setTheme],
+  );
+  const setDark = useCallback((dark: DeepPartial<ThemeDark>) => setTheme({ dark }), [setTheme]);
+  const setDarkMode = useCallback(
+    (enabled: boolean) => setTheme({ dark: { enabled } }),
+    [setTheme],
+  );
+  const setText = useCallback((text: Partial<ThemeText>) => setTheme({ text }), [setTheme]);
+  const setNotifications = useCallback(
+    (notifications: Partial<ThemeNotifications>) => setTheme({ notifications }),
+    [setTheme],
+  );
+  const setVariant = useCallback(
+    (name: string, variant: ThemeVariant) => setTheme({ variants: { [name]: variant } }),
+    [setTheme],
   );
 
-  const setNotifications = useCallback((partial: Partial<ThemeNotifications>) => {
-    setNotificationsState((prev) => ({ ...prev, ...partial }));
-  }, []);
+  const currentColors = theme.dark.enabled ? theme.dark.colors : theme.colors;
 
-  const setColors = useCallback((partial: Partial<ThemeColors>) => {
-    setColorsState((prev) => ({ ...prev, ...partial }));
-  }, []);
-
-  const setDarkColors = useCallback((partial: Partial<ThemeColors>) => {
-    setDarkColorsState((prev) => ({ ...prev, ...partial }));
-  }, []);
-
-  const setDarkMode = useCallback((enabled: boolean) => {
-    setDarkModeState(enabled);
-  }, []);
-
-  const setText = useCallback((partial: Partial<ThemeTextClasses>) => {
-    setTextState((prev) => ({ ...prev, ...partial }));
-  }, []);
-
-  const setTheme = useCallback((partial: Partial<ThemeConfig>) => {
-    if (partial.colors) setColorsState((prev) => ({ ...prev, ...partial.colors! }));
-    if (partial.darkColors) setDarkColorsState((prev) => ({ ...prev, ...partial.darkColors! }));
-    if (partial.darkMode !== undefined) setDarkModeState(partial.darkMode);
-    if (partial.text) setTextState((prev) => ({ ...prev, ...partial.text! }));
-    if (partial.notifications) {
-      setNotificationsState((prev) => ({ ...prev, ...partial.notifications! }));
-    }
-  }, []);
-
+  // Expose the active colors as CSS variables so variants can use them in plain CSS/Tailwind.
   useEffect(() => {
-    if (typeof document === "undefined") return;
     const root = document.documentElement;
-    if (darkMode) {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-    }
-    root.style.setProperty("--theme-primary", darkMode ? darkColors.primary : colors.primary);
-    root.style.setProperty("--theme-secondary", darkMode ? darkColors.secondary : colors.secondary);
-  }, [colors, darkMode, darkColors]);
+    const dark = theme.dark.enabled;
+    root.classList.toggle("dark", dark);
+    const vars: Record<string, string> = {
+      "--theme-primary": currentColors.primary,
+      "--theme-secondary": currentColors.secondary,
+      "--theme-text": currentColors.text,
+      "--theme-background": currentColors.background,
+      "--theme-border": currentColors.border,
+      "--theme-header-background": currentColors.header.background,
+      "--theme-header-border": currentColors.header.border,
+      // Slightly shifted surface and its two shadows, used by the neumorph variant.
+      "--theme-soft": `color-mix(in srgb, ${currentColors.background} 92%, ${currentColors.text})`,
+      "--theme-shadow-light": dark ? "rgba(255, 255, 255, 0.06)" : "rgba(255, 255, 255, 0.9)",
+      "--theme-shadow-dark": dark ? "rgba(0, 0, 0, 0.6)" : "rgba(0, 0, 0, 0.18)",
+    };
+    for (const [name, value] of Object.entries(vars)) root.style.setProperty(name, value);
+  }, [currentColors, theme.dark.enabled]);
 
   const value = useMemo<ThemeContextValue>(
     () => ({
+      ...theme,
       enabled: true,
-      colors,
-      darkColors,
-      darkMode,
-      text,
-      notifications,
-      setNotifications,
+      currentColors,
       setColors,
-      setDarkColors,
+      setDark,
       setDarkMode,
       setText,
+      setNotifications,
+      setVariant,
       setTheme,
     }),
-    [colors, darkMode, darkColors, text, notifications, setNotifications, setColors, setDarkMode, setDarkColors, setText, setTheme],
+    [
+      theme,
+      currentColors,
+      setColors,
+      setDark,
+      setDarkMode,
+      setText,
+      setNotifications,
+      setVariant,
+      setTheme,
+    ],
   );
 
   const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(null);
@@ -119,25 +124,24 @@ export function ThemeProvider({ children, config }: ThemeProviderProps) {
   );
 }
 
+const noop = () => {};
+
+// Used by components rendered outside a ThemeProvider: defaults, and `enabled: false`.
+const fallbackTheme: ThemeContextValue = {
+  ...defaultConfig,
+  enabled: false,
+  currentColors: defaultConfig.dark.enabled ? defaultConfig.dark.colors : defaultConfig.colors,
+  setColors: noop,
+  setDark: noop,
+  setDarkMode: noop,
+  setText: noop,
+  setNotifications: noop,
+  setVariant: noop,
+  setTheme: noop,
+};
+
 export function useTheme(): ThemeContextValue {
-  const ctx = useContext(ThemeContext);
-  if (!ctx) {
-    return {
-      enabled: false,
-      colors: defaultConfig.colors as ThemeColors,
-      darkColors: defaultConfig.darkColors as ThemeColors,
-      darkMode: defaultConfig.darkMode,
-      text: defaultConfig.text as ThemeTextClasses,
-      notifications: defaultConfig.notifications as ThemeNotifications,
-      setNotifications: () => {},
-      setColors: () => {},
-      setDarkMode: () => {},
-      setText: () => {},
-      setTheme: () => {},
-      setDarkColors: () => {},
-    };
-  }
-  return ctx;
+  return useContext(ThemeContext) ?? fallbackTheme;
 }
 
 export { defaultConfig as themeConfig };

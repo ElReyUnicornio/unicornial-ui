@@ -1,5 +1,6 @@
 import { type HTMLAttributes, forwardRef, useMemo } from "react";
 import { useTheme } from "../theme/ThemeProvider";
+import { cx, useVariant } from "../theme/variants";
 
 type Variant = "line" | "point";
 type Orientation = "horizontal" | "vertical";
@@ -10,6 +11,8 @@ export interface SeparatorProps extends HTMLAttributes<HTMLDivElement> {
   color?: string;
   thickness?: number;
   spacing?: number;
+  /** Name of a variant defined in the theme config (variants[name].separator.root). */
+  themeVariant?: string;
 }
 
 export const Separator = forwardRef<HTMLDivElement, SeparatorProps>(
@@ -20,6 +23,7 @@ export const Separator = forwardRef<HTMLDivElement, SeparatorProps>(
       color,
       thickness = 1,
       spacing = 16,
+      themeVariant,
       className = "",
       style,
       ...props
@@ -27,11 +31,11 @@ export const Separator = forwardRef<HTMLDivElement, SeparatorProps>(
     ref,
   ) {
     const theme = useTheme();
+    const themed = useVariant("separator", themeVariant)("root");
 
     const resolvedColor = useMemo(() => {
       if (color) return color;
-      if (theme.enabled) return theme.darkMode ? "#2a2535" : "#e5e4e7";
-      return "#e5e4e7";
+      return theme.currentColors.border;
     }, [color, theme]);
 
     const isHorizontal = orientation === "horizontal";
@@ -44,12 +48,13 @@ export const Separator = forwardRef<HTMLDivElement, SeparatorProps>(
       return (
         <div
           ref={ref}
-          className={[
+          className={cx(
             "flex items-center justify-center shrink-0",
             isHorizontal ? "w-full" : "h-full",
+            themed.className,
             className,
-          ].join(" ")}
-          style={{ ...paddingStyle, ...style }}
+          )}
+          style={{ ...paddingStyle, ...themed.style, ...style }}
           {...props}
         >
           <span
@@ -84,12 +89,8 @@ export const Separator = forwardRef<HTMLDivElement, SeparatorProps>(
         ref={ref}
         role="separator"
         aria-orientation={orientation}
-        className={[
-          "shrink-0",
-          isHorizontal ? "w-full" : "h-full",
-          className,
-        ].join(" ")}
-        style={{ ...dimStyle, ...style }}
+        className={cx("shrink-0", isHorizontal ? "w-full" : "h-full", themed.className, className)}
+        style={{ ...dimStyle, ...themed.style, ...style }}
         {...props}
       />
     );

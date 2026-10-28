@@ -1,11 +1,24 @@
 import type React from "react";
 import type { HTMLAttributes } from "react";
+import { cx, useVariant } from "../theme/variants";
 
 export type AlertVariant = "warning" | "info" | "error" | "success";
 
 interface AlertProps extends HTMLAttributes<HTMLDivElement> {
   variant?: AlertVariant;
+  /** Name of a variant defined in the theme config (variants[name].alert.root). */
+  themeVariant?: string;
   children?: React.ReactNode;
+}
+
+/** CSS variables exposing a severity's colors, so theme variants can build on them. */
+export function alertCssVars(variant: AlertVariant) {
+  const colors = alertColors[variant];
+  return {
+    "--alert-color": colors.color,
+    "--alert-bg": colors.background,
+    "--alert-border": colors.border,
+  } as React.CSSProperties;
 }
 
 export const alertColors: Record<AlertVariant, { color: string; background: string; border: string }> = {
@@ -63,21 +76,25 @@ export function AlertIcon({ variant, size = 20 }: { variant: AlertVariant; size?
 
 export function Alert({
   variant = "info",
+  themeVariant,
   className = "",
   style,
   children,
   ...props
 }: AlertProps) {
   const colors = alertColors[variant];
+  const themed = useVariant("alert", themeVariant)("root");
   return (
     <div
       role={variant === "error" ? "alert" : "status"}
       {...props}
-      className={["flex items-center gap-2 px-3 py-2 rounded-md border", className].join(" ")}
+      className={cx("flex items-center gap-2 px-3 py-2 rounded-md border", themed.className, className)}
       style={{
         color: colors.color,
         backgroundColor: colors.background,
         borderColor: colors.border,
+        ...alertCssVars(variant),
+        ...themed.style,
         ...style,
       }}
     >

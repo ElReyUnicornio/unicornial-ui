@@ -8,6 +8,7 @@ interface ToastItem {
   message: ReactNode;
   color: ToastColor;
   onClick?: () => void;
+  themeVariant?: string;
 }
 
 export interface ToastHandle {
@@ -48,10 +49,11 @@ export function showToast(
   color: ToastColor = "info",
   onClick?: () => void,
   duration: number = DEFAULT_DURATION,
+  themeVariant?: string,
 ): ToastHandle {
   const id = nextId++;
   const close = () => closeToast(id);
-  toasts = [...toasts, { id, message, color, onClick }];
+  toasts = [...toasts, { id, message, color, onClick, themeVariant }];
   emit();
   if (duration > 0) setTimeout(close, duration);
   return { id, close };
@@ -75,10 +77,11 @@ export function ToastContainer() {
       className="absolute inset-0 flex flex-col gap-2 p-4"
       style={{ pointerEvents: "none", ...positionStyles[notifications.position] }}
     >
-      {current.map(({ id, message, color, onClick }) => (
+      {current.map(({ id, message, color, onClick, themeVariant }) => (
         <div key={id} style={{ pointerEvents: "auto" }}>
           <Toast
             color={color}
+            themeVariant={themeVariant}
             message={message}
             onClick={onClick}
             onClose={() => closeToast(id)}

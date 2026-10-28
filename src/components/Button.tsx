@@ -1,5 +1,6 @@
 import { type ButtonHTMLAttributes, forwardRef, useMemo } from "react";
 import { useTheme } from "../theme/ThemeProvider";
+import { cx, useVariant } from "../theme/variants";
 
 type Variant = "primary" | "secondary" | "outline" | "ghost";
 type Size = "sm" | "md" | "lg";
@@ -7,6 +8,8 @@ type Size = "sm" | "md" | "lg";
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: Variant;
   size?: Size;
+  /** Name of a variant defined in the theme config (variants[name].button.root). */
+  themeVariant?: string;
 }
 
 const variantClasses: Record<Variant, string> = {
@@ -43,15 +46,15 @@ function hexToRgba(hex: string, alpha: number): string {
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
-  { variant = "primary", size = "md", className = "", style, ...props },
+  { variant = "primary", size = "md", themeVariant, className = "", style, ...props },
   ref,
 ) {
   const theme = useTheme();
+  const themed = useVariant("button", themeVariant)("root");
 
   const themeStyle = useMemo<React.CSSProperties | undefined>(() => {
     if (!theme.enabled) return undefined;
-    const primary = theme.colors.primary;
-    const secondary = theme.colors.secondary;
+    const { primary, secondary, text, border } = theme.currentColors;
     const primaryBg = hexToRgba(primary, 0.1);
     const primaryBorder = hexToRgba(primary, 0.5);
     const primaryRing = hexToRgba(primary, 0.5);
@@ -66,13 +69,13 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       case "secondary":
         return {
           backgroundColor: secondary,
-          color: "#08060d",
+          color: "#08060d", // secondary is a light color in both modes
         };
       case "outline":
         return {
-          borderColor: "#e5e4e7",
+          borderColor: border,
           backgroundColor: "transparent",
-          color: "#08060d",
+          color: text,
           ["--hover-bg" as any]: primaryBg,
           ["--hover-border" as any]: primaryBorder,
           ["--tw-ring-color" as any]: primaryRing,
@@ -81,7 +84,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       default:
         return {
           backgroundColor: "transparent",
-          color: "#08060d",
+          color: text,
           ["--hover-bg" as any]: primaryBg,
           ["--tw-ring-color" as any]: primaryRing,
         };
@@ -100,7 +103,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
   return (
     <button
       ref={ref}
-      className={[
+      className={cx(
         "inline-flex items-center justify-center font-medium rounded-lg",
         "transition-all duration-200 ease-in-out",
         "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
@@ -109,9 +112,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
         variantClasses[variant],
         sizeClasses[size],
         themeHoverClass,
+        themed.className,
         className,
-      ].join(" ")}
-      style={{ ...themeStyle, ...style }}
+      )}
+      style={{ ...themeStyle, ...themed.style, ...style }}
       {...props}
     />
   );

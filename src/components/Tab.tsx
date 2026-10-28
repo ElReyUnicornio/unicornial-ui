@@ -1,18 +1,22 @@
 import type React from "react";
 import { Children, useState, type HTMLAttributes } from "react";
 import { useTheme } from "../theme/ThemeProvider";
+import { cx, useVariant } from "../theme/variants";
 
 interface TabsContainerProps {
   orientation?: "horizontal" | "vertical";
   variant?: "underline" | "pills";
   className?: string;
   style?: React.CSSProperties;
+  /** Name of a variant defined in the theme config (variants[name].tab.{root,selected}). */
+  themeVariant?: string;
   children?: React.ReactNode;
   onChange?: (index: number) => void;
 }
 
 interface TabProps extends HTMLAttributes<HTMLDivElement> {
   variant: "underline" | "pills";
+  themeVariant?: string;
   children?: React.ReactNode;
   selected: boolean;
 }
@@ -27,6 +31,7 @@ function Tabs({
   variant = "underline",
   className = "",
   style,
+  themeVariant,
   children,
   onChange,
 }: TabsContainerProps) {
@@ -40,7 +45,7 @@ function Tabs({
   return (
     <div className={[tabsOrientationClasses[orientation], className].join(" ")} style={style}>
       {Children.map(children, (child, index) => (
-        <Tab variant={variant} onClick={() => handleChange(index)} selected={selected == index}>
+        <Tab variant={variant} themeVariant={themeVariant} onClick={() => handleChange(index)} selected={selected == index}>
           {child}
         </Tab>
       ))}
@@ -48,17 +53,26 @@ function Tabs({
   );
 }
 
-function Tab({ variant, children, selected, ...props }: TabProps) {
-  const theme = useTheme();
+function Tab({ variant, themeVariant, children, selected, ...props }: TabProps) {
+  const { currentColors } = useTheme();
+  const themed = useVariant("tab", themeVariant);
+  const root = themed("root");
+  const active = selected ? themed("selected") : undefined;
   return (
     <div
-      className="px-2 py-1 border-b-4 border-transparent cursor-pointer"
+      className={cx(
+        "px-2 py-1 border-b-4 border-transparent cursor-pointer",
+        root.className,
+        active?.className,
+      )}
       {...props}
       style={{
-        color: selected ? theme.colors.primary : "#999999",
+        color: selected ? currentColors.primary : "#999999",
         fontWeight: selected ? "bold" : "normal",
-        borderColor: selected ? theme.colors.primary : "transparent",
-        backgroundColor: variant === "underline" ? "transparent" : theme.colors.primary,
+        borderColor: selected ? currentColors.primary : "transparent",
+        backgroundColor: variant === "underline" ? "transparent" : currentColors.primary,
+        ...root.style,
+        ...active?.style,
       }}
     >
       {children}

@@ -4,12 +4,23 @@ import { AlertDialog } from "../components/AlertDialog";
 import type { AlertVariant } from "../components/Alert";
 import { instantiate, type Instance } from "./portal";
 
-export function showModal(title: ReactNode, child: ReactNode, onClose?: () => void): Instance;
-export function showModal(title: ReactNode, onClose: (() => void) | undefined, child: ReactNode): Instance;
+export function showModal(
+  title: ReactNode,
+  child: ReactNode,
+  onClose?: () => void,
+  themeVariant?: string,
+): Instance;
+export function showModal(
+  title: ReactNode,
+  onClose: (() => void) | undefined,
+  child: ReactNode,
+  themeVariant?: string,
+): Instance;
 export function showModal(
   title: ReactNode,
   second: ReactNode | (() => void) | undefined,
   third?: ReactNode | (() => void),
+  themeVariant?: string,
 ): Instance {
   // onClose is optional: showModal(title, child) or showModal(title, onClose, child)
   const [child, onClose] =
@@ -19,6 +30,7 @@ export function showModal(
   return instantiate(({ close }) => (
     <Modal
       title={title}
+      themeVariant={themeVariant}
       onClose={() => {
         close();
         onClose?.();
@@ -36,7 +48,11 @@ export interface AlertHandle extends Promise<boolean> {
   close: () => void;
 }
 
-export function showAlert(type: AlertVariant, message: ReactNode): AlertHandle {
+export function showAlert(
+  type: AlertVariant,
+  message: ReactNode,
+  themeVariant?: string,
+): AlertHandle {
   let instance!: Instance;
   const result = new Promise<boolean>((resolve) => {
     const finish = (confirmed: boolean) => {
@@ -47,6 +63,7 @@ export function showAlert(type: AlertVariant, message: ReactNode): AlertHandle {
       <AlertDialog
         variant={type}
         message={message}
+        themeVariant={themeVariant}
         onConfirm={() => finish(true)}
         onReject={() => finish(false)}
       />,

@@ -1,37 +1,42 @@
-import { type InputHTMLAttributes, forwardRef } from "react";
-//import { useTheme } from "../theme/ThemeProvider";
-
-type Variant = "default" | "filled" | "underline";
+import { type InputHTMLAttributes, type ReactNode, forwardRef } from "react";
+import { Field, FOCUS_RING, useFieldStyles, type FieldVariant } from "./Field";
+import { cx } from "../theme/variants";
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  variant?: Variant;
+  variant?: FieldVariant;
   label?: string;
+  /** Name of a variant defined in the theme config (variants[name].input.{root,label,field}). */
+  themeVariant?: string;
+  /** Content shown inside the input, on its right side (e.g. an icon button). */
+  endAdornment?: ReactNode;
 }
 
-const variantStyles: Record<Variant, string> = {
-  default: "border border-gray-300 rounded-md p-2",
-  filled: "bg-gray-100 border border-gray-300 rounded-md p-2",
-  underline: "border-b border-gray-300 p-2",
-};
-
 export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
-  { variant = "default", label, ...props },
+  { variant = "default", label, themeVariant, endAdornment, className = "", style, ...props },
   ref,
 ) {
-  //const theme = useTheme();
+  const styles = useFieldStyles(themeVariant, variant);
 
   return (
-    <div className="w-full">
-      {label && (
-        <label htmlFor={props.id} className="block text-sm font-bold mb-1 mt-2 text-gray-700">
-          {label}
-        </label>
-      )}
-      <input
-        ref={ref}
-        {...props}
-        className={`mb-4 last:mb-0 block w-full ${variantStyles[variant]} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
-      />
-    </div>
+    <Field label={label} htmlFor={props.id} themeVariant={themeVariant}>
+      <div className="relative mb-4 last:mb-0">
+        <input
+          ref={ref}
+          {...props}
+          className={cx(
+            "block w-full",
+            styles.fieldClass,
+            FOCUS_RING,
+            "sm:text-sm",
+            !!endAdornment && "pr-10",
+            className,
+          )}
+          style={{ ...styles.fieldStyle, ...style }}
+        />
+        {endAdornment && (
+          <div className="absolute inset-y-0 right-1 flex items-center">{endAdornment}</div>
+        )}
+      </div>
+    </Field>
   );
 });

@@ -1,27 +1,29 @@
-import { forwardRef, useMemo, type HTMLAttributes } from "react";
+import { forwardRef, type HTMLAttributes } from "react";
 import { useTheme } from "../theme/ThemeProvider";
+import { cx, useVariant } from "../theme/variants";
 
-export const Surface = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(function Surface(
-  { className = "", style, children, ...props },
+export interface SurfaceProps extends HTMLAttributes<HTMLDivElement> {
+  themeVariant?: string;
+}
+
+export const Surface = forwardRef<HTMLDivElement, SurfaceProps>(function Surface(
+  { className = "", style, themeVariant, children, ...props },
   ref,
 ) {
-  const theme = useTheme();
+  const { currentColors } = useTheme();
+  const variant = useVariant("surface", themeVariant)("root");
 
-  const resolvedStyles = useMemo(
-    () => ({
-      borderColor: theme.darkMode ? theme.darkColors.border : theme.colors.border,
-      backgroundColor: theme.darkMode ? theme.darkColors.background : theme.colors.background,
-    }),
-    [theme],
-  );
   return (
     <div
       ref={ref}
       {...props}
-      className={[className, "p-2 rounded-md shadow-md bg-white border"].join(" ")}
+      className={cx("p-2 rounded-md shadow-md bg-white border", variant.className, className)}
       style={{
+        borderColor: currentColors.border,
+        backgroundColor: currentColors.background,
+        color: currentColors.text,
+        ...variant.style,
         ...style,
-        ...resolvedStyles,
       }}
     >
       {children}

@@ -8,7 +8,7 @@ export interface ValidatorList {
 interface FormContextType {
   initialValues: Record<string, unknown>;
   values: Record<string, unknown>;
-  setValues: (values: Record<string, unknown>) => void;
+  setValues: React.Dispatch<React.SetStateAction<Record<string, unknown>>>;
   isSubmitting: boolean;
   validators: ValidatorList | null;
   setValidators: React.Dispatch<React.SetStateAction<ValidatorList | null>>;

@@ -5,7 +5,15 @@ export { default as Header } from "./components/Header";
 export { default as Background } from "./components/Background";
 export { default as Separator } from "./components/Separator";
 export { ThemeProvider, useTheme, themeConfig } from "./theme/ThemeProvider";
-export type { ThemeConfig, NotificationPosition } from "./theme/types";
+export { useVariant } from "./theme/variants";
+export type {
+  ThemeConfig,
+  ThemeColors,
+  ThemeVariant,
+  ComponentName,
+  StyleDef,
+  NotificationPosition,
+} from "./theme/types";
 
 //Layout
 export { Surface } from "./components/Surface";
@@ -19,6 +27,7 @@ export { AlertDialog } from "./components/AlertDialog";
 export { Toast } from "./components/Toast";
 export type { ToastColor } from "./components/Toast";
 export { Tooltip } from "./components/Tooltip";
+export { Dropdown } from "./components/Dropdown";
 export type { TooltipPosition } from "./components/Tooltip";
 
 //forms
@@ -26,6 +35,33 @@ export { Form, useForm } from "./components/Form";
 export { Input } from "./components/Input";
 export { UnicornialInput } from "./components/UnicornialInput";
 export { Button } from "./components/Button";
+export { Password } from "./components/Password";
+export { TextArea } from "./components/TextArea";
+export { Select } from "./components/Select";
+export type { SelectOption } from "./components/Select";
+export { Switch } from "./components/Switch";
+export { Spinner } from "./components/Spinner";
+export { Slider } from "./components/Slider";
+export { Radio, RadioGroup } from "./components/Radio";
+export type { RadioOption } from "./components/Radio";
+export { ColorPicker } from "./components/ColorPicker";
+export { DatePicker } from "./components/DatePicker";
+export { FileInput } from "./components/FileInput";
+export { ImageInput } from "./components/ImageInput";
+export { ProgressBar } from "./components/ProgressBar";
+export {
+  UnicornialPassword,
+  UnicornialTextArea,
+  UnicornialSelect,
+  UnicornialSwitch,
+  UnicornialSpinner,
+  UnicornialSlider,
+  UnicornialRadioGroup,
+  UnicornialColorPicker,
+  UnicornialDatePicker,
+  UnicornialFileInput,
+  UnicornialImageInput,
+} from "./components/UnicornialFields";
 
 //utils
 export { MobileOnly } from "./components/Mobile";

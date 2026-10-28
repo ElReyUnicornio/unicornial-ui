@@ -8,6 +8,7 @@ import {
   useMemo,
 } from "react";
 import { useTheme } from "../theme/ThemeProvider";
+import { cx, useVariant } from "../theme/variants";
 import { hexToRgba } from "../utils/utils";
 
 //types -----------------------------------------------------------------------------
@@ -17,6 +18,8 @@ type Variant = "default" | "blur";
 export interface HeaderProps extends HTMLAttributes<HTMLElement> {
   behaviour?: Behaviour;
   variant?: Variant;
+  /** Name of a variant defined in the theme config (variants[name].header.root). */
+  themeVariant?: string;
 }
 
 export interface HeaderLogoProps extends ImgHTMLAttributes<HTMLImageElement> {
@@ -25,7 +28,10 @@ export interface HeaderLogoProps extends ImgHTMLAttributes<HTMLImageElement> {
   title?: string;
 }
 
-export interface HeaderNavButtonProps extends AnchorHTMLAttributes<HTMLAnchorElement> {}
+export interface HeaderNavButtonProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
+  /** Name of a variant defined in the theme config (variants[name].header.navButton). */
+  themeVariant?: string;
+}
 
 //Header container -----------------------------------------------------------------------------
 
@@ -41,10 +47,11 @@ const headerVariantClasses: Record<Variant, string> = {
 };
 
 export const Header = forwardRef<HTMLElement, HeaderProps>(function Header(
-  { behaviour = "default", className = "", style, children, variant = "default", ...props },
+  { behaviour = "default", className = "", style, children, variant = "default", themeVariant, ...props },
   ref,
 ) {
   const theme = useTheme();
+  const themed = useVariant("header", themeVariant)("root");
   const [scrolled, setScrolled] = useState(false);
   const translateY = behaviour === "hide" && scrolled ? "-100%" : "0";
   //scroll event
@@ -64,26 +71,28 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header(
   //get theme
   const themeStyle = useMemo<React.CSSProperties | undefined>(() => {
     if (!theme.enabled) return undefined;
-    const bg = theme.darkMode ? theme.darkColors.header.background : theme.colors.header.background;
-    const border = theme.darkMode ? theme.darkColors.header.border : theme.colors.header.border;
+    const { header, text } = theme.currentColors;
 
     return {
-      backgroundColor: bg,
-      borderBottom: `1px solid ${border}`,
-      color: theme.darkMode ? theme.darkColors.text : theme.colors.text,
+      backgroundColor: header.background,
+      borderBottomWidth: 1,
+      borderBottomStyle: "solid",
+      borderBottomColor: header.border,
+      color: text,
     };
   }, [theme]);
 
   return (
     <header
       ref={ref}
-      className={[
+      className={cx(
         "w-full h-16 px-12 flex items-center gap-4 shadow-md shadow-gray-500/25 absolute top-0 left-0",
         behaviourContainerClasses[behaviour],
         headerVariantClasses[variant],
+        themed.className,
         className,
-      ].join(" ")}
-      style={{ ...themeStyle, ...style, transform: `translateY(${translateY})` }}
+      )}
+      style={{ ...themeStyle, ...themed.style, ...style, transform: `translateY(${translateY})` }}
       {...props}
     >
       {children}
@@ -97,7 +106,7 @@ const HeaderLogo = forwardRef<HTMLImageElement, HeaderLogoProps>(function Header
 ) {
   const theme = useTheme();
 
-  const src = theme.darkMode && darkSrc ? darkSrc : props.src;
+  const src = theme.dark.enabled && darkSrc ? darkSrc : props.src;
 
   return (
     <div className="h-full flex items-center justify-center shrink-0">
@@ -117,16 +126,17 @@ const HeaderLogo = forwardRef<HTMLImageElement, HeaderLogoProps>(function Header
 });
 
 const HeaderNavButton = forwardRef<HTMLAnchorElement, HeaderNavButtonProps>(
-  function HeaderNavButton({ className = "", style, children, ...props }, ref) {
+  function HeaderNavButton({ className = "", style, children, themeVariant, ...props }, ref) {
     const theme = useTheme();
+    const themed = useVariant("header", themeVariant)("navButton");
 
     const themeStyle = useMemo<React.CSSProperties | undefined>(() => {
       if (!theme.enabled) return undefined;
-      const ringColor = hexToRgba(theme.colors.primary, 0.5);
+      const { primary, text } = theme.currentColors;
       return {
-        color: theme.darkMode ? "#e8e4f0" : "#08060d",
-        ["--tw-ring-color" as any]: ringColor,
-        ["--hover-color" as any]: theme.colors.primary,
+        color: text,
+        ["--tw-ring-color" as any]: hexToRgba(primary, 0.5),
+        ["--hover-color" as any]: primary,
       };
     }, [theme]);
 
@@ -138,7 +148,7 @@ const HeaderNavButton = forwardRef<HTMLAnchorElement, HeaderNavButtonProps>(
     return (
       <a
         ref={ref}
-        className={[
+        className={cx(
           "inline-flex items-center justify-center",
           "px-3 py-2 text-sm font-medium",
           originalClass,
@@ -147,9 +157,10 @@ const HeaderNavButton = forwardRef<HTMLAnchorElement, HeaderNavButtonProps>(
           "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-md",
           originalRing,
           "select-none",
+          themed.className,
           className,
-        ].join(" ")}
-        style={{ ...themeStyle, ...style }}
+        )}
+        style={{ ...themeStyle, ...themed.style, ...style }}
         {...props}
       >
         {children}

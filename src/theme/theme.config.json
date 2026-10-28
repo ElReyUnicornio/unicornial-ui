@@ -10,26 +10,566 @@
       "border": "#e5e4e7"
     }
   },
-  "darkColors": {
-    "primary": "#aa3bff",
-    "secondary": "#f4f3ec",
-    "text": "#ffffff",
-    "background": "#0b0912",
-    "border": "#2a2535",
-    "header": {
+  "dark": {
+    "enabled": false,
+    "colors": {
+      "primary": "#aa3bff",
+      "secondary": "#f4f3ec",
+      "text": "#ffffff",
       "background": "#0b0912",
-      "border": "#2a2535"
+      "border": "#2a2535",
+      "header": {
+        "background": "#0b0912",
+        "border": "#2a2535"
+      }
     }
   },
-  "darkMode": false,
+  "text": {
+    "title": "text-3xl font-bold",
+    "subtitle": "text-xl font-semibold",
+    "paragraph": "text-base font-normal"
+  },
   "notifications": {
     "position": "top-right"
   },
-  "text": {
-    "title": "text-3xl font-bold text-text-h",
-    "subtitle": "text-xl font-semibold text-text-h",
-    "normal": "text-base font-normal text-text",
-    "color": "text-text",
-    "darkColor": "text-text-d"
-  }
+  "variants": {
+    "glass": {
+      "surface": {
+        "root": {
+          "style": {
+            "backgroundColor": "color-mix(in srgb, var(--theme-background) 35%, transparent)",
+            "backdropFilter": "blur(16px) saturate(160%)",
+            "WebkitBackdropFilter": "blur(16px) saturate(160%)",
+            "borderColor": "color-mix(in srgb, var(--theme-text) 14%, transparent)",
+            "boxShadow": "0 8px 32px rgba(31, 38, 135, 0.18)",
+            "borderRadius": "1rem"
+          }
+        }
+      },
+      "button": {
+        "root": {
+          "style": {
+            "backgroundColor": "color-mix(in srgb, var(--theme-primary) 28%, transparent)",
+            "color": "var(--theme-text)",
+            "backdropFilter": "blur(10px) saturate(160%)",
+            "WebkitBackdropFilter": "blur(10px) saturate(160%)",
+            "boxShadow": "inset 0 0 0 1px color-mix(in srgb, var(--theme-text) 14%, transparent), 0 4px 16px rgba(31, 38, 135, 0.15)"
+          }
+        }
+      },
+      "input": {
+        "label": {
+          "style": {
+            "color": "var(--theme-text)"
+          }
+        },
+        "field": {
+          "style": {
+            "backgroundColor": "color-mix(in srgb, var(--theme-background) 30%, transparent)",
+            "backdropFilter": "blur(8px) saturate(160%)",
+            "WebkitBackdropFilter": "blur(8px) saturate(160%)",
+            "borderColor": "color-mix(in srgb, var(--theme-text) 14%, transparent)",
+            "color": "var(--theme-text)"
+          }
+        }
+      },
+      "header": {
+        "root": {
+          "style": {
+            "backgroundColor": "color-mix(in srgb, var(--theme-background) 40%, transparent)",
+            "backdropFilter": "blur(14px) saturate(160%)",
+            "WebkitBackdropFilter": "blur(14px) saturate(160%)",
+            "borderBottomColor": "color-mix(in srgb, var(--theme-text) 14%, transparent)"
+          }
+        }
+      },
+      "modal": {
+        "backdrop": {
+          "style": {
+            "backgroundColor": "rgba(0, 0, 0, 0.25)",
+            "backdropFilter": "blur(6px) saturate(160%)",
+            "WebkitBackdropFilter": "blur(6px) saturate(160%)"
+          }
+        }
+      },
+      "alertDialog": {
+        "backdrop": {
+          "style": {
+            "backgroundColor": "rgba(0, 0, 0, 0.25)",
+            "backdropFilter": "blur(6px) saturate(160%)",
+            "WebkitBackdropFilter": "blur(6px) saturate(160%)"
+          }
+        }
+      },
+      "alert": {
+        "root": {
+          "style": {
+            "backgroundColor": "color-mix(in srgb, var(--alert-bg) 55%, transparent)",
+            "backdropFilter": "blur(10px) saturate(160%)",
+            "WebkitBackdropFilter": "blur(10px) saturate(160%)",
+            "boxShadow": "0 4px 16px rgba(31, 38, 135, 0.12)"
+          }
+        }
+      },
+      "toast": {
+        "root": {
+          "style": {
+            "backgroundColor": "color-mix(in srgb, var(--alert-bg) 60%, transparent)",
+            "backdropFilter": "blur(12px) saturate(160%)",
+            "WebkitBackdropFilter": "blur(12px) saturate(160%)",
+            "boxShadow": "0 8px 24px rgba(31, 38, 135, 0.18)"
+          }
+        }
+      },
+      "tooltip": {
+        "root": {
+          "style": {
+            "backgroundColor": "color-mix(in srgb, var(--theme-background) 55%, transparent)",
+            "backdropFilter": "blur(10px) saturate(160%)",
+            "WebkitBackdropFilter": "blur(10px) saturate(160%)",
+            "borderColor": "color-mix(in srgb, var(--theme-text) 14%, transparent)"
+          }
+        },
+        "arrow": {
+          "style": {
+            "backgroundColor": "color-mix(in srgb, var(--theme-background) 55%, transparent)"
+          }
+        }
+      },
+      "tab": {
+        "root": {
+          "style": {
+            "borderRadius": "0.5rem 0.5rem 0 0"
+          }
+        }
+      },
+      "dropdown": {
+        "root": {
+          "style": {
+            "backgroundColor": "color-mix(in srgb, var(--theme-background) 35%, transparent)",
+            "backdropFilter": "blur(16px) saturate(160%)",
+            "WebkitBackdropFilter": "blur(16px) saturate(160%)",
+            "borderColor": "color-mix(in srgb, var(--theme-text) 14%, transparent)",
+            "boxShadow": "0 8px 32px rgba(31, 38, 135, 0.18)",
+            "borderRadius": "1rem"
+          }
+        }
+      },
+      "switch": {
+        "track": {
+          "style": {
+            "boxShadow": "inset 0 0 0 1px color-mix(in srgb, var(--theme-text) 14%, transparent)"
+          }
+        },
+        "thumb": {
+          "style": {
+            "boxShadow": "0 2px 8px rgba(31, 38, 135, 0.25)"
+          }
+        }
+      },
+      "spinner": {
+        "button": {
+          "style": {
+            "backgroundColor": "color-mix(in srgb, var(--theme-primary) 18%, transparent)"
+          }
+        }
+      },
+      "slider": {
+        "track": {
+          "style": {
+            "boxShadow": "inset 0 0 0 1px color-mix(in srgb, var(--theme-text) 14%, transparent)"
+          }
+        },
+        "thumb": {
+          "style": {
+            "boxShadow": "0 2px 8px rgba(31, 38, 135, 0.25)"
+          }
+        }
+      },
+      "radio": {
+        "control": {
+          "style": {
+            "backgroundColor": "color-mix(in srgb, var(--theme-background) 35%, transparent)",
+            "backdropFilter": "blur(8px) saturate(160%)",
+            "WebkitBackdropFilter": "blur(8px) saturate(160%)"
+          }
+        }
+      },
+      "progressBar": {
+        "track": {
+          "style": {
+            "backgroundColor": "color-mix(in srgb, var(--theme-background) 35%, transparent)",
+            "boxShadow": "inset 0 0 0 1px color-mix(in srgb, var(--theme-text) 14%, transparent)",
+            "backdropFilter": "blur(8px) saturate(160%)",
+            "WebkitBackdropFilter": "blur(8px) saturate(160%)"
+          }
+        },
+        "bar": {
+          "style": {
+            "boxShadow": "0 0 12px color-mix(in srgb, var(--theme-primary) 50%, transparent)"
+          }
+        }
+      },
+      "imageInput": {
+        "area": {
+          "style": {
+            "backgroundColor": "color-mix(in srgb, var(--theme-background) 25%, transparent)",
+            "borderColor": "color-mix(in srgb, var(--theme-text) 14%, transparent)",
+            "backdropFilter": "blur(8px) saturate(160%)",
+            "WebkitBackdropFilter": "blur(8px) saturate(160%)"
+          }
+        }
+      }
+    },
+    "neumorph": {
+      "surface": {
+        "root": {
+          "style": {
+            "backgroundColor": "var(--theme-soft)",
+            "borderColor": "transparent",
+            "borderRadius": "1.25rem",
+            "boxShadow": "8px 8px 16px var(--theme-shadow-dark), -8px -8px 16px var(--theme-shadow-light)"
+          }
+        }
+      },
+      "button": {
+        "root": {
+          "style": {
+            "backgroundColor": "var(--theme-soft)",
+            "color": "var(--theme-text)",
+            "borderRadius": "0.9rem",
+            "boxShadow": "5px 5px 10px var(--theme-shadow-dark), -5px -5px 10px var(--theme-shadow-light)"
+          }
+        }
+      },
+      "input": {
+        "label": {
+          "style": {
+            "color": "var(--theme-text)"
+          }
+        },
+        "field": {
+          "style": {
+            "backgroundColor": "var(--theme-soft)",
+            "borderColor": "transparent",
+            "borderRadius": "0.9rem",
+            "boxShadow": "inset 4px 4px 8px var(--theme-shadow-dark), inset -4px -4px 8px var(--theme-shadow-light)",
+            "color": "var(--theme-text)"
+          }
+        }
+      },
+      "header": {
+        "root": {
+          "style": {
+            "backgroundColor": "var(--theme-soft)",
+            "boxShadow": "0 6px 14px var(--theme-shadow-dark)",
+            "borderBottomColor": "transparent"
+          }
+        }
+      },
+      "modal": {
+        "backdrop": {
+          "style": {
+            "backgroundColor": "color-mix(in srgb, var(--theme-soft) 70%, transparent)"
+          }
+        }
+      },
+      "alertDialog": {
+        "backdrop": {
+          "style": {
+            "backgroundColor": "color-mix(in srgb, var(--theme-soft) 70%, transparent)"
+          }
+        }
+      },
+      "alert": {
+        "root": {
+          "style": {
+            "borderColor": "transparent",
+            "borderRadius": "0.9rem",
+            "boxShadow": "4px 4px 8px var(--theme-shadow-dark), -4px -4px 8px var(--theme-shadow-light)"
+          }
+        }
+      },
+      "toast": {
+        "root": {
+          "style": {
+            "borderColor": "transparent",
+            "borderRadius": "0.9rem",
+            "boxShadow": "5px 5px 10px var(--theme-shadow-dark), -5px -5px 10px var(--theme-shadow-light)"
+          }
+        }
+      },
+      "tooltip": {
+        "root": {
+          "style": {
+            "backgroundColor": "var(--theme-soft)",
+            "borderColor": "transparent",
+            "borderRadius": "0.75rem",
+            "boxShadow": "3px 3px 6px var(--theme-shadow-dark), -3px -3px 6px var(--theme-shadow-light)"
+          }
+        },
+        "arrow": {
+          "style": {
+            "backgroundColor": "var(--theme-soft)"
+          }
+        }
+      },
+      "tab": {
+        "root": {
+          "style": {
+            "borderRadius": "0.75rem"
+          }
+        }
+      },
+      "dropdown": {
+        "root": {
+          "style": {
+            "backgroundColor": "var(--theme-soft)",
+            "borderColor": "transparent",
+            "borderRadius": "1.25rem",
+            "boxShadow": "8px 8px 16px var(--theme-shadow-dark), -8px -8px 16px var(--theme-shadow-light)"
+          }
+        }
+      },
+      "switch": {
+        "track": {
+          "style": {
+            "boxShadow": "inset 3px 3px 6px var(--theme-shadow-dark), inset -3px -3px 6px var(--theme-shadow-light)"
+          }
+        },
+        "thumb": {
+          "style": {
+            "backgroundColor": "var(--theme-soft)",
+            "boxShadow": "2px 2px 4px var(--theme-shadow-dark), -2px -2px 4px var(--theme-shadow-light)"
+          }
+        }
+      },
+      "spinner": {
+        "button": {
+          "style": {
+            "backgroundColor": "var(--theme-soft)",
+            "boxShadow": "3px 3px 6px var(--theme-shadow-dark), -3px -3px 6px var(--theme-shadow-light)"
+          }
+        }
+      },
+      "slider": {
+        "track": {
+          "style": {
+            "boxShadow": "inset 2px 2px 4px var(--theme-shadow-dark), inset -2px -2px 4px var(--theme-shadow-light)"
+          }
+        },
+        "thumb": {
+          "style": {
+            "backgroundColor": "var(--theme-soft)",
+            "borderColor": "transparent",
+            "boxShadow": "3px 3px 6px var(--theme-shadow-dark), -3px -3px 6px var(--theme-shadow-light)"
+          }
+        }
+      },
+      "radio": {
+        "control": {
+          "style": {
+            "backgroundColor": "var(--theme-soft)",
+            "borderColor": "transparent",
+            "boxShadow": "3px 3px 6px var(--theme-shadow-dark), -3px -3px 6px var(--theme-shadow-light)"
+          }
+        }
+      },
+      "progressBar": {
+        "track": {
+          "style": {
+            "boxShadow": "inset 3px 3px 6px var(--theme-shadow-dark), inset -3px -3px 6px var(--theme-shadow-light)"
+          }
+        },
+        "bar": {
+          "style": {
+            "boxShadow": "1px 1px 3px var(--theme-shadow-dark)"
+          }
+        }
+      },
+      "imageInput": {
+        "area": {
+          "style": {
+            "backgroundColor": "var(--theme-soft)",
+            "borderColor": "transparent",
+            "boxShadow": "inset 5px 5px 10px var(--theme-shadow-dark), inset -5px -5px 10px var(--theme-shadow-light)"
+          }
+        }
+      }
+    },
+    "clay": {
+      "surface": {
+        "root": {
+          "style": {
+            "backgroundColor": "color-mix(in srgb, var(--theme-primary) 6%, var(--theme-background))",
+            "borderColor": "transparent",
+            "borderRadius": "1.75rem",
+            "boxShadow": "inset -6px -6px 12px color-mix(in srgb, var(--theme-primary) 30%, transparent), inset 6px 6px 12px rgba(255, 255, 255, 0.55), 10px 12px 18px color-mix(in srgb, var(--theme-primary) 28%, transparent)"
+          }
+        }
+      },
+      "button": {
+        "root": {
+          "style": {
+            "backgroundImage": "linear-gradient(145deg, rgba(255, 255, 255, 0.35), transparent 60%)",
+            "borderRadius": "1.25rem",
+            "boxShadow": "inset -4px -4px 8px color-mix(in srgb, var(--theme-primary) 30%, transparent), inset 4px 4px 8px rgba(255, 255, 255, 0.55), 8px 10px 12px color-mix(in srgb, var(--theme-primary) 28%, transparent)"
+          }
+        }
+      },
+      "input": {
+        "label": {
+          "style": {
+            "color": "var(--theme-text)"
+          }
+        },
+        "field": {
+          "style": {
+            "backgroundColor": "color-mix(in srgb, var(--theme-primary) 3%, var(--theme-background))",
+            "borderColor": "transparent",
+            "borderRadius": "1rem",
+            "color": "var(--theme-text)",
+            "boxShadow": "inset 4px 4px 8px color-mix(in srgb, var(--theme-primary) 25%, transparent), inset -4px -4px 8px rgba(255, 255, 255, 0.5)"
+          }
+        }
+      },
+      "header": {
+        "root": {
+          "style": {
+            "backgroundColor": "color-mix(in srgb, var(--theme-primary) 6%, var(--theme-background))",
+            "borderRadius": "0 0 1.75rem 1.75rem",
+            "boxShadow": "inset -4px -4px 8px color-mix(in srgb, var(--theme-primary) 30%, transparent), inset 4px 4px 8px rgba(255, 255, 255, 0.55), 8px 10px 12px color-mix(in srgb, var(--theme-primary) 28%, transparent)",
+            "borderBottomColor": "transparent"
+          }
+        }
+      },
+      "modal": {
+        "backdrop": {
+          "style": {
+            "backgroundColor": "color-mix(in srgb, var(--theme-primary) 25%, transparent)"
+          }
+        }
+      },
+      "alertDialog": {
+        "backdrop": {
+          "style": {
+            "backgroundColor": "color-mix(in srgb, var(--theme-primary) 25%, transparent)"
+          }
+        }
+      },
+      "alert": {
+        "root": {
+          "style": {
+            "borderColor": "transparent",
+            "borderRadius": "1.25rem",
+            "boxShadow": "inset -3px -3px 6px color-mix(in srgb, var(--alert-color) 30%, transparent), inset 3px 3px 6px rgba(255, 255, 255, 0.55), 7px 9px 9px color-mix(in srgb, var(--alert-color) 28%, transparent)"
+          }
+        }
+      },
+      "toast": {
+        "root": {
+          "style": {
+            "borderColor": "transparent",
+            "borderRadius": "1.25rem",
+            "boxShadow": "inset -4px -4px 8px color-mix(in srgb, var(--alert-color) 30%, transparent), inset 4px 4px 8px rgba(255, 255, 255, 0.55), 8px 10px 12px color-mix(in srgb, var(--alert-color) 28%, transparent)"
+          }
+        }
+      },
+      "tooltip": {
+        "root": {
+          "style": {
+            "backgroundColor": "color-mix(in srgb, var(--theme-primary) 6%, var(--theme-background))",
+            "borderColor": "transparent",
+            "borderRadius": "1rem",
+            "boxShadow": "inset -3px -3px 6px color-mix(in srgb, var(--theme-primary) 30%, transparent), inset 3px 3px 6px rgba(255, 255, 255, 0.55), 7px 9px 9px color-mix(in srgb, var(--theme-primary) 28%, transparent)"
+          }
+        },
+        "arrow": {
+          "style": {
+            "backgroundColor": "color-mix(in srgb, var(--theme-primary) 6%, var(--theme-background))"
+          }
+        }
+      },
+      "tab": {
+        "root": {
+          "style": {
+            "borderRadius": "1rem"
+          }
+        }
+      },
+      "dropdown": {
+        "root": {
+          "style": {
+            "backgroundColor": "color-mix(in srgb, var(--theme-primary) 6%, var(--theme-background))",
+            "borderColor": "transparent",
+            "borderRadius": "1.75rem",
+            "boxShadow": "inset -6px -6px 12px color-mix(in srgb, var(--theme-primary) 30%, transparent), inset 6px 6px 12px rgba(255, 255, 255, 0.55), 10px 12px 18px color-mix(in srgb, var(--theme-primary) 28%, transparent)"
+          }
+        }
+      },
+      "switch": {
+        "track": {
+          "style": {
+            "boxShadow": "inset 3px 3px 6px color-mix(in srgb, var(--theme-primary) 25%, transparent), inset -3px -3px 6px rgba(255, 255, 255, 0.5)"
+          }
+        },
+        "thumb": {
+          "style": {
+            "boxShadow": "inset -2px -2px 4px color-mix(in srgb, var(--theme-primary) 30%, transparent), inset 2px 2px 4px rgba(255, 255, 255, 0.55), 6px 8px 6px color-mix(in srgb, var(--theme-primary) 28%, transparent)"
+          }
+        }
+      },
+      "spinner": {
+        "button": {
+          "style": {
+            "backgroundColor": "color-mix(in srgb, var(--theme-primary) 10%, var(--theme-background))",
+            "boxShadow": "inset -2px -2px 4px color-mix(in srgb, var(--theme-primary) 30%, transparent), inset 2px 2px 4px rgba(255, 255, 255, 0.55), 6px 8px 6px color-mix(in srgb, var(--theme-primary) 28%, transparent)"
+          }
+        }
+      },
+      "slider": {
+        "track": {
+          "style": {
+            "boxShadow": "inset 2px 2px 4px color-mix(in srgb, var(--theme-primary) 25%, transparent), inset -2px -2px 4px rgba(255, 255, 255, 0.5)"
+          }
+        },
+        "thumb": {
+          "style": {
+            "boxShadow": "inset -2px -2px 4px color-mix(in srgb, var(--theme-primary) 30%, transparent), inset 2px 2px 4px rgba(255, 255, 255, 0.55), 6px 8px 6px color-mix(in srgb, var(--theme-primary) 28%, transparent)"
+          }
+        }
+      },
+      "radio": {
+        "control": {
+          "style": {
+            "backgroundColor": "color-mix(in srgb, var(--theme-primary) 10%, var(--theme-background))",
+            "boxShadow": "inset -2px -2px 4px color-mix(in srgb, var(--theme-primary) 30%, transparent), inset 2px 2px 4px rgba(255, 255, 255, 0.55), 6px 8px 6px color-mix(in srgb, var(--theme-primary) 28%, transparent)"
+          }
+        }
+      },
+      "progressBar": {
+        "track": {
+          "style": {
+            "boxShadow": "inset 3px 3px 6px color-mix(in srgb, var(--theme-primary) 25%, transparent), inset -3px -3px 6px rgba(255, 255, 255, 0.5)"
+          }
+        },
+        "bar": {
+          "style": {
+            "backgroundImage": "linear-gradient(180deg, rgba(255, 255, 255, 0.35), transparent 70%)",
+            "boxShadow": "inset -2px -2px 4px color-mix(in srgb, var(--theme-primary) 30%, transparent), inset 2px 2px 4px rgba(255, 255, 255, 0.55), 6px 8px 6px color-mix(in srgb, var(--theme-primary) 28%, transparent)"
+          }
+        }
+      },
+      "imageInput": {
+        "area": {
+          "style": {
+            "backgroundColor": "color-mix(in srgb, var(--theme-primary) 6%, var(--theme-background))",
+            "boxShadow": "inset 5px 5px 10px color-mix(in srgb, var(--theme-primary) 25%, transparent), inset -5px -5px 10px rgba(255, 255, 255, 0.5)",
+            "borderRadius": "1.5rem"
+          }
+        }
+      }
+    }
+  },
+  "env": {}
 }
