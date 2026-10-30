@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Modal } from "../components/Modal";
+import { Drawer, type DrawerSide } from "../components/Drawer";
 import { AlertDialog } from "../components/AlertDialog";
 import type { AlertVariant } from "../components/Alert";
 import { instantiate, type Instance } from "./portal";
@@ -38,6 +39,28 @@ export function showModal(
     >
       {child}
     </Modal>
+  ));
+}
+
+export function showDrawer(
+  title: ReactNode,
+  child: ReactNode,
+  onClose?: () => void,
+  themeVariant?: string,
+  side?: DrawerSide,
+): Instance {
+  return instantiate(({ close }) => (
+    <Drawer
+      title={title}
+      side={side}
+      themeVariant={themeVariant}
+      onClose={() => {
+        close();
+        onClose?.();
+      }}
+    >
+      {child}
+    </Drawer>
   ));
 }
 

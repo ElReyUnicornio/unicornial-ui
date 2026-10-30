@@ -80,6 +80,7 @@ Aceptan las mismas props que el componente base (`defaultValue`, `onChange`, `th
 ### Feedback
 - `Alert` — tarjeta con icono y texto | variantes: info, success, warning, error
 - `Modal` — ventana modal con cabecera (título y botón de cierre) | props: `title`, `onClose`
+- `Drawer` — panel lateral con cabecera y botón de cierre | props: `title`, `side` (left, right, top, bottom), `onClose`
 - `AlertDialog` — pop-up de alerta con icono centrado y botones según la variante | variantes: info, success (Accept), warning (Cancel/Continue), error (Close/Retry)
 - `Toast` — notificación flotante con icono, mensaje y botón de cierre | colores: info, success, warning, error
 - `Dropdown` — panel flotante anclado a un elemento (`anchorRef`) con contenido libre | props: `open`, `onClose` (clic fuera o Escape), `position`, `align` (start, center, end), `matchWidth`
@@ -102,6 +103,7 @@ const [open, setOpen] = useState(false);
 
 - `instantiate(content)` — renderiza cualquier componente en el portal; devuelve `{ id, close, update }`
 - `showModal(title, child, onClose?, themeVariant?)` — muestra un `Modal` (también acepta `showModal(title, onClose, child)`)
+- `showDrawer(title, child, onClose?, themeVariant?, side?)` — muestra un `Drawer`
 - `showAlert(type, message, themeVariant?)` — muestra un `AlertDialog` y devuelve una promesa (`true` al confirmar, `false` al rechazar o cerrar) con `.onConfirm(cb)` y `.onReject(cb)` encadenables
 - `showToast(message, color, onClick?, duration?, themeVariant?)` — muestra un `Toast` (se cierra a los 4 s; `duration = 0` lo mantiene abierto)
 
@@ -167,3 +169,10 @@ La posición de los toasts se configura en el tema (`notifications.position`): t
 - `MobileOnly` / `DesktopOnly` — renderizado condicional por tamaño de pantalla
 - `Validate` / `validators` — constructor de validaciones encadenables
 - `useDebounce` — hook de debounce
+
+## Nuevos componentes y utilidades
+
+- `Accordion` / `Accordion.Item` — secciones desplegables | props: `type` (single, multiple), `value`, `defaultValue`, `onValueChange`; en el item: `value`, `title`, `disabled`
+- `Sidebar` / `Sidebar.Header` / `Sidebar.Button` — barra lateral colapsable | props: `collapsed`, `defaultCollapsed`, `onCollapsedChange`; botón: `icon`, `active`
+- `Gestures` — detecta gestos dentro de su área | props: `onTap`, `onDoubleTap`, `onSwipeLeft/Right/Up/Down`, `swipeThreshold`, `doubleTapDelay`, `tapMaxMove`
+- `get`, `post`, `put`, `patch`, `del` — wrappers de `fetch` `(route, data?, requireAuth?)`. Usan `env.apiUrl` del theme config; con `requireAuth` envían `Authorization: Bearer <localStorage.token>`; lanzan `HttpError` si la respuesta no es 2xx

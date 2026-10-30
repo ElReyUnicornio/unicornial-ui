@@ -59,7 +59,10 @@ export type ComponentName =
   | "progressBar"
   | "imageInput"
   | "datePicker"
-  | "colorPicker";
+  | "colorPicker"
+  | "drawer"
+  | "accordion"
+  | "sidebar";
 
 /** Tailwind classes and/or inline CSS for one part of a component. */
 export interface StyleDef {
@@ -79,8 +82,8 @@ export interface ThemeConfig {
   text: ThemeText;
   notifications: ThemeNotifications;
   variants: Record<string, ThemeVariant>;
-  /** Reserved for variables read from a .env file. */
-  env: Record<string, string>;
+  /** Environment values. `apiUrl` is the base url used by the http wrappers. */
+  env: { apiUrl: string; [key: string]: string };
 }
 
 export interface ThemeContextValue extends ThemeConfig {

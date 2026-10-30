@@ -18,11 +18,16 @@ export type {
 //Layout
 export { Surface } from "./components/Surface";
 export { default as Tabs } from "./components/Tab";
+export { default as Accordion } from "./components/Accordion";
+export { default as Sidebar } from "./components/Sidebar";
+export { Gestures } from "./components/Gestures";
 
 //feedback
 export { Alert } from "./components/Alert";
 export type { AlertVariant } from "./components/Alert";
 export { Modal } from "./components/Modal";
+export { Drawer } from "./components/Drawer";
+export type { DrawerSide } from "./components/Drawer";
 export { AlertDialog } from "./components/AlertDialog";
 export { Toast } from "./components/Toast";
 export type { ToastColor } from "./components/Toast";
@@ -64,10 +69,11 @@ export {
 } from "./components/UnicornialFields";
 
 //utils
+export { get, post, put, patch, del, HttpError, setApiUrl } from "./utils/http";
 export { MobileOnly } from "./components/Mobile";
 export { DesktopOnly } from "./components/Desktop";
 export { instantiate } from "./utils/portal";
-export { showModal, showAlert } from "./utils/dialogs";
+export { showModal, showAlert, showDrawer } from "./utils/dialogs";
 export { showToast } from "./utils/toasts";
 export type { ToastHandle } from "./utils/toasts";
 export type { AlertHandle } from "./utils/dialogs";

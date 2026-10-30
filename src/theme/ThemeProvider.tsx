@@ -2,6 +2,7 @@ import { createContext, useContext, useMemo, useState, useCallback, useEffect } 
 import { createPortal } from "react-dom";
 import defaultJson from "./theme.config.json";
 import { PortalHost } from "../utils/portal";
+import { setApiUrl } from "../utils/http";
 import type {
   ThemeConfig,
   ThemeContextValue,
@@ -70,6 +71,8 @@ export function ThemeProvider({ children, config }: ThemeProviderProps) {
     };
     for (const [name, value] of Object.entries(vars)) root.style.setProperty(name, value);
   }, [currentColors, theme.dark.enabled]);
+
+  useEffect(() => setApiUrl(theme.env.apiUrl), [theme.env.apiUrl]);
 
   const value = useMemo<ThemeContextValue>(
     () => ({

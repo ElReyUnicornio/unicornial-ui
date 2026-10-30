@@ -12,7 +12,11 @@ import Header from "./components/Header";
 import { Alert } from "./components/Alert";
 import { Button } from "./components/Button";
 import { Tooltip } from "./components/Tooltip";
-import { showAlert, showModal } from "./utils/dialogs";
+import { showAlert, showDrawer, showModal } from "./utils/dialogs";
+import Accordion from "./components/Accordion";
+import Sidebar from "./components/Sidebar";
+import { Gestures } from "./components/Gestures";
+import { get, HttpError } from "./utils/http";
 import { showToast } from "./utils/toasts";
 import Logo from "./assets/logo.png";
 import {
@@ -42,6 +46,7 @@ const TabsEnum = {
   Login: 0,
   Register: 1,
   Fields: 2,
+  Components: 3,
 };
 
 function FieldsDemo({ look }: { look?: string }) {
@@ -117,6 +122,98 @@ function FieldsDemo({ look }: { look?: string }) {
   );
 }
 
+function ComponentsDemo({ look }: { look?: string }) {
+  const [lastGesture, setLastGesture] = useState("none");
+  const [page, setPage] = useState("Home");
+  const [request, setRequest] = useState("not sent");
+
+  const sendRequest = async () => {
+    try {
+      await get("/api/ping", { q: "demo" }, true);
+      setRequest("ok");
+    } catch (error) {
+      setRequest(error instanceof HttpError ? `HttpError ${error.status}` : String(error));
+    }
+  };
+
+  return (
+    <>
+      <h1>Components</h1>
+
+      <h2 className="mt-2 font-semibold">Drawer</h2>
+      <div className="flex gap-2 mb-4">
+        {(["left", "right", "top", "bottom"] as const).map((side) => (
+          <Button
+            key={side}
+            type="button"
+            variant="outline"
+            size="sm"
+            themeVariant={look}
+            onClick={() =>
+              showDrawer(`Drawer ${side}`, <p>This drawer was created with showDrawer().</p>, undefined, look, side)
+            }
+          >
+            {side}
+          </Button>
+        ))}
+      </div>
+
+      <h2 className="font-semibold">Gestures</h2>
+      <Gestures
+        className="mb-1 h-24 flex items-center justify-center rounded-md border border-dashed select-none"
+        onTap={() => setLastGesture("tap")}
+        onDoubleTap={() => setLastGesture("double tap")}
+        onSwipeLeft={() => setLastGesture("swipe left")}
+        onSwipeRight={() => setLastGesture("swipe right")}
+        onSwipeUp={() => setLastGesture("swipe up")}
+        onSwipeDown={() => setLastGesture("swipe down")}
+      >
+        Tap, double tap or swipe here
+      </Gestures>
+      <p className="mb-4 text-sm">Last gesture: {lastGesture}</p>
+
+      <h2 className="font-semibold">Accordion</h2>
+      <Accordion className="mb-4" themeVariant={look} defaultValue={["one"]}>
+        <Accordion.Item value="one" title="What is Unicornial UI?">
+          A themeable React component library.
+        </Accordion.Item>
+        <Accordion.Item value="two" title="Is it accessible?">
+          Items expose aria-expanded and aria-controls.
+        </Accordion.Item>
+        <Accordion.Item value="three" title="Disabled item" disabled>
+          You can't see this.
+        </Accordion.Item>
+      </Accordion>
+
+      <h2 className="font-semibold">Sidebar</h2>
+      <div className="mb-4 h-56 flex border rounded-md overflow-hidden">
+        <Sidebar themeVariant={look}>
+          <Sidebar.Header title="Menu" />
+          {["Home", "Profile", "Settings"].map((name) => (
+            <Sidebar.Button
+              key={name}
+              active={page === name}
+              icon={<span aria-hidden="true">{name[0]}</span>}
+              onClick={() => setPage(name)}
+            >
+              {name}
+            </Sidebar.Button>
+          ))}
+        </Sidebar>
+        <div className="p-4 text-sm">Page: {page}</div>
+      </div>
+
+      <h2 className="font-semibold">HTTP</h2>
+      <div className="flex items-center gap-2">
+        <Button type="button" variant="outline" size="sm" themeVariant={look} onClick={sendRequest}>
+          get("/api/ping", ..., true)
+        </Button>
+        <span className="text-sm">{request}</span>
+      </div>
+    </>
+  );
+}
+
 function Main() {
   const [selectedTab, setSelectedTab] = useState(TabsEnum.Login);
   const tooltipAnchor = useRef<HTMLButtonElement>(null);
@@ -142,6 +239,7 @@ function Main() {
           <Tabs.Item>Login</Tabs.Item>
           <Tabs.Item>Register</Tabs.Item>
           <Tabs.Item>Fields</Tabs.Item>
+          <Tabs.Item>Components</Tabs.Item>
         </Tabs>
       </Header>
       <div className="flex gap-2 mb-4">
@@ -240,7 +338,7 @@ function Main() {
       >
         <Surface
           themeVariant={look}
-          className={selectedTab === TabsEnum.Fields ? "w-96 max-h-[60vh] overflow-auto p-4" : ""}
+          className={selectedTab === TabsEnum.Fields || selectedTab === TabsEnum.Components ? "w-96 max-h-[60vh] overflow-auto p-4" : ""}
         >
           {selectedTab === TabsEnum.Login && (
             <>
@@ -255,6 +353,7 @@ function Main() {
             </>
           )}
           {selectedTab === TabsEnum.Fields && <FieldsDemo look={look} />}
+          {selectedTab === TabsEnum.Components && <ComponentsDemo look={look} />}
           {selectedTab === TabsEnum.Register && (
             <>
               <h1>Register</h1>
