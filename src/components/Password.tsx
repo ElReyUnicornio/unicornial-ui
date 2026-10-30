@@ -23,7 +23,7 @@ export const Password = forwardRef<HTMLInputElement, PasswordProps>(function Pas
           aria-pressed={visible}
           disabled={props.disabled}
           onClick={() => setVisible((v) => !v)}
-          className="p-1 rounded-md cursor-pointer opacity-60 hover:opacity-100 disabled:pointer-events-none"
+          className="p-1 rounded-md cursor-pointer opacity-60 hover:opacity-100 hover:bg-hover disabled:pointer-events-none"
         >
           {visible ? <EyeOff /> : <Eye />}
         </button>

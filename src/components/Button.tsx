@@ -14,19 +14,19 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<Variant, string> = {
   primary:
-    "bg-accent text-white hover:bg-accent/90 focus-visible:ring-accent/50",
+    "bg-accent text-white hover:bg-accent/90 focus-visible:ring-focus/40",
   secondary:
-    "bg-code-bg text-text-h hover:bg-code-bg/80 focus-visible:ring-code-bg/50",
+    "bg-code-bg text-text-h hover:bg-code-bg/80 focus-visible:ring-focus/40",
   outline:
-    "border border-border bg-transparent text-text-h hover:bg-accent-bg hover:border-accent-border focus-visible:ring-accent/50",
+    "border border-border bg-transparent text-text-h hover:bg-hover hover:border-accent-border focus-visible:ring-focus/40",
   ghost:
-    "bg-transparent text-text-h hover:bg-accent-bg focus-visible:ring-accent/50",
+    "bg-transparent text-text-h hover:bg-hover focus-visible:ring-focus/40",
 };
 
 const sizeClasses: Record<Size, string> = {
-  sm: "px-3 py-1.5 text-sm gap-1.5",
-  md: "px-5 py-2.5 text-base gap-2",
-  lg: "px-7 py-3 text-lg gap-2.5",
+  sm: "px-2.5 py-1 text-sm gap-1.5",
+  md: "px-4 py-2 text-sm gap-2",
+  lg: "px-5 py-2.5 text-base gap-2.5",
 };
 
 function hexToRgba(hex: string, alpha: number): string {
@@ -104,9 +104,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     <button
       ref={ref}
       className={cx(
-        "inline-flex items-center justify-center font-medium rounded-lg",
+        "inline-flex items-center justify-center font-medium rounded-md",
         "transition-all duration-200 ease-in-out",
-        "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+        "focus:outline-none focus-visible:ring-2 focus-visible:ring-focus/40",
         "disabled:opacity-50 disabled:pointer-events-none",
         "select-none",
         variantClasses[variant],

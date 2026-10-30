@@ -85,7 +85,7 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(function Sidebar(
         ref={ref}
         {...props}
         className={cx(
-          "h-full flex flex-col gap-1 p-2 shadow-md shadow-gray-500/25 shrink-0 overflow-hidden transition-[width] duration-200",
+          "h-full flex flex-col gap-1 p-2 shrink-0 overflow-hidden transition-[width] duration-200",
           isCollapsed ? "w-16" : "w-60",
           themed.className,
           className,
@@ -129,7 +129,7 @@ const SidebarHeader = forwardRef<HTMLDivElement, SidebarHeaderProps>(function Si
           aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
           aria-expanded={!collapsed}
           onClick={toggle}
-          className="shrink-0 p-1 rounded-md cursor-pointer opacity-60 hover:opacity-100 hover:bg-black/10"
+          className="shrink-0 p-1 rounded-md cursor-pointer opacity-60 hover:opacity-100 hover:bg-hover"
         >
           <svg
             width="18"
@@ -175,7 +175,7 @@ const SidebarButton = forwardRef<HTMLButtonElement, SidebarButtonProps>(function
       title={collapsed && typeof children === "string" ? children : props.title}
       {...props}
       className={cx(
-        "w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium cursor-pointer select-none transition-colors duration-200 hover:bg-black/10 focus-visible:outline-none focus-visible:ring-2 disabled:opacity-50 disabled:cursor-not-allowed",
+        "w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium cursor-pointer select-none transition-colors duration-200 hover:bg-hover focus-visible:outline-none focus-visible:ring-2 disabled:opacity-50 disabled:cursor-not-allowed",
         collapsed && "justify-center",
         themed.className,
         className,

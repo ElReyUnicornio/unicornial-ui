@@ -50,7 +50,7 @@ export function AlertDialog({
         aria-modal="true"
         themeVariant={themeVariant}
         className={cx(
-          "relative w-full max-w-sm flex flex-col items-center gap-4 p-6 text-center",
+          "relative w-full max-w-sm flex flex-col items-center gap-4 p-6 text-center shadow-float",
           container.className,
         )}
         style={container.style}

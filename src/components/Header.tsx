@@ -86,7 +86,7 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header(
     <header
       ref={ref}
       className={cx(
-        "w-full h-16 px-12 flex items-center gap-4 shadow-md shadow-gray-500/25 absolute top-0 left-0",
+        "w-full h-16 px-6 sm:px-12 flex items-center gap-4 absolute top-0 left-0",
         behaviourContainerClasses[behaviour],
         headerVariantClasses[variant],
         themed.className,

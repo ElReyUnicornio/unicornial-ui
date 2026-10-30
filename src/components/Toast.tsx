@@ -31,7 +31,7 @@ export function Toast({
       {...props}
       onClick={onClick}
       className={cx(
-        "flex items-center gap-2 w-80 max-w-full px-3 py-2 rounded-md border shadow-md",
+        "flex items-center gap-2 w-80 max-w-full px-3 py-2 rounded-md border shadow-float",
         onClick && "cursor-pointer",
         themed.className,
         className,

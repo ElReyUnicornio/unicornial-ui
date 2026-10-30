@@ -77,8 +77,7 @@ export function FileInput({
           style={styles.fieldStyle}
         >
           <span
-            className="flex items-center gap-1.5 px-2 py-0.5 rounded-md font-medium shrink-0"
-            style={{ backgroundColor: "color-mix(in srgb, var(--theme-primary) 14%, transparent)" }}
+            className="flex items-center gap-1.5 px-2 py-0.5 rounded-md font-medium shrink-0 bg-hover"
           >
             <FileIcon size={16} />
             {buttonText}

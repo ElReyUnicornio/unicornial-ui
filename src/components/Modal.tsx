@@ -17,7 +17,7 @@ export function CloseButton({ onClick }: { onClick?: (event: MouseEvent<HTMLButt
       type="button"
       aria-label="Close"
       onClick={onClick}
-      className="shrink-0 p-1 rounded-md cursor-pointer opacity-60 hover:opacity-100 hover:bg-black/10"
+      className="shrink-0 p-1 rounded-md cursor-pointer opacity-60 hover:opacity-100 hover:bg-hover"
     >
       <svg
         width="18"
@@ -76,7 +76,7 @@ export function Modal({
         aria-modal="true"
         themeVariant={themeVariant}
         {...props}
-        className={cx("w-full max-w-md p-0", container.className, className)}
+        className={cx("w-full max-w-md p-0 shadow-float", container.className, className)}
         style={{ ...container.style, ...style }}
         onClick={(event) => event.stopPropagation()}
       >

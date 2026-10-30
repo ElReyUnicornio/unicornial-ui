@@ -1,20 +1,20 @@
 {
   "colors": {
     "primary": "#aa3bff",
-    "secondary": "#f4f3ec",
+    "secondary": "#f4f4f5",
     "text": "#000000",
     "background": "#ffffff",
-    "border": "#e5e4e7",
+    "border": "#e4e4e7",
     "header": {
       "background": "#ffffff",
-      "border": "#e5e4e7"
+      "border": "#e4e4e7"
     }
   },
   "dark": {
     "enabled": false,
     "colors": {
       "primary": "#aa3bff",
-      "secondary": "#f4f3ec",
+      "secondary": "#f4f4f5",
       "text": "#ffffff",
       "background": "#0b0912",
       "border": "#2a2535",

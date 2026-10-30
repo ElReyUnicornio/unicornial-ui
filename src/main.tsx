@@ -1,38 +1,39 @@
-import { StrictMode, useRef, useState } from "react";
+import { StrictMode, useRef, useState, type ReactNode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import Background from "./components/Background";
-import { ThemeProvider } from "./theme/ThemeProvider";
+import { ThemeProvider, useTheme } from "./theme/ThemeProvider";
 import { Surface } from "./components/Surface";
-import { UnicornialInput } from "./components/UnicornialInput";
 import Validate from "./utils/validation";
 import { Form } from "./components/Form";
 import Tabs from "./components/Tab";
 import Header from "./components/Header";
+import Sidebar from "./components/Sidebar";
+import Accordion from "./components/Accordion";
+import { Gestures } from "./components/Gestures";
 import { Alert } from "./components/Alert";
 import { Button } from "./components/Button";
-import { Tooltip } from "./components/Tooltip";
+import { Switch } from "./components/Switch";
+import { Slider } from "./components/Slider";
+import { Spinner } from "./components/Spinner";
+import { RadioGroup } from "./components/Radio";
+import { ProgressBar } from "./components/ProgressBar";
+import { Tooltip, type TooltipPosition } from "./components/Tooltip";
 import { showAlert, showDrawer, showModal } from "./utils/dialogs";
-import Accordion from "./components/Accordion";
-import Sidebar from "./components/Sidebar";
-import { Gestures } from "./components/Gestures";
-import { get, HttpError } from "./utils/http";
 import { showToast } from "./utils/toasts";
+import { get, HttpError } from "./utils/http";
 import Logo from "./assets/logo.png";
+import darkLogo from "./assets/darklogo.png";
 import {
   UnicornialColorPicker,
   UnicornialDatePicker,
   UnicornialFileInput,
   UnicornialImageInput,
   UnicornialPassword,
-  UnicornialRadioGroup,
   UnicornialSelect,
-  UnicornialSlider,
-  UnicornialSpinner,
-  UnicornialSwitch,
   UnicornialTextArea,
 } from "./components/UnicornialFields";
-import { ProgressBar } from "./components/ProgressBar";
+import { UnicornialInput } from "./components/UnicornialInput";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -42,89 +43,411 @@ createRoot(document.getElementById("root")!).render(
   </StrictMode>,
 );
 
-const TabsEnum = {
-  Login: 0,
-  Register: 1,
-  Fields: 2,
-  Components: 3,
-};
+// layout helpers ------------------------------------------------------------------------------------
 
-function FieldsDemo({ look }: { look?: string }) {
+function Card({
+  title,
+  description,
+  look,
+  className = "",
+  children,
+}: {
+  title: string;
+  description?: string;
+  look?: string;
+  className?: string;
+  children: ReactNode;
+}) {
+  return (
+    <Surface themeVariant={look} className={`flex flex-col gap-3 ${className}`}>
+      <div>
+        <h3 className="font-semibold">{title}</h3>
+        {description && <p className="text-sm opacity-60">{description}</p>}
+      </div>
+      {children}
+    </Surface>
+  );
+}
+
+function Row({ children }: { children: ReactNode }) {
+  return <div className="flex flex-wrap items-center gap-2">{children}</div>;
+}
+
+function Grid({ children }: { children: ReactNode }) {
+  return <div className="grid gap-4 grid-cols-1 xl:grid-cols-2 items-start">{children}</div>;
+}
+
+// sections ------------------------------------------------------------------------------------------
+
+interface SectionProps {
+  look?: string;
+}
+
+function ButtonsSection({ look }: SectionProps) {
+  return (
+    <Grid>
+      <Card title="Variants" look={look}>
+        <Row>
+          {(["primary", "secondary", "outline", "ghost"] as const).map((variant) => (
+            <Button key={variant} variant={variant} themeVariant={look}>
+              {variant}
+            </Button>
+          ))}
+        </Row>
+      </Card>
+      <Card title="Sizes" look={look}>
+        <Row>
+          {(["sm", "md", "lg"] as const).map((size) => (
+            <Button key={size} size={size} themeVariant={look}>
+              Size {size}
+            </Button>
+          ))}
+        </Row>
+      </Card>
+      <Card title="Disabled" look={look}>
+        <Row>
+          {(["primary", "secondary", "outline", "ghost"] as const).map((variant) => (
+            <Button key={variant} variant={variant} themeVariant={look} disabled>
+              {variant}
+            </Button>
+          ))}
+        </Row>
+      </Card>
+    </Grid>
+  );
+}
+
+function FormsSection({ look }: SectionProps) {
+  return (
+    <Form
+      initialValues={{}}
+      onSubmit={(values, hasErrors) =>
+        hasErrors ? console.log("Form has errors.") : console.log("Form submitted:", values)
+      }
+    >
+      <Grid>
+        <Card title="Text" description="Inputs with validation" look={look}>
+          <UnicornialInput
+            themeVariant={look}
+            label="Email"
+            name="email"
+            placeholder="you@example.com"
+            validator={Validate.email()}
+          />
+          <UnicornialPassword
+            themeVariant={look}
+            name="password"
+            label="Password"
+            placeholder="At least 6 characters"
+            validator={Validate.minLength(6)}
+          />
+          <UnicornialTextArea
+            themeVariant={look}
+            name="message"
+            label="Message"
+            placeholder="Write something..."
+            validator={Validate.required()}
+          />
+        </Card>
+        <Card title="Pickers" look={look}>
+          <UnicornialSelect
+            themeVariant={look}
+            name="country"
+            label="Country"
+            validator={Validate.required()}
+            options={[
+              { value: "mx", label: "Mexico" },
+              { value: "es", label: "Spain" },
+              { value: "ar", label: "Argentina" },
+              { value: "co", label: "Colombia", disabled: true },
+            ]}
+          />
+          <UnicornialDatePicker
+            themeVariant={look}
+            name="date"
+            label="Date"
+            format="DD MMM YYYY"
+            validator={Validate.required()}
+          />
+          <UnicornialColorPicker themeVariant={look} name="color" label="Color" format="oklch" />
+        </Card>
+        <Card title="Files" look={look}>
+          <UnicornialFileInput themeVariant={look} name="document" label="Document" />
+          <UnicornialImageInput themeVariant={look} name="avatar" label="Avatar" />
+        </Card>
+        <Card title="Submit" description="Shows every validation error at once" look={look}>
+          <Row>
+            <Button type="submit" themeVariant={look}>
+              Submit
+            </Button>
+            <Button type="reset" variant="outline" themeVariant={look}>
+              Reset
+            </Button>
+          </Row>
+        </Card>
+      </Grid>
+    </Form>
+  );
+}
+
+function ControlsSection({ look }: SectionProps) {
   const [progress, setProgress] = useState(40);
 
   return (
+    <Grid>
+      <Card title="Switch & radio" look={look}>
+        <Switch themeVariant={look} label="Notifications" defaultChecked />
+        <Switch themeVariant={look} label="Disabled" disabled />
+        <RadioGroup
+          themeVariant={look}
+          label="Plan"
+          defaultValue="free"
+          orientation="horizontal"
+          options={[
+            { value: "free", label: "Free" },
+            { value: "pro", label: "Pro" },
+            { value: "team", label: "Team" },
+          ]}
+        />
+      </Card>
+      <Card title="Slider & spinner" look={look}>
+        <Slider themeVariant={look} label="Volume" showValue defaultValue={30} />
+        <Spinner themeVariant={look} label="Quantity" min={0} max={10} defaultValue={1} />
+      </Card>
+      <Card title="Progress" look={look}>
+        <ProgressBar themeVariant={look} label="Upload" showValue value={progress} />
+        <Row>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            themeVariant={look}
+            onClick={() => setProgress((p) => Math.max(0, p - 10))}
+          >
+            -10
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            themeVariant={look}
+            onClick={() => setProgress((p) => Math.min(100, p + 10))}
+          >
+            +10
+          </Button>
+        </Row>
+        <ProgressBar themeVariant={look} label="Loading" indeterminate />
+      </Card>
+    </Grid>
+  );
+}
+
+function FeedbackSection({ look }: SectionProps) {
+  return (
+    <Grid>
+      <Card title="Alerts" look={look}>
+        <div className="flex flex-col gap-2">
+          <Alert variant="info" themeVariant={look}>
+            This is an informational message.
+          </Alert>
+          <Alert variant="success" themeVariant={look}>
+            Your changes were saved.
+          </Alert>
+          <Alert variant="warning" themeVariant={look}>
+            This is a warning message.
+          </Alert>
+          <Alert variant="error" themeVariant={look}>
+            Something went wrong.
+          </Alert>
+        </div>
+      </Card>
+      <Card title="Toasts" description="showToast()" look={look}>
+        <Row>
+          {(["info", "success", "warning", "error"] as const).map((color) => (
+            <Button
+              key={color}
+              type="button"
+              variant="outline"
+              size="sm"
+              themeVariant={look}
+              onClick={() =>
+                showToast(
+                  `This is a ${color} toast.`,
+                  color,
+                  () => console.log(`${color} toast clicked`),
+                  undefined,
+                  look,
+                )
+              }
+            >
+              {color}
+            </Button>
+          ))}
+        </Row>
+      </Card>
+      <Card
+        title="Alert dialogs"
+        description="showAlert() resolves on confirm / reject"
+        look={look}
+      >
+        <Row>
+          {(["info", "success", "warning", "error"] as const).map((type) => (
+            <Button
+              key={type}
+              type="button"
+              variant="outline"
+              size="sm"
+              themeVariant={look}
+              onClick={() =>
+                showAlert(type, `This is a ${type} alert.`, look)
+                  .onConfirm(() => console.log(`${type} confirmed`))
+                  .onReject(() => console.log(`${type} rejected`))
+              }
+            >
+              {type}
+            </Button>
+          ))}
+        </Row>
+      </Card>
+    </Grid>
+  );
+}
+
+function TooltipDemo({ position, look }: { position: TooltipPosition; look?: string }) {
+  const anchor = useRef<HTMLButtonElement>(null);
+  const [open, setOpen] = useState(false);
+
+  return (
     <>
-      <h1>Fields</h1>
-      <UnicornialPassword
+      <Button
+        ref={anchor}
+        type="button"
+        variant="secondary"
+        size="sm"
         themeVariant={look}
-        name="fieldPassword"
-        label="Password"
-        placeholder="Your password"
-        validator={Validate.minLength(6)}
-      />
-      <UnicornialTextArea
-        themeVariant={look}
-        name="message"
-        label="Message"
-        placeholder="Write something..."
-        validator={Validate.required()}
-      />
-      <UnicornialSelect
-        themeVariant={look}
-        name="country"
-        label="Country"
-        validator={Validate.required()}
-        options={[
-          { value: "mx", label: "Mexico" },
-          { value: "es", label: "Spain" },
-          { value: "ar", label: "Argentina" },
-          { value: "co", label: "Colombia", disabled: true },
-        ]}
-      />
-      <UnicornialSpinner themeVariant={look} name="quantity" label="Quantity" min={0} max={10} defaultValue={1} />
-      <UnicornialSwitch themeVariant={look} name="notifications" label="Notifications" defaultChecked />
-      <UnicornialRadioGroup
-        themeVariant={look}
-        name="plan"
-        label="Plan"
-        defaultValue="free"
-        options={[
-          { value: "free", label: "Free" },
-          { value: "pro", label: "Pro" },
-        ]}
-        orientation="horizontal"
-      />
-      <UnicornialSlider themeVariant={look} name="volume" label="Volume" showValue defaultValue={30} />
-      <ProgressBar themeVariant={look} label="Progress" showValue value={progress} />
-      <div className="flex gap-2 mb-4">
-        <Button type="button" variant="outline" size="sm" onClick={() => setProgress((p) => Math.max(0, p - 10))}>
-          -10
-        </Button>
-        <Button type="button" variant="outline" size="sm" onClick={() => setProgress((p) => Math.min(100, p + 10))}>
-          +10
-        </Button>
-      </div>
-      <ProgressBar themeVariant={look} label="Loading" indeterminate />
-      <UnicornialColorPicker themeVariant={look} name="color" label="Color" format="oklch" />
-      <UnicornialDatePicker
-        themeVariant={look}
-        name="date"
-        label="Date"
-        format="DD MMM YYYY"
-        validator={Validate.required()}
-      />
-      <UnicornialFileInput themeVariant={look} name="document" label="Document" />
-      <UnicornialImageInput themeVariant={look} name="avatar" label="Avatar" />
-      <Button type="submit" themeVariant={look}>
-        Submit
+        onMouseEnter={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
+      >
+        {position}
       </Button>
+      <Tooltip anchorRef={anchor} position={position} open={open} themeVariant={look}>
+        Tooltip on the {position}
+      </Tooltip>
     </>
   );
 }
 
-function ComponentsDemo({ look }: { look?: string }) {
+function OverlaysSection({ look }: SectionProps) {
+  return (
+    <Grid>
+      <Card title="Modal" description="showModal()" look={look}>
+        <Row>
+          <Button
+            type="button"
+            themeVariant={look}
+            onClick={() =>
+              showModal(
+                "Hello from the portal",
+                <p>This modal was created with showModal().</p>,
+                undefined,
+                look,
+              )
+            }
+          >
+            Open modal
+          </Button>
+        </Row>
+      </Card>
+      <Card title="Drawer" description="showDrawer() from any side" look={look}>
+        <Row>
+          {(["left", "right", "top", "bottom"] as const).map((side) => (
+            <Button
+              key={side}
+              type="button"
+              variant="outline"
+              size="sm"
+              themeVariant={look}
+              onClick={() =>
+                showDrawer(
+                  `Drawer ${side}`,
+                  <p>This drawer was created with showDrawer().</p>,
+                  undefined,
+                  look,
+                  side,
+                )
+              }
+            >
+              {side}
+            </Button>
+          ))}
+        </Row>
+      </Card>
+      <Card title="Tooltip" description="Hover each button" look={look}>
+        <Row>
+          {(["top", "bottom", "left", "right"] as const).map((position) => (
+            <TooltipDemo key={position} position={position} look={look} />
+          ))}
+        </Row>
+      </Card>
+    </Grid>
+  );
+}
+
+function NavigationSection({ look }: SectionProps) {
+  const [underline, setUnderline] = useState(0);
+  const [pills, setPills] = useState(0);
+  const labels = ["Overview", "Activity", "Settings"];
+
+  return (
+    <Grid>
+      <Card title="Tabs: underline" look={look}>
+        <Tabs variant="underline" themeVariant={look} onChange={setUnderline}>
+          {labels.map((label) => (
+            <Tabs.Item key={label}>{label}</Tabs.Item>
+          ))}
+        </Tabs>
+        <p className="text-sm opacity-60">Selected: {labels[underline]}</p>
+      </Card>
+      <Card title="Tabs: pills" look={look}>
+        <Tabs variant="pills" themeVariant={look} onChange={setPills}>
+          {labels.map((label) => (
+            <Tabs.Item key={label}>{label}</Tabs.Item>
+          ))}
+        </Tabs>
+        <p className="text-sm opacity-60">Selected: {labels[pills]}</p>
+      </Card>
+      <Card title="Accordion: single" look={look}>
+        <Accordion themeVariant={look} defaultValue={["one"]}>
+          <Accordion.Item value="one" title="What is Unicornial UI?">
+            A small, themeable React component library.
+          </Accordion.Item>
+          <Accordion.Item value="two" title="Is it accessible?">
+            Items expose aria-expanded and aria-controls.
+          </Accordion.Item>
+          <Accordion.Item value="three" title="Disabled item" disabled>
+            You can't see this.
+          </Accordion.Item>
+        </Accordion>
+      </Card>
+      <Card title="Accordion: multiple" look={look}>
+        <Accordion type="multiple" themeVariant={look} defaultValue={["a", "b"]}>
+          <Accordion.Item value="a" title="First">
+            Several items can stay open at once.
+          </Accordion.Item>
+          <Accordion.Item value="b" title="Second">
+            This one starts open too.
+          </Accordion.Item>
+          <Accordion.Item value="c" title="Third">
+            Closed until you click it.
+          </Accordion.Item>
+        </Accordion>
+      </Card>
+    </Grid>
+  );
+}
+
+function InteractionSection({ look }: SectionProps) {
   const [lastGesture, setLastGesture] = useState("none");
-  const [page, setPage] = useState("Home");
   const [request, setRequest] = useState("not sent");
 
   const sendRequest = async () => {
@@ -137,243 +460,123 @@ function ComponentsDemo({ look }: { look?: string }) {
   };
 
   return (
-    <>
-      <h1>Components</h1>
-
-      <h2 className="mt-2 font-semibold">Drawer</h2>
-      <div className="flex gap-2 mb-4">
-        {(["left", "right", "top", "bottom"] as const).map((side) => (
+    <Grid>
+      <Card title="Gestures" description="Tap, double tap or swipe inside the box" look={look}>
+        <Gestures
+          className="h-32 flex items-center justify-center rounded-md border border-dashed select-none"
+          onTap={() => setLastGesture("tap")}
+          onDoubleTap={() => setLastGesture("double tap")}
+          onSwipeLeft={() => setLastGesture("swipe left")}
+          onSwipeRight={() => setLastGesture("swipe right")}
+          onSwipeUp={() => setLastGesture("swipe up")}
+          onSwipeDown={() => setLastGesture("swipe down")}
+        >
+          Last gesture: <strong className="ml-1">{lastGesture}</strong>
+        </Gestures>
+      </Card>
+      <Card title="HTTP" description="get() with requireAuth, reads env.apiUrl" look={look}>
+        <Row>
           <Button
-            key={side}
             type="button"
             variant="outline"
             size="sm"
             themeVariant={look}
-            onClick={() =>
-              showDrawer(`Drawer ${side}`, <p>This drawer was created with showDrawer().</p>, undefined, look, side)
-            }
+            onClick={sendRequest}
           >
-            {side}
+            get("/api/ping")
           </Button>
-        ))}
-      </div>
-
-      <h2 className="font-semibold">Gestures</h2>
-      <Gestures
-        className="mb-1 h-24 flex items-center justify-center rounded-md border border-dashed select-none"
-        onTap={() => setLastGesture("tap")}
-        onDoubleTap={() => setLastGesture("double tap")}
-        onSwipeLeft={() => setLastGesture("swipe left")}
-        onSwipeRight={() => setLastGesture("swipe right")}
-        onSwipeUp={() => setLastGesture("swipe up")}
-        onSwipeDown={() => setLastGesture("swipe down")}
-      >
-        Tap, double tap or swipe here
-      </Gestures>
-      <p className="mb-4 text-sm">Last gesture: {lastGesture}</p>
-
-      <h2 className="font-semibold">Accordion</h2>
-      <Accordion className="mb-4" themeVariant={look} defaultValue={["one"]}>
-        <Accordion.Item value="one" title="What is Unicornial UI?">
-          A themeable React component library.
-        </Accordion.Item>
-        <Accordion.Item value="two" title="Is it accessible?">
-          Items expose aria-expanded and aria-controls.
-        </Accordion.Item>
-        <Accordion.Item value="three" title="Disabled item" disabled>
-          You can't see this.
-        </Accordion.Item>
-      </Accordion>
-
-      <h2 className="font-semibold">Sidebar</h2>
-      <div className="mb-4 h-56 flex border rounded-md overflow-hidden">
-        <Sidebar themeVariant={look}>
-          <Sidebar.Header title="Menu" />
-          {["Home", "Profile", "Settings"].map((name) => (
-            <Sidebar.Button
-              key={name}
-              active={page === name}
-              icon={<span aria-hidden="true">{name[0]}</span>}
-              onClick={() => setPage(name)}
-            >
-              {name}
-            </Sidebar.Button>
-          ))}
-        </Sidebar>
-        <div className="p-4 text-sm">Page: {page}</div>
-      </div>
-
-      <h2 className="font-semibold">HTTP</h2>
-      <div className="flex items-center gap-2">
-        <Button type="button" variant="outline" size="sm" themeVariant={look} onClick={sendRequest}>
-          get("/api/ping", ..., true)
-        </Button>
-        <span className="text-sm">{request}</span>
-      </div>
-    </>
+          <span className="text-sm opacity-70">{request}</span>
+        </Row>
+      </Card>
+    </Grid>
   );
 }
 
+// page ----------------------------------------------------------------------------------------------
+
+const sections = [
+  { id: "buttons", label: "Buttons", Component: ButtonsSection },
+  { id: "forms", label: "Forms", Component: FormsSection },
+  { id: "controls", label: "Controls", Component: ControlsSection },
+  { id: "feedback", label: "Feedback", Component: FeedbackSection },
+  { id: "overlays", label: "Overlays", Component: OverlaysSection },
+  { id: "navigation", label: "Navigation", Component: NavigationSection },
+  { id: "interaction", label: "Interaction", Component: InteractionSection },
+];
+
+const looks = [undefined, "glass", "neumorph", "clay"];
+
 function Main() {
-  const [selectedTab, setSelectedTab] = useState(TabsEnum.Login);
-  const tooltipAnchor = useRef<HTMLButtonElement>(null);
-  const [tooltipOpen, setTooltipOpen] = useState(false);
+  const { currentColors, dark, setDarkMode } = useTheme();
+  const [sectionId, setSectionId] = useState(sections[0].id);
   const [look, setLook] = useState<string | undefined>(undefined);
+  const active = sections.find((section) => section.id === sectionId) ?? sections[0];
 
   return (
-    <Background
-      variant="grid"
-      size={50}
-      color="#00000022"
-      className="h-screen flex flex-col items-center justify-center-safe pt-20 pb-8"
-      mask="fade-in"
+    <div
+      className="h-screen flex flex-col"
+      style={{ backgroundColor: currentColors.background, color: currentColors.text }}
     >
-      <Header themeVariant={look}>
-        <Header.Logo src={Logo} alt="Logo" title="Unicornial-UI" />
-        <Tabs
-          variant="underline"
-          themeVariant={look}
-          className="h-full items-center"
-          onChange={(i) => setSelectedTab(i)}
-        >
-          <Tabs.Item>Login</Tabs.Item>
-          <Tabs.Item>Register</Tabs.Item>
-          <Tabs.Item>Fields</Tabs.Item>
-          <Tabs.Item>Components</Tabs.Item>
-        </Tabs>
+      <Header themeVariant={look} className="z-10">
+        <Header.Logo src={Logo} darkSrc={darkLogo} alt="Logo" title="Unicornial-UI" />
+        <div className="ml-auto flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-1">
+            {looks.map((name) => (
+              <Button
+                key={name ?? "default"}
+                type="button"
+                size="sm"
+                variant={look === name ? "primary" : "ghost"}
+                onClick={() => setLook(name)}
+              >
+                {name ?? "default"}
+              </Button>
+            ))}
+          </div>
+          <Switch themeVariant={look} label="Dark" checked={dark.enabled} onChange={setDarkMode} />
+        </div>
       </Header>
-      <div className="flex gap-2 mb-4">
-        {[undefined, "glass", "neumorph", "clay"].map((name) => (
-          <Button
-            key={name ?? "default"}
-            type="button"
-            variant={look === name ? "primary" : "outline"}
-            onClick={() => setLook(name)}
-          >
-            {name ?? "default"}
-          </Button>
-        ))}
-      </div>
-      <div className="flex flex-col gap-2 mb-4">
-        <Alert variant="info" themeVariant={look}>This is an informational message.</Alert>
-        <Alert variant="warning" themeVariant={look}>This is a warning message.</Alert>
-        <Alert variant="error" themeVariant={look}>This is an error message.</Alert>
-      </div>
-      <Button
-        type="button"
-        themeVariant={look}
-        className="mb-4"
-        onClick={() =>
-          showModal(
-            "Hello from the portal",
-            <p>This modal was created with showModal().</p>,
-            undefined,
-            look,
-          )
-        }
-      >
-        Open modal
-      </Button>
-      <div className="flex gap-2 mb-4">
-        {(["info", "warning", "error"] as const).map((type) => (
-          <Button
-            key={type}
-            type="button"
-            variant="outline"
-            themeVariant={look}
-            onClick={() =>
-              showAlert(type, `This is a ${type} alert.`, look)
-                .onConfirm(() => console.log(`${type} confirmed`))
-                .onReject(() => console.log(`${type} rejected`))
-            }
-          >
-            {type} alert
-          </Button>
-        ))}
-      </div>
-      <div className="flex gap-2 mb-4">
-        {(["info", "success", "warning", "error"] as const).map((color) => (
-          <Button
-            key={color}
-            type="button"
-            variant="ghost"
-            themeVariant={look}
-            onClick={() =>
-              showToast(
-                `This is a ${color} toast.`,
-                color,
-                () => console.log(`${color} toast clicked`),
-                undefined,
-                look,
-              )
-            }
-          >
-            {color} toast
-          </Button>
-        ))}
-      </div>
-      <Button
-        ref={tooltipAnchor}
-        type="button"
-        variant="secondary"
-        themeVariant={look}
-        className="mb-4"
-        onMouseEnter={() => setTooltipOpen(true)}
-        onMouseLeave={() => setTooltipOpen(false)}
-      >
-        Hover me
-      </Button>
-      <Tooltip anchorRef={tooltipAnchor} position="top" arrow open={tooltipOpen} themeVariant={look}>
-        This is a tooltip
-      </Tooltip>
-      <Form
-        initialValues={{ username: "", password: "" }}
-        onSubmit={(values, hasErrors) => {
-          if (hasErrors) {
-            console.log("Form has errors. Please fix them before submitting.");
-          } else {
-            console.log("Form submitted successfully with values:", values);
-          }
-        }}
-      >
-        <Surface
-          themeVariant={look}
-          className={selectedTab === TabsEnum.Fields || selectedTab === TabsEnum.Components ? "w-96 max-h-[60vh] overflow-auto p-4" : ""}
+
+      <div className="flex flex-1 min-h-0 pt-16">
+        <Sidebar themeVariant={look}>
+          <Sidebar.Header title="Components" />
+          {sections.map((section) => (
+            <Sidebar.Button
+              key={section.id}
+              active={section.id === active.id}
+              icon={
+                <span
+                  aria-hidden="true"
+                  className="w-5 h-5 rounded-md flex items-center justify-center text-xs font-semibold bg-hover"
+                >
+                  {section.label[0]}
+                </span>
+              }
+              onClick={() => setSectionId(section.id)}
+            >
+              {section.label}
+            </Sidebar.Button>
+          ))}
+        </Sidebar>
+
+        <Background
+          variant="dots-grid"
+          size={24}
+          color="#88888822"
+          mask="none"
+          className="flex-1 min-w-0 overflow-auto"
         >
-          {selectedTab === TabsEnum.Login && (
-            <>
-              <h1>Login</h1>
-              <UnicornialInput themeVariant={look} label="Username" name="username" validator={Validate.email()} />
-              <UnicornialInput
-                themeVariant={look}
-                label="Password"
-                name="password"
-                validator={Validate.minLength(6).onlyNumbers()}
-              />
-            </>
-          )}
-          {selectedTab === TabsEnum.Fields && <FieldsDemo look={look} />}
-          {selectedTab === TabsEnum.Components && <ComponentsDemo look={look} />}
-          {selectedTab === TabsEnum.Register && (
-            <>
-              <h1>Register</h1>
-              <UnicornialInput themeVariant={look} label="Username" name="username" validator={Validate.email()} />
-              <UnicornialInput
-                themeVariant={look}
-                label="Password"
-                name="password"
-                validator={Validate.minLength(6).onlyNumbers()}
-              />
-              <UnicornialInput
-                themeVariant={look}
-                label="Confirm Password"
-                name="confirmPassword"
-                validator={Validate.minLength(6).onlyNumbers()}
-              />
-            </>
-          )}
-        </Surface>
-      </Form>
-    </Background>
+          <main className="max-w-5xl mx-auto p-6 flex flex-col gap-6">
+            <div>
+              <h1 className="text-2xl font-bold">{active.label}</h1>
+              <p className="text-sm opacity-60">
+                Look: {look ?? "default"} · {dark.enabled ? "dark" : "light"}
+              </p>
+            </div>
+            <active.Component look={look} />
+          </main>
+        </Background>
+      </div>
+    </div>
   );
 }

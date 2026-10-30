@@ -17,7 +17,7 @@ export const Surface = forwardRef<HTMLDivElement, SurfaceProps>(function Surface
     <div
       ref={ref}
       {...props}
-      className={cx("p-2 rounded-md shadow-md bg-white border", variant.className, className)}
+      className={cx("p-4 rounded-md border", variant.className, className)}
       style={{
         borderColor: currentColors.border,
         backgroundColor: currentColors.background,

@@ -5,13 +5,13 @@ import { cx, useVariant } from "../theme/variants";
 export type FieldVariant = "default" | "filled" | "underline";
 
 const variantClasses: Record<FieldVariant, string> = {
-  default: "border rounded-md p-2",
-  filled: "border rounded-md p-2",
-  underline: "border-b p-2",
+  default: "border rounded-md px-3 py-2",
+  filled: "border rounded-md px-3 py-2",
+  underline: "border-b px-3 py-2",
 };
 
 export const FOCUS_RING =
-  "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500";
+  "focus:outline-none focus:ring-2 focus:ring-focus/40 focus:border-focus";
 
 /**
  * Styles shared by every form field: the `input` variant parts (root, label, field)
@@ -35,7 +35,7 @@ export function useFieldStyles(themeVariant?: string, variant: FieldVariant = "d
   return {
     rootClass: cx("w-full", root.className),
     rootStyle: root.style,
-    labelClass: cx("block text-sm font-bold mb-1 mt-2", label.className),
+    labelClass: cx("block text-sm font-medium mb-1.5", label.className),
     labelStyle: { color: currentColors.text, ...label.style } as CSSProperties,
     fieldClass: cx(variantClasses[variant], field.className),
     fieldStyle,

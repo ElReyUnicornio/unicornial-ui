@@ -139,7 +139,7 @@ export function DatePicker({
               type="button"
               aria-label="Previous month"
               onClick={() => showMonth(-1)}
-              className="p-1 rounded-md cursor-pointer hover:bg-black/10"
+              className="p-1 rounded-md cursor-pointer hover:bg-hover"
             >
               <ChevronLeft />
             </button>
@@ -150,7 +150,7 @@ export function DatePicker({
               type="button"
               aria-label="Next month"
               onClick={() => showMonth(1)}
-              className="p-1 rounded-md cursor-pointer hover:bg-black/10"
+              className="p-1 rounded-md cursor-pointer hover:bg-hover"
             >
               <ChevronRight />
             </button>
@@ -181,7 +181,7 @@ export function DatePicker({
                   }}
                   className={cx(
                     "w-8 h-8 rounded-md cursor-pointer disabled:opacity-30 disabled:pointer-events-none",
-                    !isSelected && "hover:bg-black/10",
+                    !isSelected && "hover:bg-hover",
                     dayVariant.className,
                     isSelected && selectedVariant.className,
                   )}

@@ -21,11 +21,28 @@ export function alertCssVars(variant: AlertVariant) {
   } as React.CSSProperties;
 }
 
-export const alertColors: Record<AlertVariant, { color: string; background: string; border: string }> = {
-  warning: { color: "#92400e", background: "#fffbeb", border: "#f59e0b" },
-  info: { color: "#1e40af", background: "#eff6ff", border: "#3b82f6" },
-  error: { color: "#991b1b", background: "#fef2f2", border: "#ef4444" },
-  success: { color: "#166534", background: "#f0fdf4", border: "#22c55e" },
+// Derived from one hue per severity and mixed with the theme colors, so it reads in light and dark.
+const severityHue: Record<AlertVariant, string> = {
+  warning: "#f59e0b",
+  info: "#3b82f6",
+  error: "#ef4444",
+  success: "#22c55e",
+};
+
+const severityColors = (hue: string) => ({
+  color: `color-mix(in srgb, ${hue} 65%, var(--theme-text))`,
+  background: `color-mix(in srgb, ${hue} 10%, var(--theme-background))`,
+  border: `color-mix(in srgb, ${hue} 35%, var(--theme-background))`,
+});
+
+export const alertColors: Record<
+  AlertVariant,
+  { color: string; background: string; border: string }
+> = {
+  warning: severityColors(severityHue.warning),
+  info: severityColors(severityHue.info),
+  error: severityColors(severityHue.error),
+  success: severityColors(severityHue.success),
 };
 
 const iconPaths: Record<AlertVariant, React.ReactNode> = {
@@ -88,7 +105,11 @@ export function Alert({
     <div
       role={variant === "error" ? "alert" : "status"}
       {...props}
-      className={cx("flex items-center gap-2 px-3 py-2 rounded-md border", themed.className, className)}
+      className={cx(
+        "flex items-center gap-2 px-3 py-2 rounded-md border",
+        themed.className,
+        className,
+      )}
       style={{
         color: colors.color,
         backgroundColor: colors.background,

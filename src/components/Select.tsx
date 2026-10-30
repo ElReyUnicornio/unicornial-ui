@@ -185,7 +185,7 @@ export function Select({
                   )}
                   style={{
                     backgroundColor: isActive
-                      ? "color-mix(in srgb, var(--theme-primary) 14%, transparent)"
+                      ? "color-mix(in srgb, var(--theme-primary) 10%, transparent)"
                       : undefined,
                     ...optionVariant.style,
                     ...(isActive ? activeVariant.style : undefined),

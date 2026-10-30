@@ -74,7 +74,7 @@ export function Drawer({
         themeVariant={themeVariant}
         {...props}
         className={cx(
-          "flex flex-col p-0 transition-transform duration-300 ease-out",
+          "flex flex-col p-0 shadow-float transition-transform duration-300 ease-out",
           panelClasses[side],
           container.className,
           className,

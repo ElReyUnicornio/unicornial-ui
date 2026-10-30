@@ -104,7 +104,7 @@ function Item({
         disabled={disabled}
         onClick={() => context.toggle(value)}
         className={cx(
-          "w-full flex items-center justify-between gap-2 px-4 py-3 text-left font-medium cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed hover:bg-black/5",
+          "w-full flex items-center justify-between gap-2 px-4 py-3 text-left font-medium cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed hover:bg-hover",
           header.className,
         )}
         style={{ color: currentColors.text, ...header.style }}

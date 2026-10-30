@@ -77,7 +77,7 @@ export function Spinner({
 
   const buttonClass = cx(
     "flex items-center justify-center w-7 h-7 rounded-md cursor-pointer shrink-0",
-    "hover:bg-black/10 disabled:opacity-40 disabled:pointer-events-none",
+    "hover:bg-hover disabled:opacity-40 disabled:pointer-events-none",
     button.className,
   );
 
@@ -85,7 +85,7 @@ export function Spinner({
     <Field label={label} htmlFor={inputId} themeVariant={themeVariant} className={className}>
       <div
         className={cx(
-          "mb-4 last:mb-0 flex items-center gap-1 focus-within:ring-2 focus-within:ring-blue-500",
+          "mb-4 last:mb-0 flex items-center gap-1 focus-within:ring-2 focus-within:ring-focus/40 focus-within:border-focus",
           styles.fieldClass,
           disabled && "opacity-50 pointer-events-none",
         )}

@@ -80,7 +80,7 @@ export function Tooltip({
     <div
       ref={tooltipRef}
       role="tooltip"
-      className={cx("fixed px-2 py-1 text-sm rounded-md border shadow-md", root.className, className)}
+      className={cx("fixed px-2 py-1 text-sm rounded-md border shadow-float", root.className, className)}
       style={{
         top: placement?.top ?? 0,
         left: placement?.left ?? 0,

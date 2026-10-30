@@ -45,7 +45,12 @@ function Tabs({
   return (
     <div className={[tabsOrientationClasses[orientation], className].join(" ")} style={style}>
       {Children.map(children, (child, index) => (
-        <Tab variant={variant} themeVariant={themeVariant} onClick={() => handleChange(index)} selected={selected == index}>
+        <Tab
+          variant={variant}
+          themeVariant={themeVariant}
+          onClick={() => handleChange(index)}
+          selected={selected == index}
+        >
           {child}
         </Tab>
       ))}
@@ -61,16 +66,21 @@ function Tab({ variant, themeVariant, children, selected, ...props }: TabProps) 
   return (
     <div
       className={cx(
-        "px-2 py-1 border-b-4 border-transparent cursor-pointer",
+        "px-3 py-1.5 border-b-2 border-transparent cursor-pointer rounded-t-md transition-colors",
         root.className,
         active?.className,
       )}
       {...props}
       style={{
-        color: selected ? currentColors.primary : "#999999",
-        fontWeight: selected ? "bold" : "normal",
+        color: selected
+          ? currentColors.primary
+          : "color-mix(in srgb, var(--theme-text) 55%, transparent)",
+        fontWeight: selected ? 600 : 500,
         borderColor: selected ? currentColors.primary : "transparent",
-        backgroundColor: variant === "underline" ? "transparent" : currentColors.primary,
+        backgroundColor:
+          variant === "pills" && selected
+            ? "color-mix(in srgb, var(--theme-primary) 10%, transparent)"
+            : "transparent",
         ...root.style,
         ...active?.style,
       }}
@@ -81,7 +91,11 @@ function Tab({ variant, themeVariant, children, selected, ...props }: TabProps) 
 }
 
 function Item({ children, ...props }: HTMLAttributes<HTMLSpanElement>) {
-  return <span className="text-inherit" {...props}>{children}</span>;
+  return (
+    <span className="text-inherit" {...props}>
+      {children}
+    </span>
+  );
 }
 
 export const TabsNamespace = Object.assign(Tabs, {
