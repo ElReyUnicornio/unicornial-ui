@@ -44,6 +44,22 @@ export function hexToRgb(hex: string): Triple {
   return [(value >> 16) & 255, (value >> 8) & 255, value & 255];
 }
 
+export function hexToRgba(hex: string, alpha: number): string {
+  const cleaned = hex.replace("#", "");
+  const full =
+    cleaned.length === 3
+      ? cleaned
+          .split("")
+          .map((c) => c + c)
+          .join("")
+      : cleaned;
+  const num = parseInt(full, 16);
+  const r = (num >> 16) & 0xff;
+  const g = (num >> 8) & 0xff;
+  const b = num & 0xff;
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
 export function rgbToHex([r, g, b]: Triple): string {
   const part = (n: number) => clamp(Math.round(n), 0, 255).toString(16).padStart(2, "0");
   return `#${part(r)}${part(g)}${part(b)}`;
@@ -57,8 +73,7 @@ export function rgbToHsl([r, g, b]: Triple): Triple {
   const d = max - min;
   if (d === 0) return [0, 0, l * 100];
   const s = d / (1 - Math.abs(2 * l - 1));
-  const h =
-    max === rn ? ((gn - bn) / d) % 6 : max === gn ? (bn - rn) / d + 2 : (rn - gn) / d + 4;
+  const h = max === rn ? ((gn - bn) / d) % 6 : max === gn ? (bn - rn) / d + 2 : (rn - gn) / d + 4;
   return [(h * 60 + 360) % 360, s * 100, l * 100];
 }
 
@@ -70,6 +85,22 @@ export function hslToRgb([h, s, l]: Triple): Triple {
     return (ln - a * Math.max(-1, Math.min(k - 3, 9 - k, 1))) * 255;
   };
   return [f(0), f(8), f(4)];
+}
+
+/** Shifts the lightness of a hex color by `amount` percentage points; returns #rrggbb. */
+function shiftLightness(hex: string, amount: number): string {
+  const [h, s, l] = rgbToHsl(hexToRgb(hex));
+  return rgbToHex(hslToRgb([h, s, clamp(l + amount, 0, 100)]));
+}
+
+/** Lighter version of a hex color, meant as the light end of a gradient. */
+export function getLighterGradientColor(hex: string, amount = 12): string {
+  return shiftLightness(hex, amount);
+}
+
+/** Darker version of a hex color, meant as the dark end of a gradient. */
+export function getDarkerGradientColor(hex: string, amount = 12): string {
+  return shiftLightness(hex, -amount);
 }
 
 const toLinear = (c: number) => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);

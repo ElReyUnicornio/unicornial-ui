@@ -3,6 +3,7 @@
 /* Defaults for the theme variables; ThemeProvider overrides them at runtime. */
 :root {
   --theme-primary: #aa3bff;
+  --theme-primary-gradient: #c578ff;
   --theme-secondary: #f4f4f5;
   --theme-text: #000000;
   --theme-background: #ffffff;

@@ -62,7 +62,11 @@ function Accordion({
     <AccordionContext.Provider value={{ open, toggle, themeVariant }}>
       <div
         {...props}
-        className={cx("w-full rounded-md border overflow-hidden", root.className, className)}
+        className={cx(
+          "w-full rounded-md border overflow-hidden shadow-sm",
+          root.className,
+          className,
+        )}
         style={{ borderColor: currentColors.border, ...root.style, ...style }}
       >
         {children}

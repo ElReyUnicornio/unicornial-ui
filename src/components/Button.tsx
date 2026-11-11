@@ -1,6 +1,7 @@
 import { type ButtonHTMLAttributes, forwardRef, useMemo } from "react";
 import { useTheme } from "../theme/ThemeProvider";
 import { cx, useVariant } from "../theme/variants";
+import { hexToRgba } from "../utils/color";
 
 type Variant = "primary" | "secondary" | "outline" | "ghost";
 type Size = "sm" | "md" | "lg";
@@ -14,13 +15,11 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<Variant, string> = {
   primary:
-    "bg-accent text-white hover:bg-accent/90 focus-visible:ring-focus/40",
-  secondary:
-    "bg-code-bg text-text-h hover:bg-code-bg/80 focus-visible:ring-focus/40",
+    "bg-linear-to-bl to-(--theme-primary) from-(--theme-primary-gradient) hover:bg-linear-to-tr text-white focus-visible:ring-focus/40",
+  secondary: "bg-code-bg text-text-h hover:bg-code-bg/80 focus-visible:ring-focus/40",
   outline:
     "border border-border bg-transparent text-text-h hover:bg-hover hover:border-accent-border focus-visible:ring-focus/40",
-  ghost:
-    "bg-transparent text-text-h hover:bg-hover focus-visible:ring-focus/40",
+  ghost: "bg-transparent text-text-h hover:font-bold focus-visible:ring-focus/40",
 };
 
 const sizeClasses: Record<Size, string> = {
@@ -28,22 +27,6 @@ const sizeClasses: Record<Size, string> = {
   md: "px-4 py-2 text-sm gap-2",
   lg: "px-5 py-2.5 text-base gap-2.5",
 };
-
-function hexToRgba(hex: string, alpha: number): string {
-  const cleaned = hex.replace("#", "");
-  const full =
-    cleaned.length === 3
-      ? cleaned
-          .split("")
-          .map((c) => c + c)
-          .join("")
-      : cleaned;
-  const num = parseInt(full, 16);
-  const r = (num >> 16) & 0xff;
-  const g = (num >> 8) & 0xff;
-  const b = num & 0xff;
-  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-}
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
   { variant = "primary", size = "md", themeVariant, className = "", style, ...props },
@@ -104,9 +87,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     <button
       ref={ref}
       className={cx(
-        "inline-flex items-center justify-center font-medium rounded-md",
+        "inline-flex items-center justify-center font-medium rounded-md hover:cursor-pointer",
         "transition-all duration-200 ease-in-out",
-        "focus:outline-none focus-visible:ring-2 focus-visible:ring-focus/40",
         "disabled:opacity-50 disabled:pointer-events-none",
         "select-none",
         variantClasses[variant],

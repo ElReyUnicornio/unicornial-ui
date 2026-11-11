@@ -1,6 +1,7 @@
 import type React from "react";
 import type { HTMLAttributes } from "react";
 import { cx, useVariant } from "../theme/variants";
+import { getLighterGradientColor } from "../utils/color";
 
 export type AlertVariant = "warning" | "info" | "error" | "success";
 
@@ -31,7 +32,7 @@ const severityHue: Record<AlertVariant, string> = {
 
 const severityColors = (hue: string) => ({
   color: `color-mix(in srgb, ${hue} 65%, var(--theme-text))`,
-  background: `color-mix(in srgb, ${hue} 10%, var(--theme-background))`,
+  background: `linear-gradient(0deg, color-mix(in srgb, ${hue} 30%, var(--theme-background)), color-mix(in srgb, ${getLighterGradientColor(hue)} 30%, var(--theme-background)))`,
   border: `color-mix(in srgb, ${hue} 35%, var(--theme-background))`,
 });
 
@@ -112,7 +113,7 @@ export function Alert({
       )}
       style={{
         color: colors.color,
-        backgroundColor: colors.background,
+        background: colors.background,
         borderColor: colors.border,
         ...alertCssVars(variant),
         ...themed.style,

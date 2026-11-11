@@ -1,4 +1,10 @@
-import { useRef, type CSSProperties, type KeyboardEvent, type PointerEvent, type ReactNode } from "react";
+import {
+  useRef,
+  type CSSProperties,
+  type KeyboardEvent,
+  type PointerEvent,
+  type ReactNode,
+} from "react";
 import { useTheme } from "../theme/ThemeProvider";
 import { useControllable } from "../hooks/useControllable";
 import { Field } from "./Field";
@@ -55,7 +61,10 @@ export function Slider({
 
   const precision = decimals(step);
   const snap = (n: number) =>
-    Math.min(max, Math.max(min, Number((Math.round((n - min) / step) * step + min).toFixed(precision))));
+    Math.min(
+      max,
+      Math.max(min, Number((Math.round((n - min) / step) * step + min).toFixed(precision))),
+    );
   const ratio = max === min ? 0 : (current - min) / (max - min);
 
   const setFromPointer = (event: PointerEvent<HTMLDivElement>) => {
@@ -89,7 +98,9 @@ export function Slider({
         label && showValue ? (
           <span className="flex justify-between">
             <span>{label}</span>
-            <span className="font-normal opacity-70">{formatValue ? formatValue(current) : current}</span>
+            <span className="font-normal opacity-70">
+              {formatValue ? formatValue(current) : current}
+            </span>
           </span>
         ) : (
           label
@@ -130,7 +141,11 @@ export function Slider({
           {!trackBackground && (
             <div
               className={cx("absolute inset-y-0 left-0 rounded-full", fill.className)}
-              style={{ width: `${ratio * 100}%`, backgroundColor: currentColors.primary, ...fill.style }}
+              style={{
+                width: `${ratio * 100}%`,
+                background: `linear-gradient(to right, ${currentColors.primary}, var(--theme-primary-gradient))`,
+                ...fill.style,
+              }}
             />
           )}
           <div

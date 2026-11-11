@@ -36,7 +36,7 @@ export interface HeaderNavButtonProps extends AnchorHTMLAttributes<HTMLAnchorEle
 //Header container -----------------------------------------------------------------------------
 
 const behaviourContainerClasses: Record<Behaviour, string> = {
-  default: "",
+  default: "shadow-sm",
   sticky: "sticky top-0 z-50",
   hide: "transition-transform duration-300 absolute top-0 left-0",
 };
@@ -47,7 +47,15 @@ const headerVariantClasses: Record<Variant, string> = {
 };
 
 export const Header = forwardRef<HTMLElement, HeaderProps>(function Header(
-  { behaviour = "default", className = "", style, children, variant = "default", themeVariant, ...props },
+  {
+    behaviour = "default",
+    className = "",
+    style,
+    children,
+    variant = "default",
+    themeVariant,
+    ...props
+  },
   ref,
 ) {
   const theme = useTheme();
@@ -110,14 +118,16 @@ const HeaderLogo = forwardRef<HTMLImageElement, HeaderLogoProps>(function Header
 
   return (
     <div className="h-full flex items-center justify-center shrink-0">
-      {src && <img
-        ref={ref}
-        alt={alt}
-        className="h-full max-h-12 w-auto object-contain"
-        style={{ aspectRatio: "auto", ...style }}
-        {...props}
-        src={src}
-      />}
+      {src && (
+        <img
+          ref={ref}
+          alt={alt}
+          className="h-full max-h-12 w-auto object-contain"
+          style={{ aspectRatio: "auto", ...style }}
+          {...props}
+          src={src}
+        />
+      )}
       <h1 className="ml-2 text-lg font-bold" title={title}>
         {title}
       </h1>

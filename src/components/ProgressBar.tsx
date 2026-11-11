@@ -55,7 +55,10 @@ export function ProgressBar({
         aria-valuemax={max}
         aria-valuenow={indeterminate ? undefined : value}
         aria-label={label}
-        className={cx("relative h-2 w-full overflow-hidden rounded-full mb-2 last:mb-0", track.className)}
+        className={cx(
+          "relative h-2 w-full overflow-hidden rounded-full mb-2 last:mb-0",
+          track.className,
+        )}
         style={{ backgroundColor: currentColors.border, ...track.style, ...style }}
       >
         <div
@@ -65,13 +68,13 @@ export function ProgressBar({
               ? {
                   position: "absolute",
                   width: "40%",
-                  backgroundColor: currentColors.primary,
+                  background: `linear-gradient(to right, ${currentColors.primary}, var(--theme-primary-gradient))`,
                   animation: "progress-indeterminate 1.2s ease-in-out infinite",
                   ...bar.style,
                 }
               : {
                   width: `${percent}%`,
-                  backgroundColor: currentColors.primary,
+                  background: `linear-gradient(to right, ${currentColors.primary}, var(--theme-primary-gradient))`,
                   transition: "width 200ms ease",
                   ...bar.style,
                 }

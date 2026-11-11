@@ -38,7 +38,7 @@ export function Toast({
       )}
       style={{
         color: colors.color,
-        backgroundColor: colors.background,
+        background: colors.background,
         borderColor: colors.border,
         ...alertCssVars(color),
         ...themed.style,

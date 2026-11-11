@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import defaultJson from "./theme.config.json";
 import { PortalHost } from "../utils/portal";
 import { setApiUrl } from "../utils/http";
+import { getLighterGradientColor } from "../utils/color";
 import type {
   ThemeConfig,
   ThemeContextValue,
@@ -58,6 +59,7 @@ export function ThemeProvider({ children, config }: ThemeProviderProps) {
     root.classList.toggle("dark", dark);
     const vars: Record<string, string> = {
       "--theme-primary": currentColors.primary,
+      "--theme-primary-gradient": getLighterGradientColor(currentColors.primary),
       "--theme-secondary": currentColors.secondary,
       "--theme-text": currentColors.text,
       "--theme-background": currentColors.background,
