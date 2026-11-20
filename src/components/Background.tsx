@@ -1,6 +1,7 @@
 import { type HTMLAttributes, forwardRef, useMemo } from "react";
 import { useTheme } from "../theme/ThemeProvider";
-import { hexToRgba, rgbaToString } from "../utils/utils";
+import { cx } from "../theme/variants";
+import { hexToRgba } from "../utils/color";
 
 // types ----------------------------------------------------------------------------------------------
 type Variant =
@@ -94,50 +95,19 @@ const variantStyles: Record<
   }),
 };
 
-const maskStyles: Record<Mask, () => React.CSSProperties> = {
-  "fade-in": () => ({
-    maskImage: `
-      radial-gradient(
-        ellipse at center,
-        rgba(0, 0, 0, 0.7) 0%,
-        rgba(0, 0, 0, 0) 75%
-      )
-    `,
-    WebkitMaskImage: `
-      radial-gradient(
-        ellipse at center,
-        rgba(0, 0, 0, 0.7) 0%,
-        rgba(0, 0, 0, 0) 75%
-      )
-    `,
-    maskSize: "100% 100%",
-    WebkitMaskSize: "100% 100%",
-    maskRepeat: "no-repeat",
-    WebkitMaskRepeat: "no-repeat",
-  }),
+const radialMask = (gradient: string): React.CSSProperties => ({
+  maskImage: gradient,
+  WebkitMaskImage: gradient,
+  maskSize: "100% 100%",
+  WebkitMaskSize: "100% 100%",
+  maskRepeat: "no-repeat",
+  WebkitMaskRepeat: "no-repeat",
+});
 
-  "fade-out": () => ({
-    maskImage: `
-      radial-gradient(
-        ellipse at center,
-        rgba(0, 0, 0, 0) 40%,
-        rgba(0, 0, 0, 0.6) 100%
-      )
-    `,
-    WebkitMaskImage: `
-      radial-gradient(
-        ellipse at center,
-        rgba(0, 0, 0, 0) 40%,
-        rgba(0, 0, 0, 0.6) 100%
-      )
-    `,
-    maskSize: "100% 100%",
-    WebkitMaskSize: "100% 100%",
-    maskRepeat: "no-repeat",
-    WebkitMaskRepeat: "no-repeat",
-  }),
-  none: () => ({
-  }),
+const maskStyles: Record<Mask, React.CSSProperties> = {
+  "fade-in": radialMask("radial-gradient(ellipse at center, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 75%)"),
+  "fade-out": radialMask("radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.6) 100%)"),
+  none: {},
 };
 
 // component ----------------------------------------------------------------------------------------------
@@ -157,22 +127,17 @@ export const Background = forwardRef<HTMLDivElement, BackgroundProps>(
   ) {
     const theme = useTheme();
 
-    const resolvedColor = useMemo(() => {
-      if (color) return color;
-      return rgbaToString(hexToRgba(theme.currentColors.primary, 0.25));
-    }, [color, theme]);
+    const resolvedColor = color ?? hexToRgba(theme.currentColors.primary, 0.25);
 
     const bgStyles = useMemo<React.CSSProperties>(
-      () => ({...variantStyles[variant](resolvedColor, size), ...maskStyles[mask]()}),
+      () => ({...variantStyles[variant](resolvedColor, size), ...maskStyles[mask] }),
       [variant, mask, resolvedColor, size],
     );
 
     return (
       <div
         ref={ref}
-        className={["w-full h-full relative overflow-x-hidden overflow-y-auto flex flex-col", className].join(
-          " ",
-        )}
+        className={cx("w-full h-full relative overflow-x-hidden overflow-y-auto flex flex-col", className)}
         style={style}
         {...props}
       >

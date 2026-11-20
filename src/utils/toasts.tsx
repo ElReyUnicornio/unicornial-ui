@@ -1,7 +1,8 @@
-import { useSyncExternalStore, type CSSProperties, type ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { Toast, type ToastColor } from "../components/Toast";
 import { useTheme } from "../theme/ThemeProvider";
 import type { NotificationPosition } from "../theme/types";
+import { createStore, useStore } from "./store";
 
 interface ToastItem {
   id: number;
@@ -19,25 +20,11 @@ export interface ToastHandle {
 const DEFAULT_DURATION = 4000;
 
 let nextId = 1;
-let toasts: ToastItem[] = [];
-const listeners = new Set<() => void>();
-
-function emit() {
-  toasts = [...toasts];
-  listeners.forEach((listener) => listener());
-}
-
-function subscribe(listener: () => void) {
-  listeners.add(listener);
-  return () => {
-    listeners.delete(listener);
-  };
-}
+const store = createStore<ToastItem[]>([]);
 
 function closeToast(id: number) {
-  if (!toasts.some((toast) => toast.id === id)) return;
-  toasts = toasts.filter((toast) => toast.id !== id);
-  emit();
+  const toasts = store.get();
+  if (toasts.some((toast) => toast.id === id)) store.set(toasts.filter((toast) => toast.id !== id));
 }
 
 /**
@@ -53,8 +40,7 @@ export function showToast(
 ): ToastHandle {
   const id = nextId++;
   const close = () => closeToast(id);
-  toasts = [...toasts, { id, message, color, onClick, themeVariant }];
-  emit();
+  store.set([...store.get(), { id, message, color, onClick, themeVariant }]);
   if (duration > 0) setTimeout(close, duration);
   return { id, close };
 }
@@ -69,7 +55,7 @@ const positionStyles: Record<NotificationPosition, CSSProperties> = {
 };
 
 export function ToastContainer() {
-  const current = useSyncExternalStore(subscribe, () => toasts);
+  const current = useStore(store);
   const { notifications } = useTheme();
 
   return (

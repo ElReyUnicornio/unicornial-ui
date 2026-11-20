@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { Surface } from "./Surface";
 import { Button } from "./Button";
 import { AlertIcon, alertColors, type AlertVariant } from "./Alert";
-import { CloseButton, useEscape } from "./Modal";
+import { Backdrop, CloseButton, stopPropagation } from "./Overlay";
 import { useTheme } from "../theme/ThemeProvider";
 import { cx, useVariant } from "../theme/variants";
 
@@ -33,17 +33,15 @@ export function AlertDialog({
   const colors = alertColors[variant];
   const buttons = dialogButtons[variant];
   const themed = useVariant("alertDialog", themeVariant);
-  const backdrop = themed("backdrop");
   const container = themed("container");
   const icon = themed("icon");
   const messageStyle = themed("message");
-  useEscape(onReject);
 
   return (
-    <div
-      className={cx("fixed inset-0 flex items-center justify-center p-4", backdrop.className)}
-      style={{ backgroundColor: "#00000066", ...backdrop.style }}
-      onClick={onReject}
+    <Backdrop
+      onDismiss={onReject}
+      className="flex items-center justify-center p-4"
+      themed={themed("backdrop")}
     >
       <Surface
         role="alertdialog"
@@ -54,7 +52,7 @@ export function AlertDialog({
           container.className,
         )}
         style={container.style}
-        onClick={(event) => event.stopPropagation()}
+        onClick={stopPropagation}
       >
         <div className="absolute top-2 right-2">
           <CloseButton onClick={onReject} />
@@ -79,7 +77,7 @@ export function AlertDialog({
           </Button>
         </div>
       </Surface>
-    </div>
+    </Backdrop>
   );
 }
 

@@ -1,4 +1,4 @@
-import { type HTMLAttributes, forwardRef, useMemo } from "react";
+import { type HTMLAttributes, forwardRef } from "react";
 import { useTheme } from "../theme/ThemeProvider";
 import { cx, useVariant } from "../theme/variants";
 
@@ -33,10 +33,7 @@ export const Separator = forwardRef<HTMLDivElement, SeparatorProps>(
     const theme = useTheme();
     const themed = useVariant("separator", themeVariant)("root");
 
-    const resolvedColor = useMemo(() => {
-      if (color) return color;
-      return theme.currentColors.border;
-    }, [color, theme]);
+    const resolvedColor = color ?? theme.currentColors.border;
 
     const isHorizontal = orientation === "horizontal";
 

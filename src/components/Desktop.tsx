@@ -1,26 +1,8 @@
 import type { ReactNode } from "react";
-import { useState, useEffect } from 'react';
+import { useMediaQuery } from "../hooks/useMediaQuery";
 
-interface NonMobilePortraitOnlyProps {
-  children: ReactNode;
+/** Renders its children only when the viewport is not in portrait orientation. */
+export function DesktopOnly({ children }: { children: ReactNode }) {
+  const isPortrait = useMediaQuery("(orientation: portrait)");
+  return isPortrait ? null : <>{children}</>;
 }
-
-const DesktopOnly = ({ children }: NonMobilePortraitOnlyProps) => {
-  const [isNonMobilePortrait, setIsNonMobilePortrait] = useState(false);
-
-  useEffect(() => {
-    const checkNonMobilePortrait = () => {
-      const isPortrait = window.innerHeight > window.innerWidth;
-      setIsNonMobilePortrait(!isPortrait);
-    };
-
-    checkNonMobilePortrait();
-    window.addEventListener('resize', checkNonMobilePortrait);
-    
-    return () => window.removeEventListener('resize', checkNonMobilePortrait);
-  }, []);
-
-  return isNonMobilePortrait ? <>{children}</> : null;
-};
-
-export { DesktopOnly };

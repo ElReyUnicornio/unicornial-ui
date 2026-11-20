@@ -1,6 +1,7 @@
+const pad = (n: number, size = 2) => String(n).padStart(size, "0");
+
 /** Standard value format used by DatePicker: YYYY-MM-DD (local date, no time zone). */
 export function toIso(year: number, month: number, day: number): string {
-  const pad = (n: number, size = 2) => String(n).padStart(size, "0");
   return `${pad(year, 4)}-${pad(month + 1)}-${pad(day)}`;
 }
 
@@ -35,11 +36,10 @@ export function formatDate(iso: string, format: string, locale?: string): string
   const date = new Date(year, month, day);
   const monthName = (style: "long" | "short") =>
     new Intl.DateTimeFormat(locale, { month: style }).format(date);
-  const pad = (n: number) => String(n).padStart(2, "0");
   return format.replace(/YYYY|YY|MMMM|MMM|MM|M|DD|D/g, (token) => {
     switch (token) {
       case "YYYY":
-        return String(year).padStart(4, "0");
+        return pad(year, 4);
       case "YY":
         return String(year).slice(-2);
       case "MMMM":

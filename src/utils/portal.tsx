@@ -1,5 +1,6 @@
-import { useSyncExternalStore, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import { ToastContainer } from "./toasts";
+import { createStore, useStore } from "./store";
 
 export interface InstanceApi {
   id: number;
@@ -18,20 +19,7 @@ interface PortalItem {
 }
 
 let nextId = 1;
-let items: PortalItem[] = [];
-const listeners = new Set<() => void>();
-
-function emit() {
-  items = [...items];
-  listeners.forEach((listener) => listener());
-}
-
-function subscribe(listener: () => void) {
-  listeners.add(listener);
-  return () => {
-    listeners.delete(listener);
-  };
-}
+const store = createStore<PortalItem[]>([]);
 
 /**
  * Renders a component into the floating portal created by the ThemeProvider.
@@ -43,24 +31,22 @@ export function instantiate(content: InstanceContent): Instance {
   const api: InstanceApi = {
     id,
     close: () => {
-      if (!items.some((item) => item.id === id)) return;
-      items = items.filter((item) => item.id !== id);
-      emit();
+      const items = store.get();
+      if (items.some((item) => item.id === id)) store.set(items.filter((item) => item.id !== id));
     },
     update: (next) => {
-      const item = items.find((item) => item.id === id);
-      if (!item) return;
-      item.content = next;
-      emit();
+      const items = store.get();
+      if (items.some((item) => item.id === id)) {
+        store.set(items.map((item) => (item.id === id ? { ...item, content: next } : item)));
+      }
     },
   };
-  items = [...items, { id, content, api }];
-  emit();
+  store.set([...store.get(), { id, content, api }]);
   return api;
 }
 
 export function PortalHost() {
-  const current = useSyncExternalStore(subscribe, () => items);
+  const current = useStore(store);
   return (
     <>
       {current.map(({ id, content, api }) => (

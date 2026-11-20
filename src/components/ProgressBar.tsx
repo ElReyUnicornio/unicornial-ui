@@ -1,7 +1,8 @@
 import type { CSSProperties, ReactNode } from "react";
 import { useTheme } from "../theme/ThemeProvider";
-import { Field } from "./Field";
+import { Field, LabelWithValue } from "./Field";
 import { cx, useVariant } from "../theme/variants";
+import { clamp } from "../utils/number";
 
 export interface ProgressBarProps {
   value?: number;
@@ -32,16 +33,14 @@ export function ProgressBar({
   const themed = useVariant("progressBar", themeVariant);
   const track = themed("track");
   const bar = themed("bar");
-  const percent = max <= 0 ? 0 : Math.min(100, Math.max(0, (value / max) * 100));
+  const gradient = `linear-gradient(to right, ${currentColors.primary}, var(--theme-primary-gradient))`;
+  const percent = max <= 0 ? 0 : clamp((value / max) * 100, 0, 100);
 
   return (
     <Field
       label={
         label && showValue && !indeterminate ? (
-          <span className="flex justify-between">
-            <span>{label}</span>
-            <span className="font-normal opacity-70">{Math.round(percent)}%</span>
-          </span>
+          <LabelWithValue label={label}>{Math.round(percent)}%</LabelWithValue>
         ) : (
           label
         )
@@ -68,13 +67,13 @@ export function ProgressBar({
               ? {
                   position: "absolute",
                   width: "40%",
-                  background: `linear-gradient(to right, ${currentColors.primary}, var(--theme-primary-gradient))`,
+                  background: gradient,
                   animation: "progress-indeterminate 1.2s ease-in-out infinite",
                   ...bar.style,
                 }
               : {
                   width: `${percent}%`,
-                  background: `linear-gradient(to right, ${currentColors.primary}, var(--theme-primary-gradient))`,
+                  background: gradient,
                   transition: "width 200ms ease",
                   ...bar.style,
                 }

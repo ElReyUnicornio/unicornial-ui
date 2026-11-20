@@ -1,6 +1,6 @@
-import { useEffect, useState, type HTMLAttributes, type ReactNode } from "react";
+import type { HTMLAttributes, ReactNode } from "react";
 import { Surface } from "./Surface";
-import { CloseButton, useEscape } from "./Modal";
+import { Backdrop, OverlayHeader, stopPropagation } from "./Overlay";
 import { useTheme } from "../theme/ThemeProvider";
 import { cx, useVariant } from "../theme/variants";
 
@@ -29,11 +29,12 @@ const panelClasses: Record<DrawerSide, string> = {
   bottom: "w-full max-h-[80%] rounded-none",
 };
 
-const hiddenTransform: Record<DrawerSide, string> = {
-  left: "translateX(-100%)",
-  right: "translateX(100%)",
-  top: "translateY(-100%)",
-  bottom: "translateY(100%)",
+// Slide in from the side on mount (@starting-style), no state or effect needed.
+const startingClasses: Record<DrawerSide, string> = {
+  left: "starting:-translate-x-full",
+  right: "starting:translate-x-full",
+  top: "starting:-translate-y-full",
+  bottom: "starting:translate-y-full",
 };
 
 export function Drawer({
@@ -48,26 +49,11 @@ export function Drawer({
 }: DrawerProps) {
   const { text } = useTheme();
   const themed = useVariant("drawer", themeVariant);
-  const backdrop = themed("backdrop");
   const container = themed("container");
-  const header = themed("header");
-  const titleStyle = themed("title");
   const body = themed("body");
-  const [shown, setShown] = useState(false);
-  useEscape(onClose);
-
-  // Mount hidden, then slide in on the next frame.
-  useEffect(() => {
-    const frame = requestAnimationFrame(() => setShown(true));
-    return () => cancelAnimationFrame(frame);
-  }, []);
 
   return (
-    <div
-      className={cx("fixed inset-0 flex", backdropClasses[side], backdrop.className)}
-      style={{ backgroundColor: "#00000066", ...backdrop.style }}
-      onClick={onClose}
-    >
+    <Backdrop onDismiss={onClose} className={cx("flex", backdropClasses[side])} themed={themed("backdrop")}>
       <Surface
         role="dialog"
         aria-modal="true"
@@ -76,28 +62,21 @@ export function Drawer({
         className={cx(
           "flex flex-col p-0 shadow-float transition-transform duration-300 ease-out",
           panelClasses[side],
+          startingClasses[side],
           container.className,
           className,
         )}
-        style={{
-          transform: shown ? "none" : hiddenTransform[side],
-          ...container.style,
-          ...style,
-        }}
-        onClick={(event) => event.stopPropagation()}
+        style={{ ...container.style, ...style }}
+        onClick={stopPropagation}
       >
-        <div
-          className={cx(
-            "flex items-center justify-between gap-2 px-4 py-2 border-b border-inherit shrink-0",
-            header.className,
-          )}
-          style={header.style}
-        >
-          <h2 className={cx(text.subtitle, titleStyle.className)} style={titleStyle.style}>
-            {title}
-          </h2>
-          <CloseButton onClick={onClose} />
-        </div>
+        <OverlayHeader
+          title={title}
+          onClose={onClose}
+          className="shrink-0"
+          themedHeader={themed("header")}
+          themedTitle={themed("title")}
+          titleClass={text.subtitle}
+        />
         <div
           className={cx("p-4 flex-1 overflow-auto", text.paragraph, body.className)}
           style={body.style}
@@ -105,7 +84,7 @@ export function Drawer({
           {children}
         </div>
       </Surface>
-    </div>
+    </Backdrop>
   );
 }
 

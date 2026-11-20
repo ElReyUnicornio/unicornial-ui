@@ -1,6 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import { useTheme } from "../theme/ThemeProvider";
 import { cx, useVariant } from "../theme/variants";
+import Alert from "./Alert";
 
 export type FieldVariant = "default" | "filled" | "underline";
 
@@ -62,5 +63,25 @@ export function Field({ label, htmlFor, themeVariant, className = "", children }
       )}
       {children}
     </div>
+  );
+}
+
+/** Label with a secondary value aligned to the right (e.g. "Volume ... 40%"). */
+export function LabelWithValue({ label, children }: { label: ReactNode; children: ReactNode }) {
+  return (
+    <span className="flex justify-between">
+      <span>{label}</span>
+      <span className="font-normal opacity-70">{children}</span>
+    </span>
+  );
+}
+
+/** Validation message shown under a form-connected field; renders nothing when empty. */
+export function FieldError({ message, themeVariant }: { message: string; themeVariant?: string }) {
+  if (!message) return null;
+  return (
+    <Alert variant="error" themeVariant={themeVariant} className="mt-2">
+      {message}
+    </Alert>
   );
 }

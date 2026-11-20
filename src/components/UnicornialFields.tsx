@@ -1,9 +1,9 @@
-import type { ChangeEvent, FocusEvent } from "react";
+import type { ChangeEvent, ComponentType, FocusEvent } from "react";
 import { useFormField } from "../hooks/useFormField";
 import type { Validate } from "../utils/validation";
-import Alert from "./Alert";
 import { ColorPicker, type ColorPickerProps } from "./ColorPicker";
 import { DatePicker, type DatePickerProps } from "./DatePicker";
+import { FieldError } from "./Field";
 import { FileInput, type FileInputProps } from "./FileInput";
 import { ImageInput, type ImageInputProps } from "./ImageInput";
 import { RadioGroup, type RadioGroupProps } from "./Radio";
@@ -24,13 +24,44 @@ interface FormFieldProps {
   validator?: Validate;
 }
 
-function FieldError({ message, themeVariant }: { message: string; themeVariant?: string }) {
-  if (!message) return null;
-  return (
-    <Alert variant="error" themeVariant={themeVariant} className="mt-2">
-      {message}
-    </Alert>
-  );
+/** Props every wrapped component has in common. */
+interface BaseFieldProps<V> {
+  onChange?: (value: V) => void;
+  disabled?: boolean;
+  themeVariant?: string;
+}
+
+/**
+ * Connects `Component` to the form. `valueProp` is the prop that receives the form value
+ * (`null` for components that keep their own state, like the file inputs) and `fallback`
+ * the value used until the form has one.
+ */
+function bindToForm<P extends FormFieldProps & BaseFieldProps<V>, V>(
+  Component: ComponentType<Omit<P, "validator"> & { value?: V; checked?: V }>,
+  valueProp: "value" | "checked" | null,
+  fallback: (props: P) => V,
+) {
+  return function BoundField(props: P) {
+    const { name, validator, onChange, disabled, themeVariant, ...rest } = props;
+    const field = useFormField<V>(name, validator, fallback(props));
+
+    return (
+      <div className={valueProp === "checked" ? "mb-4 last:mb-0" : undefined}>
+        <Component
+          {...(rest as unknown as Omit<P, "validator">)}
+          {...(valueProp && { [valueProp]: field.value })}
+          name={name}
+          themeVariant={themeVariant}
+          disabled={disabled || field.disabled}
+          onChange={(value: V) => {
+            field.onChange(value);
+            onChange?.(value);
+          }}
+        />
+        <FieldError message={field.message} themeVariant={themeVariant} />
+      </div>
+    );
+  };
 }
 
 // Password ------------------------------------------------------------------------------------
@@ -83,298 +114,71 @@ export function UnicornialTextArea({
   );
 }
 
-// Select --------------------------------------------------------------------------------------
+// Value-based fields --------------------------------------------------------------------------
 
 export type UnicornialSelectProps = Omit<SelectProps, "name" | "value"> & FormFieldProps;
-
-export function UnicornialSelect({
-  name,
-  validator,
-  defaultValue,
-  onChange,
-  disabled,
-  themeVariant,
-  ...props
-}: UnicornialSelectProps) {
-  const field = useFormField<string>(name, validator, defaultValue ?? "");
-
-  return (
-    <div>
-      <Select
-        {...props}
-        name={name}
-        themeVariant={themeVariant}
-        value={field.value}
-        disabled={disabled || field.disabled}
-        onChange={(value) => {
-          field.onChange(value);
-          onChange?.(value);
-        }}
-      />
-      <FieldError message={field.message} themeVariant={themeVariant} />
-    </div>
-  );
-}
-
-// Switch --------------------------------------------------------------------------------------
+export const UnicornialSelect = bindToForm<UnicornialSelectProps, string>(
+  Select,
+  "value",
+  (p) => p.defaultValue ?? "",
+);
 
 export type UnicornialSwitchProps = Omit<SwitchProps, "name" | "checked"> & FormFieldProps;
-
-export function UnicornialSwitch({
-  name,
-  validator,
-  defaultChecked,
-  onChange,
-  disabled,
-  themeVariant,
-  ...props
-}: UnicornialSwitchProps) {
-  const field = useFormField<boolean>(name, validator, defaultChecked ?? false);
-
-  return (
-    <div className="mb-4 last:mb-0">
-      <Switch
-        {...props}
-        name={name}
-        themeVariant={themeVariant}
-        checked={field.value}
-        disabled={disabled || field.disabled}
-        onChange={(checked) => {
-          field.onChange(checked);
-          onChange?.(checked);
-        }}
-      />
-      <FieldError message={field.message} themeVariant={themeVariant} />
-    </div>
-  );
-}
-
-// Spinner -------------------------------------------------------------------------------------
+export const UnicornialSwitch = bindToForm<UnicornialSwitchProps, boolean>(
+  Switch,
+  "checked",
+  (p) => p.defaultChecked ?? false,
+);
 
 export type UnicornialSpinnerProps = Omit<SpinnerProps, "name" | "value"> & FormFieldProps;
-
-export function UnicornialSpinner({
-  name,
-  validator,
-  defaultValue,
-  onChange,
-  disabled,
-  themeVariant,
-  ...props
-}: UnicornialSpinnerProps) {
-  const min = props.min ?? -Infinity;
-  const field = useFormField<number>(name, validator, defaultValue ?? (min === -Infinity ? 0 : min));
-
-  return (
-    <div>
-      <Spinner
-        {...props}
-        name={name}
-        themeVariant={themeVariant}
-        value={field.value}
-        disabled={disabled || field.disabled}
-        onChange={(value) => {
-          field.onChange(value);
-          onChange?.(value);
-        }}
-      />
-      <FieldError message={field.message} themeVariant={themeVariant} />
-    </div>
-  );
-}
-
-// Slider --------------------------------------------------------------------------------------
+export const UnicornialSpinner = bindToForm<UnicornialSpinnerProps, number>(
+  Spinner,
+  "value",
+  (p) => p.defaultValue ?? (p.min === undefined || p.min === -Infinity ? 0 : p.min),
+);
 
 export type UnicornialSliderProps = Omit<SliderProps, "name" | "value"> & FormFieldProps;
-
-export function UnicornialSlider({
-  name,
-  validator,
-  defaultValue,
-  onChange,
-  disabled,
-  themeVariant,
-  ...props
-}: UnicornialSliderProps) {
-  const field = useFormField<number>(name, validator, defaultValue ?? props.min ?? 0);
-
-  return (
-    <div>
-      <Slider
-        {...props}
-        name={name}
-        themeVariant={themeVariant}
-        value={field.value}
-        disabled={disabled || field.disabled}
-        onChange={(value) => {
-          field.onChange(value);
-          onChange?.(value);
-        }}
-      />
-      <FieldError message={field.message} themeVariant={themeVariant} />
-    </div>
-  );
-}
-
-// RadioGroup ----------------------------------------------------------------------------------
+export const UnicornialSlider = bindToForm<UnicornialSliderProps, number>(
+  Slider,
+  "value",
+  (p) => p.defaultValue ?? p.min ?? 0,
+);
 
 export type UnicornialRadioGroupProps = Omit<RadioGroupProps, "name" | "value"> & FormFieldProps;
-
-export function UnicornialRadioGroup({
-  name,
-  validator,
-  defaultValue,
-  onChange,
-  disabled,
-  themeVariant,
-  ...props
-}: UnicornialRadioGroupProps) {
-  const field = useFormField<string>(name, validator, defaultValue ?? "");
-
-  return (
-    <div>
-      <RadioGroup
-        {...props}
-        name={name}
-        themeVariant={themeVariant}
-        value={field.value}
-        disabled={disabled || field.disabled}
-        onChange={(value) => {
-          field.onChange(value);
-          onChange?.(value);
-        }}
-      />
-      <FieldError message={field.message} themeVariant={themeVariant} />
-    </div>
-  );
-}
-
-// ColorPicker ---------------------------------------------------------------------------------
+export const UnicornialRadioGroup = bindToForm<UnicornialRadioGroupProps, string>(
+  RadioGroup,
+  "value",
+  (p) => p.defaultValue ?? "",
+);
 
 export type UnicornialColorPickerProps = Omit<ColorPickerProps, "name" | "value"> & FormFieldProps;
-
-export function UnicornialColorPicker({
-  name,
-  validator,
-  defaultValue,
-  onChange,
-  disabled,
-  themeVariant,
-  ...props
-}: UnicornialColorPickerProps) {
-  const field = useFormField<string>(name, validator, defaultValue ?? "#aa3bff");
-
-  return (
-    <div>
-      <ColorPicker
-        {...props}
-        name={name}
-        themeVariant={themeVariant}
-        value={field.value}
-        disabled={disabled || field.disabled}
-        onChange={(hex) => {
-          field.onChange(hex);
-          onChange?.(hex);
-        }}
-      />
-      <FieldError message={field.message} themeVariant={themeVariant} />
-    </div>
-  );
-}
-
-// DatePicker ----------------------------------------------------------------------------------
+export const UnicornialColorPicker = bindToForm<UnicornialColorPickerProps, string>(
+  ColorPicker,
+  "value",
+  (p) => p.defaultValue ?? "#aa3bff",
+);
 
 export type UnicornialDatePickerProps = Omit<DatePickerProps, "name" | "value"> & FormFieldProps;
+export const UnicornialDatePicker = bindToForm<UnicornialDatePickerProps, string>(
+  DatePicker,
+  "value",
+  (p) => p.defaultValue ?? "",
+);
 
-export function UnicornialDatePicker({
-  name,
-  validator,
-  defaultValue,
-  onChange,
-  disabled,
-  themeVariant,
-  ...props
-}: UnicornialDatePickerProps) {
-  const field = useFormField<string>(name, validator, defaultValue ?? "");
-
-  return (
-    <div>
-      <DatePicker
-        {...props}
-        name={name}
-        themeVariant={themeVariant}
-        value={field.value}
-        disabled={disabled || field.disabled}
-        onChange={(date) => {
-          field.onChange(date);
-          onChange?.(date);
-        }}
-      />
-      <FieldError message={field.message} themeVariant={themeVariant} />
-    </div>
-  );
-}
-
-// FileInput -----------------------------------------------------------------------------------
+// File fields (the component keeps its own state) ---------------------------------------------
 
 export type UnicornialFileInputProps = Omit<FileInputProps, "name"> & FormFieldProps;
-
 /** The form value is the array of chosen `File`s. */
-export function UnicornialFileInput({
-  name,
-  validator,
-  onChange,
-  disabled,
-  themeVariant,
-  ...props
-}: UnicornialFileInputProps) {
-  const field = useFormField<File[]>(name, validator, []);
-
-  return (
-    <div>
-      <FileInput
-        {...props}
-        name={name}
-        themeVariant={themeVariant}
-        disabled={disabled || field.disabled}
-        onChange={(files) => {
-          field.onChange(files);
-          onChange?.(files);
-        }}
-      />
-      <FieldError message={field.message} themeVariant={themeVariant} />
-    </div>
-  );
-}
-
-// ImageInput ----------------------------------------------------------------------------------
+export const UnicornialFileInput = bindToForm<UnicornialFileInputProps, File[]>(
+  FileInput,
+  null,
+  () => [],
+);
 
 export type UnicornialImageInputProps = Omit<ImageInputProps, "name"> & FormFieldProps;
-
 /** The form value is the chosen image `File`, or `null`. */
-export function UnicornialImageInput({
-  name,
-  validator,
-  onChange,
-  disabled,
-  themeVariant,
-  ...props
-}: UnicornialImageInputProps) {
-  const field = useFormField<File | null>(name, validator, null);
-
-  return (
-    <div>
-      <ImageInput
-        {...props}
-        name={name}
-        themeVariant={themeVariant}
-        disabled={disabled || field.disabled}
-        onChange={(file) => {
-          field.onChange(file);
-          onChange?.(file);
-        }}
-      />
-      <FieldError message={field.message} themeVariant={themeVariant} />
-    </div>
-  );
-}
+export const UnicornialImageInput = bindToForm<UnicornialImageInputProps, File | null>(
+  ImageInput,
+  null,
+  () => null,
+);

@@ -1,3 +1,5 @@
+import { clamp, round } from "./number";
+
 export type ColorSpace = "rgb" | "hsl" | "oklch";
 export type ColorFormat = "hex" | ColorSpace;
 
@@ -28,8 +30,6 @@ export const channelsOf: Record<ColorSpace, Channel[]> = {
 
 type Triple = [number, number, number];
 
-const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n));
-const round = (n: number, digits = 0) => Number(n.toFixed(digits));
 
 /** Accepts #rgb or #rrggbb (with or without #); returns lowercase #rrggbb or null. */
 export function normalizeHex(input: string): string | null {
@@ -45,18 +45,7 @@ export function hexToRgb(hex: string): Triple {
 }
 
 export function hexToRgba(hex: string, alpha: number): string {
-  const cleaned = hex.replace("#", "");
-  const full =
-    cleaned.length === 3
-      ? cleaned
-          .split("")
-          .map((c) => c + c)
-          .join("")
-      : cleaned;
-  const num = parseInt(full, 16);
-  const r = (num >> 16) & 0xff;
-  const g = (num >> 8) & 0xff;
-  const b = num & 0xff;
+  const [r, g, b] = hexToRgb(hex);
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
@@ -155,9 +144,5 @@ export function channelsToCss(space: ColorSpace, [a, b, c]: Triple): string {
 
 /** Human-readable code for a hex color in the requested format. */
 export function formatColor(hex: string, format: ColorFormat): string {
-  if (format === "hex") return hex;
-  const [a, b, c] = hexToChannels(hex, format);
-  if (format === "rgb") return `rgb(${round(a)}, ${round(b)}, ${round(c)})`;
-  if (format === "hsl") return `hsl(${round(a)}, ${round(b)}%, ${round(c)}%)`;
-  return `oklch(${round(a, 1)}% ${round(b, 3)} ${round(c, 1)})`;
+  return format === "hex" ? hex : channelsToCss(format, hexToChannels(hex, format));
 }

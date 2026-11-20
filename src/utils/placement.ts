@@ -1,4 +1,5 @@
 import { useCallback, useLayoutEffect, useState, type RefObject } from "react";
+import { clamp } from "./number";
 
 export type Side = "top" | "bottom" | "left" | "right";
 export type Align = "start" | "center" | "end";
@@ -21,9 +22,6 @@ const opposite: Record<Side, Side> = {
   left: "right",
   right: "left",
 };
-
-const clamp = (value: number, min: number, max: number) =>
-  Math.max(min, Math.min(value, Math.max(min, max)));
 
 /** Position along the cross axis for the requested alignment. */
 function alignStart(anchorStart: number, anchorSize: number, size: number, align: Align) {

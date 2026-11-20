@@ -15,6 +15,7 @@ import {
   type ColorFormat,
   type ColorSpace,
 } from "../utils/color";
+import { clamp } from "../utils/number";
 
 export interface ColorPickerProps {
   /** Color as #rrggbb. */
@@ -140,7 +141,7 @@ export function ColorPicker({
                   min={channel.min}
                   max={channel.max}
                   step={channel.step}
-                  value={Math.min(channel.max, Math.max(channel.min, channels[index]))}
+                  value={clamp(channels[index], channel.min, channel.max)}
                   onChange={(next) => update(index, next)}
                   trackBackground={gradient(index)}
                   themeVariant={themeVariant}

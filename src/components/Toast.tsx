@@ -1,7 +1,7 @@
 import type { HTMLAttributes, ReactNode } from "react";
 import { AlertIcon, alertColors, alertCssVars, type AlertVariant } from "./Alert";
 import { cx, useVariant } from "../theme/variants";
-import { CloseButton } from "./Modal";
+import { CloseButton } from "./Overlay";
 
 export type ToastColor = AlertVariant;
 

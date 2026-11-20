@@ -1,5 +1,6 @@
 import type React from "react";
-import { Children, useState, type HTMLAttributes } from "react";
+import type { ButtonHTMLAttributes } from "react";
+import { Children, useRef, useState, type HTMLAttributes, type KeyboardEvent } from "react";
 import { useTheme } from "../theme/ThemeProvider";
 import { cx, useVariant } from "../theme/variants";
 
@@ -14,7 +15,7 @@ interface TabsContainerProps {
   onChange?: (index: number) => void;
 }
 
-interface TabProps extends HTMLAttributes<HTMLDivElement> {
+interface TabProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children"> {
   variant: "underline" | "pills";
   themeVariant?: string;
   children?: React.ReactNode;
@@ -36,20 +37,50 @@ function Tabs({
   onChange,
 }: TabsContainerProps) {
   const [selected, setSelected] = useState(0);
+  const listRef = useRef<HTMLDivElement>(null);
+  const count = Children.count(children);
+  const horizontal = orientation === "horizontal";
 
-  const handleChange = (index: number) => {
+  const select = (index: number) => {
     setSelected(index);
-    if (onChange) onChange(index);
+    onChange?.(index);
+  };
+
+  // Selection follows focus; arrows move along the tab axis, Home/End jump to the ends.
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    const prevKey = horizontal ? "ArrowLeft" : "ArrowUp";
+    const nextKey = horizontal ? "ArrowRight" : "ArrowDown";
+    const target =
+      event.key === prevKey
+        ? (selected - 1 + count) % count
+        : event.key === nextKey
+          ? (selected + 1) % count
+          : event.key === "Home"
+            ? 0
+            : event.key === "End"
+              ? count - 1
+              : -1;
+    if (target < 0) return;
+    event.preventDefault();
+    select(target);
+    listRef.current?.querySelectorAll<HTMLElement>('[role="tab"]')[target]?.focus();
   };
 
   return (
-    <div className={[tabsOrientationClasses[orientation], className].join(" ")} style={style}>
+    <div
+      ref={listRef}
+      role="tablist"
+      aria-orientation={orientation}
+      onKeyDown={handleKeyDown}
+      className={cx(tabsOrientationClasses[orientation], className)}
+      style={style}
+    >
       {Children.map(children, (child, index) => (
         <Tab
           variant={variant}
           themeVariant={themeVariant}
-          onClick={() => handleChange(index)}
-          selected={selected == index}
+          onClick={() => select(index)}
+          selected={selected === index}
         >
           {child}
         </Tab>
@@ -64,7 +95,12 @@ function Tab({ variant, themeVariant, children, selected, ...props }: TabProps) 
   const root = themed("root");
   const active = selected ? themed("selected") : undefined;
   return (
-    <div
+    <button
+      type="button"
+      role="tab"
+      aria-selected={selected}
+      // Roving tabindex: only the selected tab is in the tab order.
+      tabIndex={selected ? 0 : -1}
       className={cx(
         "px-3 py-1.5 border-b-2 border-transparent cursor-pointer rounded-t-md transition-colors",
         root.className,
@@ -86,7 +122,7 @@ function Tab({ variant, themeVariant, children, selected, ...props }: TabProps) 
       }}
     >
       {children}
-    </div>
+    </button>
   );
 }
 

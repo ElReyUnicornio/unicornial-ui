@@ -96,7 +96,7 @@ export const validators: Record<string, (...args: any[]) => Validator> = {
     (message: string) =>
     (value: unknown): ValidationResult => {
       const str = String(value ?? "");
-      const re = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+      const re = /^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/;
       return re.test(str)
         ? { valid: true, message: "" }
         : { valid: false, message: message || "Correo invalido" };

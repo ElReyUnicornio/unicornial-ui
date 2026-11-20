@@ -7,8 +7,9 @@ import {
 } from "react";
 import { useTheme } from "../theme/ThemeProvider";
 import { useControllable } from "../hooks/useControllable";
-import { Field } from "./Field";
+import { Field, LabelWithValue } from "./Field";
 import { cx, useVariant } from "../theme/variants";
+import { clamp, decimals } from "../utils/number";
 
 export interface SliderProps {
   value?: number;
@@ -31,8 +32,6 @@ export interface SliderProps {
   className?: string;
   style?: CSSProperties;
 }
-
-const decimals = (n: number) => (String(n).split(".")[1] ?? "").length;
 
 export function Slider({
   value,
@@ -61,10 +60,7 @@ export function Slider({
 
   const precision = decimals(step);
   const snap = (n: number) =>
-    Math.min(
-      max,
-      Math.max(min, Number((Math.round((n - min) / step) * step + min).toFixed(precision))),
-    );
+    clamp(Number((Math.round((n - min) / step) * step + min).toFixed(precision)), min, max);
   const ratio = max === min ? 0 : (current - min) / (max - min);
 
   const setFromPointer = (event: PointerEvent<HTMLDivElement>) => {
@@ -96,12 +92,7 @@ export function Slider({
     <Field
       label={
         label && showValue ? (
-          <span className="flex justify-between">
-            <span>{label}</span>
-            <span className="font-normal opacity-70">
-              {formatValue ? formatValue(current) : current}
-            </span>
-          </span>
+          <LabelWithValue label={label}>{formatValue ? formatValue(current) : current}</LabelWithValue>
         ) : (
           label
         )

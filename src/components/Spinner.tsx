@@ -3,6 +3,7 @@ import { Field, FOCUS_RING, useFieldStyles, type FieldVariant } from "./Field";
 import { Minus, Plus } from "./icons";
 import { useControllable } from "../hooks/useControllable";
 import { cx, useVariant } from "../theme/variants";
+import { clamp as clampTo, decimals } from "../utils/number";
 
 export interface SpinnerProps {
   value?: number;
@@ -20,8 +21,6 @@ export interface SpinnerProps {
   themeVariant?: string;
   className?: string;
 }
-
-const decimals = (n: number) => (String(n).split(".")[1] ?? "").length;
 
 /** Numeric input with decrement and increment buttons. */
 export function Spinner({
@@ -44,7 +43,7 @@ export function Spinner({
   const styles = useFieldStyles(themeVariant, variant);
   const button = useVariant("spinner", themeVariant)("button");
 
-  const clamp = (n: number) => Math.min(max, Math.max(min, n));
+  const clamp = (n: number) => clampTo(n, min, max);
   const [current, setCurrent] = useControllable(
     value,
     clamp(defaultValue ?? (min === -Infinity ? 0 : min)),

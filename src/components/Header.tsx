@@ -9,7 +9,7 @@ import {
 } from "react";
 import { useTheme } from "../theme/ThemeProvider";
 import { cx, useVariant } from "../theme/variants";
-import { hexToRgba } from "../utils/utils";
+import { hexToRgba } from "../utils/color";
 
 //types -----------------------------------------------------------------------------
 type Behaviour = "default" | "sticky" | "hide";
@@ -122,7 +122,7 @@ const HeaderLogo = forwardRef<HTMLImageElement, HeaderLogoProps>(function Header
         <img
           ref={ref}
           alt={alt}
-          className="h-full max-h-12 w-auto object-contain"
+          className={cx("h-full max-h-12 w-auto object-contain", className)}
           style={{ aspectRatio: "auto", ...style }}
           {...props}
           src={src}

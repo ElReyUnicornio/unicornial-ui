@@ -1,25 +1,8 @@
-import { useState, useEffect, type ReactNode } from 'react';
+import type { ReactNode } from "react";
+import { useMediaQuery } from "../hooks/useMediaQuery";
 
-interface MobilePortraitOnlyProps {
-  children: ReactNode;
+/** Renders its children only when the viewport is in portrait orientation. */
+export function MobileOnly({ children }: { children: ReactNode }) {
+  const isPortrait = useMediaQuery("(orientation: portrait)");
+  return isPortrait ? <>{children}</> : null;
 }
-
-const MobileOnly = ({ children }: MobilePortraitOnlyProps) => {
-  const [isMobilePortrait, setIsMobilePortrait] = useState(false);
-
-  useEffect(() => {
-    const checkMobilePortrait = () => {
-      const isPortrait = window.innerHeight > window.innerWidth;
-      setIsMobilePortrait(isPortrait);
-    };
-
-    checkMobilePortrait();
-    window.addEventListener('resize', checkMobilePortrait);
-    
-    return () => window.removeEventListener('resize', checkMobilePortrait);
-  }, []);
-
-  return isMobilePortrait ? <>{children}</> : null;
-};
-
-export { MobileOnly };
