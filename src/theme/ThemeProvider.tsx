@@ -1,6 +1,6 @@
 import { createContext, useContext, useMemo, useState, useCallback, useEffect } from "react";
 import { createPortal } from "react-dom";
-import defaultJson from "./theme.config.json";
+import { unicornialConfig } from "../config/unicornial.config";
 import { PortalHost } from "../utils/portal";
 import { setApiUrl } from "../utils/http";
 import { getLighterGradientColor } from "../utils/color";
@@ -13,22 +13,31 @@ import type {
   ThemeNotifications,
   ThemeVariant,
   ThemeProviderProps,
+  EnvConfig,
 } from "./types";
 import { deepMerge, type DeepPartial } from "../utils/typeUtils";
 
 const PORTAL_ID = "unicornial-portal";
 
-const defaultConfig = defaultJson as unknown as ThemeConfig;
+const defaultTheme: ThemeConfig = unicornialConfig.theme;
+const defaultEnv: EnvConfig = unicornialConfig.env;
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 export function ThemeProvider({ children, config }: ThemeProviderProps) {
   const [theme, setThemeState] = useState<ThemeConfig>(() =>
-    deepMerge<ThemeConfig>(defaultConfig, config ?? {}),
+    deepMerge<ThemeConfig>(defaultTheme, config?.theme ?? {}),
+  );
+  const [env, setEnvState] = useState<EnvConfig>(() =>
+    deepMerge<EnvConfig>(defaultEnv, config?.env ?? {}),
   );
 
   const setTheme = useCallback((partial: DeepPartial<ThemeConfig>) => {
     setThemeState((prev) => deepMerge<ThemeConfig>(prev, partial));
+  }, []);
+
+  const setEnv = useCallback((partial: Partial<EnvConfig>) => {
+    setEnvState((prev) => deepMerge<EnvConfig>(prev, partial));
   }, []);
 
   const setColors = useCallback(
@@ -74,11 +83,12 @@ export function ThemeProvider({ children, config }: ThemeProviderProps) {
     for (const [name, value] of Object.entries(vars)) root.style.setProperty(name, value);
   }, [currentColors, theme.dark.enabled]);
 
-  useEffect(() => setApiUrl(theme.env.apiUrl), [theme.env.apiUrl]);
+  useEffect(() => setApiUrl(env.apiUrl), [env.apiUrl]);
 
   const value = useMemo<ThemeContextValue>(
     () => ({
       ...theme,
+      env,
       enabled: true,
       currentColors,
       setColors,
@@ -88,9 +98,12 @@ export function ThemeProvider({ children, config }: ThemeProviderProps) {
       setNotifications,
       setVariant,
       setTheme,
+      setEnv,
     }),
     [
       theme,
+      env,
+      setEnv,
       currentColors,
       setColors,
       setDark,
@@ -133,9 +146,10 @@ const noop = () => {};
 
 // Used by components rendered outside a ThemeProvider: defaults, and `enabled: false`.
 const fallbackTheme: ThemeContextValue = {
-  ...defaultConfig,
+  ...defaultTheme,
+  env: defaultEnv,
   enabled: false,
-  currentColors: defaultConfig.dark.enabled ? defaultConfig.dark.colors : defaultConfig.colors,
+  currentColors: defaultTheme.dark.enabled ? defaultTheme.dark.colors : defaultTheme.colors,
   setColors: noop,
   setDark: noop,
   setDarkMode: noop,
@@ -143,10 +157,13 @@ const fallbackTheme: ThemeContextValue = {
   setNotifications: noop,
   setVariant: noop,
   setTheme: noop,
+  setEnv: noop,
 };
 
 export function useTheme(): ThemeContextValue {
   return useContext(ThemeContext) ?? fallbackTheme;
 }
 
-export { defaultConfig as themeConfig };
+export { unicornialConfig };
+/** The default `theme` part of the config. */
+export const themeConfig = defaultTheme;

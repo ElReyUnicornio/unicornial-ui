@@ -37,7 +37,7 @@ import { UnicornialInput } from "./components/UnicornialInput";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ThemeProvider config={{ dark: { enabled: false } }}>
+    <ThemeProvider config={{ theme: { dark: { enabled: false } } }}>
       <Main />
     </ThemeProvider>
   </StrictMode>,

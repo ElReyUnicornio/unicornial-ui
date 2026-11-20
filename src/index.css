@@ -1,33 +1,39 @@
 @import "tailwindcss";
 
-/* Defaults for the theme variables; ThemeProvider overrides them at runtime. */
+/*
+ * Defaults for the theme variables (the light colors of src/config/unicornial.config.ts).
+ * ThemeProvider overrides them at runtime, also for dark mode.
+ */
 :root {
-  --theme-primary: #aa3bff;
-  --theme-primary-gradient: #c578ff;
+  --theme-primary: #7642ef;
+  --theme-primary-gradient: #9f7af4;
   --theme-secondary: #f4f4f5;
   --theme-text: #000000;
   --theme-background: #ffffff;
   --theme-border: #e4e4e7;
+  --theme-header-background: #ffffff;
+  --theme-header-border: #e4e4e7;
+  --theme-soft: color-mix(in srgb, var(--theme-background) 92%, var(--theme-text));
+  --theme-shadow-light: rgba(255, 255, 255, 0.9);
+  --theme-shadow-dark: rgba(0, 0, 0, 0.18);
 }
 
-/* Shared tokens that follow the active theme. */
+/* Utility colors (bg-accent, border-border, text-text-h...) follow the active theme. */
 @theme inline {
+  --color-text: var(--theme-text);
+  --color-text-h: var(--theme-text);
+  --color-bg: var(--theme-background);
+  --color-border: var(--theme-border);
+  --color-code-bg: var(--theme-secondary);
+  --color-accent: var(--theme-primary);
+  --color-accent-bg: color-mix(in srgb, var(--theme-primary) 10%, transparent);
+  --color-accent-border: color-mix(in srgb, var(--theme-primary) 50%, transparent);
   --color-hover: color-mix(in srgb, var(--theme-primary) 10%, transparent);
   --color-focus: var(--theme-primary);
   --shadow-float: 0 8px 24px -6px rgba(0, 0, 0, 0.18), 0 2px 6px -2px rgba(0, 0, 0, 0.08);
 }
 
 @theme {
-  --color-text: #6b6375;
-  --color-text-h: #08060d;
-  --color-bg: #fff;
-  --color-border: #e4e4e7;
-  --color-code-bg: #f4f4f5;
-  --color-accent: #aa3bff;
-  --color-accent-bg: rgba(170, 59, 255, 0.1);
-  --color-accent-border: rgba(170, 59, 255, 0.5);
-  --color-social-bg: rgba(244, 243, 236, 0.5);
-
   --font-sans: system-ui, "Segoe UI", Roboto, sans-serif;
   --font-heading: system-ui, "Segoe UI", Roboto, sans-serif;
   --font-mono: ui-monospace, Consolas, monospace;

@@ -4,11 +4,14 @@ import "./index.css";
 export { default as Header } from "./components/Header";
 export { default as Background } from "./components/Background";
 export { default as Separator } from "./components/Separator";
-export { ThemeProvider, useTheme, themeConfig } from "./theme/ThemeProvider";
+export { ThemeProvider, useTheme, themeConfig, unicornialConfig } from "./theme/ThemeProvider";
 export { useVariant } from "./theme/variants";
 export type {
+  UnicornialConfig,
+  EnvConfig,
   ThemeConfig,
   ThemeColors,
+  ComponentParts,
   ThemeVariant,
   ComponentName,
   StyleDef,

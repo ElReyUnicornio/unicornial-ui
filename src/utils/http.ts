@@ -1,8 +1,8 @@
-import defaultJson from "../theme/theme.config.json";
+import { unicornialConfig } from "../config/unicornial.config";
 
 const TOKEN_KEY = "token";
 
-let apiUrl: string = defaultJson.env.apiUrl;
+let apiUrl: string = unicornialConfig.env.apiUrl;
 
 /** Overrides the base url used by the wrappers (ThemeProvider calls it with `env.apiUrl`). */
 export function setApiUrl(url: string) {
