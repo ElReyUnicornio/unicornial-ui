@@ -515,7 +515,15 @@ function Main() {
   return (
     <div
       className="h-screen flex flex-col"
-      style={{ backgroundColor: currentColors.background, color: currentColors.text }}
+      style={{
+        backgroundColor: currentColors.background,
+        color: currentColors.text,
+        // Soft color blobs so the glass look has something to blur.
+        backgroundImage:
+          look === "glass"
+            ? "radial-gradient(45% 40% at 15% 10%, rgba(125, 211, 252, 0.5), transparent), radial-gradient(40% 45% at 85% 25%, rgba(192, 132, 252, 0.5), transparent), radial-gradient(50% 50% at 60% 95%, rgba(99, 102, 241, 0.4), transparent)"
+            : undefined,
+      }}
     >
       <Header themeVariant={look} className="z-10">
         <Header.Logo src={Logo} darkSrc={darkLogo} alt="Logo" title="Unicornial-UI" />

@@ -37,67 +37,142 @@
       "surface": {
         "root": {
           "style": {
-            "backgroundColor": "color-mix(in srgb, var(--theme-background) 35%, transparent)",
-            "backdropFilter": "blur(16px) saturate(160%)",
-            "WebkitBackdropFilter": "blur(16px) saturate(160%)",
-            "borderColor": "color-mix(in srgb, var(--theme-text) 14%, transparent)",
-            "boxShadow": "0 8px 32px rgba(31, 38, 135, 0.18)",
-            "borderRadius": "1rem"
+            "backgroundColor": "color-mix(in srgb, var(--theme-background) 32%, transparent)",
+            "backgroundImage": "linear-gradient(145deg, color-mix(in srgb, white 40%, transparent), transparent 60%)",
+            "backdropFilter": "blur(18px) saturate(180%)",
+            "WebkitBackdropFilter": "blur(18px) saturate(180%)",
+            "borderColor": "color-mix(in srgb, white 70%, transparent)",
+            "boxShadow": "inset 0 0 0 1px color-mix(in srgb, white 75%, transparent), inset 0 1px 0 color-mix(in srgb, white 80%, transparent), inset 0 0 22px 0 color-mix(in srgb, white 45%, transparent), inset 0 -12px 22px -12px rgba(99, 102, 241, 0.2), 0 10px 30px -8px rgba(99, 102, 241, 0.28)",
+            "borderRadius": "1.5rem"
           }
         }
       },
       "button": {
         "root": {
           "style": {
-            "backgroundColor": "color-mix(in srgb, var(--theme-primary) 28%, transparent)",
-            "color": "var(--theme-text)",
-            "backdropFilter": "blur(10px) saturate(160%)",
-            "WebkitBackdropFilter": "blur(10px) saturate(160%)",
-            "boxShadow": "inset 0 0 0 1px color-mix(in srgb, var(--theme-text) 14%, transparent), 0 4px 16px rgba(31, 38, 135, 0.15)"
+            "borderRadius": "0.875rem"
           }
         }
       },
       "input": {
         "label": {
           "style": {
-            "color": "var(--theme-text)"
+            "color": "var(--theme-text)",
+            "fontWeight": 600
           }
         },
         "field": {
           "style": {
-            "backgroundColor": "color-mix(in srgb, var(--theme-background) 30%, transparent)",
-            "backdropFilter": "blur(8px) saturate(160%)",
-            "WebkitBackdropFilter": "blur(8px) saturate(160%)",
-            "borderColor": "color-mix(in srgb, var(--theme-text) 14%, transparent)",
-            "color": "var(--theme-text)"
+            "backgroundColor": "color-mix(in srgb, var(--theme-background) 40%, transparent)",
+            "backdropFilter": "blur(10px) saturate(180%)",
+            "WebkitBackdropFilter": "blur(10px) saturate(180%)",
+            "borderColor": "color-mix(in srgb, white 70%, transparent)",
+            "borderRadius": "0.875rem",
+            "color": "var(--theme-text)",
+            "boxShadow": "inset 0 2px 8px rgba(99, 102, 241, 0.18), inset 0 0 0 1px color-mix(in srgb, white 70%, transparent), inset 0 -1px 0 color-mix(in srgb, white 60%, transparent)"
           }
         }
       },
       "header": {
         "root": {
           "style": {
-            "backgroundColor": "color-mix(in srgb, var(--theme-background) 40%, transparent)",
-            "backdropFilter": "blur(14px) saturate(160%)",
-            "WebkitBackdropFilter": "blur(14px) saturate(160%)",
-            "borderBottomColor": "color-mix(in srgb, var(--theme-text) 14%, transparent)"
+            "top": "0.75rem",
+            "left": "1rem",
+            "width": "calc(100% - 2rem)",
+            "backgroundColor": "color-mix(in srgb, var(--theme-background) 32%, transparent)",
+            "backgroundImage": "linear-gradient(145deg, color-mix(in srgb, white 40%, transparent), transparent 60%)",
+            "backdropFilter": "blur(18px) saturate(180%)",
+            "WebkitBackdropFilter": "blur(18px) saturate(180%)",
+            "borderBottomColor": "color-mix(in srgb, white 70%, transparent)",
+            "borderWidth": 1,
+            "borderStyle": "solid",
+            "borderColor": "color-mix(in srgb, white 70%, transparent)",
+            "borderRadius": "9999px",
+            "boxShadow": "inset 0 0 0 1px color-mix(in srgb, white 75%, transparent), inset 0 1px 0 color-mix(in srgb, white 80%, transparent), inset 0 0 22px 0 color-mix(in srgb, white 45%, transparent), inset 0 -12px 22px -12px rgba(99, 102, 241, 0.2), 0 10px 30px -8px rgba(99, 102, 241, 0.28)"
+          }
+        }
+      },
+      "sidebar": {
+        "root": {
+          "style": {
+            "backgroundColor": "color-mix(in srgb, var(--theme-background) 32%, transparent)",
+            "backgroundImage": "linear-gradient(145deg, color-mix(in srgb, white 40%, transparent), transparent 60%)",
+            "backdropFilter": "blur(18px) saturate(180%)",
+            "WebkitBackdropFilter": "blur(18px) saturate(180%)",
+            "borderRightColor": "color-mix(in srgb, white 70%, transparent)",
+            "borderRadius": "0 1.5rem 1.5rem 0",
+            "boxShadow": "inset 0 0 0 1px color-mix(in srgb, white 75%, transparent), inset 0 1px 0 color-mix(in srgb, white 80%, transparent), inset 0 0 22px 0 color-mix(in srgb, white 45%, transparent), inset 0 -12px 22px -12px rgba(99, 102, 241, 0.2), 0 10px 30px -8px rgba(99, 102, 241, 0.28)"
+          }
+        },
+        "button": {
+          "style": {
+            "borderRadius": "9999px"
           }
         }
       },
       "modal": {
         "backdrop": {
           "style": {
-            "backgroundColor": "rgba(0, 0, 0, 0.25)",
-            "backdropFilter": "blur(6px) saturate(160%)",
-            "WebkitBackdropFilter": "blur(6px) saturate(160%)"
+            "backgroundColor": "rgba(99, 102, 241, 0.12)",
+            "backdropFilter": "blur(8px) saturate(180%)",
+            "WebkitBackdropFilter": "blur(8px) saturate(180%)"
+          }
+        },
+        "container": {
+          "style": {
+            "backgroundColor": "color-mix(in srgb, var(--theme-background) 78%, transparent)",
+            "backdropFilter": "blur(24px) saturate(180%)",
+            "WebkitBackdropFilter": "blur(24px) saturate(180%)"
           }
         }
       },
       "alertDialog": {
         "backdrop": {
           "style": {
-            "backgroundColor": "rgba(0, 0, 0, 0.25)",
-            "backdropFilter": "blur(6px) saturate(160%)",
-            "WebkitBackdropFilter": "blur(6px) saturate(160%)"
+            "backgroundColor": "rgba(99, 102, 241, 0.12)",
+            "backdropFilter": "blur(8px) saturate(180%)",
+            "WebkitBackdropFilter": "blur(8px) saturate(180%)"
+          }
+        },
+        "container": {
+          "style": {
+            "backgroundColor": "color-mix(in srgb, var(--theme-background) 78%, transparent)",
+            "backdropFilter": "blur(24px) saturate(180%)",
+            "WebkitBackdropFilter": "blur(24px) saturate(180%)"
+          }
+        }
+      },
+      "drawer": {
+        "backdrop": {
+          "style": {
+            "backgroundColor": "rgba(99, 102, 241, 0.12)",
+            "backdropFilter": "blur(8px) saturate(180%)",
+            "WebkitBackdropFilter": "blur(8px) saturate(180%)"
+          }
+        },
+        "container": {
+          "style": {
+            "backgroundColor": "color-mix(in srgb, var(--theme-background) 78%, transparent)",
+            "backdropFilter": "blur(24px) saturate(180%)",
+            "WebkitBackdropFilter": "blur(24px) saturate(180%)"
+          }
+        }
+      },
+      "accordion": {
+        "root": {
+          "style": {
+            "backgroundColor": "color-mix(in srgb, var(--theme-background) 32%, transparent)",
+            "backgroundImage": "linear-gradient(145deg, color-mix(in srgb, white 40%, transparent), transparent 60%)",
+            "backdropFilter": "blur(14px) saturate(180%)",
+            "WebkitBackdropFilter": "blur(14px) saturate(180%)",
+            "borderColor": "color-mix(in srgb, white 70%, transparent)",
+            "boxShadow": "inset 0 0 0 1px color-mix(in srgb, white 75%, transparent), inset 0 1px 0 color-mix(in srgb, white 80%, transparent), inset 0 0 22px 0 color-mix(in srgb, white 40%, transparent), inset 0 -12px 22px -12px rgba(99, 102, 241, 0.2), 0 4px 14px -4px rgba(99, 102, 241, 0.25)",
+            "borderRadius": "1.25rem"
+          }
+        },
+        "header": {
+          "style": {
+            "fontWeight": 600
           }
         }
       },
@@ -105,9 +180,10 @@
         "root": {
           "style": {
             "backgroundColor": "color-mix(in srgb, var(--alert-bg) 55%, transparent)",
-            "backdropFilter": "blur(10px) saturate(160%)",
-            "WebkitBackdropFilter": "blur(10px) saturate(160%)",
-            "boxShadow": "0 4px 16px rgba(31, 38, 135, 0.12)"
+            "backdropFilter": "blur(12px) saturate(180%)",
+            "WebkitBackdropFilter": "blur(12px) saturate(180%)",
+            "borderRadius": "1rem",
+            "boxShadow": "inset 0 0 0 1px color-mix(in srgb, white 75%, transparent), inset 0 1px 0 color-mix(in srgb, white 80%, transparent), inset 0 0 16px 0 color-mix(in srgb, white 35%, transparent), inset 0 -12px 16px -12px rgba(99, 102, 241, 0.12), 0 4px 14px -4px rgba(99, 102, 241, 0.25)"
           }
         }
       },
@@ -115,9 +191,10 @@
         "root": {
           "style": {
             "backgroundColor": "color-mix(in srgb, var(--alert-bg) 60%, transparent)",
-            "backdropFilter": "blur(12px) saturate(160%)",
-            "WebkitBackdropFilter": "blur(12px) saturate(160%)",
-            "boxShadow": "0 8px 24px rgba(31, 38, 135, 0.18)"
+            "backdropFilter": "blur(12px) saturate(180%)",
+            "WebkitBackdropFilter": "blur(12px) saturate(180%)",
+            "borderRadius": "1rem",
+            "boxShadow": "inset 0 0 0 1px color-mix(in srgb, white 75%, transparent), inset 0 1px 0 color-mix(in srgb, white 80%, transparent), inset 0 0 16px 0 color-mix(in srgb, white 35%, transparent), inset 0 -12px 16px -12px rgba(99, 102, 241, 0.12), 0 4px 14px -4px rgba(99, 102, 241, 0.25)"
           }
         }
       },
@@ -125,9 +202,12 @@
         "root": {
           "style": {
             "backgroundColor": "color-mix(in srgb, var(--theme-background) 55%, transparent)",
-            "backdropFilter": "blur(10px) saturate(160%)",
-            "WebkitBackdropFilter": "blur(10px) saturate(160%)",
-            "borderColor": "color-mix(in srgb, var(--theme-text) 14%, transparent)"
+            "backgroundImage": "linear-gradient(145deg, color-mix(in srgb, white 40%, transparent), transparent 60%)",
+            "backdropFilter": "blur(14px) saturate(180%)",
+            "WebkitBackdropFilter": "blur(14px) saturate(180%)",
+            "borderColor": "color-mix(in srgb, white 70%, transparent)",
+            "boxShadow": "inset 0 0 0 1px color-mix(in srgb, white 75%, transparent), inset 0 1px 0 color-mix(in srgb, white 80%, transparent), inset 0 0 22px 0 color-mix(in srgb, white 40%, transparent), inset 0 -12px 22px -12px rgba(99, 102, 241, 0.2), 0 4px 14px -4px rgba(99, 102, 241, 0.25)",
+            "borderRadius": "0.75rem"
           }
         },
         "arrow": {
@@ -139,73 +219,76 @@
       "tab": {
         "root": {
           "style": {
-            "borderRadius": "0.5rem 0.5rem 0 0"
+            "borderRadius": "0.75rem 0.75rem 0 0"
           }
         }
       },
       "dropdown": {
         "root": {
           "style": {
-            "backgroundColor": "color-mix(in srgb, var(--theme-background) 35%, transparent)",
-            "backdropFilter": "blur(16px) saturate(160%)",
-            "WebkitBackdropFilter": "blur(16px) saturate(160%)",
-            "borderColor": "color-mix(in srgb, var(--theme-text) 14%, transparent)",
-            "boxShadow": "0 8px 32px rgba(31, 38, 135, 0.18)",
-            "borderRadius": "1rem"
+            "backgroundColor": "color-mix(in srgb, var(--theme-background) 32%, transparent)",
+            "backgroundImage": "linear-gradient(145deg, color-mix(in srgb, white 40%, transparent), transparent 60%)",
+            "backdropFilter": "blur(18px) saturate(180%)",
+            "WebkitBackdropFilter": "blur(18px) saturate(180%)",
+            "borderColor": "color-mix(in srgb, white 70%, transparent)",
+            "boxShadow": "inset 0 0 0 1px color-mix(in srgb, white 75%, transparent), inset 0 1px 0 color-mix(in srgb, white 80%, transparent), inset 0 0 22px 0 color-mix(in srgb, white 45%, transparent), inset 0 -12px 22px -12px rgba(99, 102, 241, 0.2), 0 10px 30px -8px rgba(99, 102, 241, 0.28)",
+            "borderRadius": "1.25rem"
           }
         }
       },
       "switch": {
         "track": {
           "style": {
-            "boxShadow": "inset 0 0 0 1px color-mix(in srgb, var(--theme-text) 14%, transparent)"
+            "boxShadow": "inset 0 0 0 1px color-mix(in srgb, white 70%, transparent)"
           }
         },
         "thumb": {
           "style": {
-            "boxShadow": "0 2px 8px rgba(31, 38, 135, 0.25)"
+            "boxShadow": "0 2px 8px rgba(99, 102, 241, 0.35)"
           }
         }
       },
       "spinner": {
         "button": {
           "style": {
-            "backgroundColor": "color-mix(in srgb, var(--theme-primary) 18%, transparent)"
+            "backgroundColor": "color-mix(in srgb, var(--theme-primary) 18%, transparent)",
+            "borderRadius": "9999px"
           }
         }
       },
       "slider": {
         "track": {
           "style": {
-            "boxShadow": "inset 0 0 0 1px color-mix(in srgb, var(--theme-text) 14%, transparent)"
+            "boxShadow": "inset 0 0 0 1px color-mix(in srgb, white 70%, transparent)"
           }
         },
         "thumb": {
           "style": {
-            "boxShadow": "0 2px 8px rgba(31, 38, 135, 0.25)"
+            "boxShadow": "0 2px 8px rgba(99, 102, 241, 0.35)"
           }
         }
       },
       "radio": {
         "control": {
           "style": {
-            "backgroundColor": "color-mix(in srgb, var(--theme-background) 35%, transparent)",
-            "backdropFilter": "blur(8px) saturate(160%)",
-            "WebkitBackdropFilter": "blur(8px) saturate(160%)"
+            "backgroundColor": "color-mix(in srgb, var(--theme-background) 40%, transparent)",
+            "backdropFilter": "blur(8px) saturate(180%)",
+            "WebkitBackdropFilter": "blur(8px) saturate(180%)"
           }
         }
       },
       "progressBar": {
         "track": {
           "style": {
-            "backgroundColor": "color-mix(in srgb, var(--theme-background) 35%, transparent)",
-            "boxShadow": "inset 0 0 0 1px color-mix(in srgb, var(--theme-text) 14%, transparent)",
-            "backdropFilter": "blur(8px) saturate(160%)",
-            "WebkitBackdropFilter": "blur(8px) saturate(160%)"
+            "backgroundColor": "color-mix(in srgb, var(--theme-background) 40%, transparent)",
+            "boxShadow": "inset 0 0 0 1px color-mix(in srgb, white 70%, transparent)",
+            "backdropFilter": "blur(8px) saturate(180%)",
+            "WebkitBackdropFilter": "blur(8px) saturate(180%)"
           }
         },
         "bar": {
           "style": {
+            "backgroundImage": "linear-gradient(90deg, var(--theme-primary), var(--theme-primary-gradient))",
             "boxShadow": "0 0 12px color-mix(in srgb, var(--theme-primary) 50%, transparent)"
           }
         }
@@ -213,359 +296,11 @@
       "imageInput": {
         "area": {
           "style": {
-            "backgroundColor": "color-mix(in srgb, var(--theme-background) 25%, transparent)",
-            "borderColor": "color-mix(in srgb, var(--theme-text) 14%, transparent)",
-            "backdropFilter": "blur(8px) saturate(160%)",
-            "WebkitBackdropFilter": "blur(8px) saturate(160%)"
-          }
-        }
-      }
-    },
-    "neumorph": {
-      "surface": {
-        "root": {
-          "style": {
-            "backgroundColor": "var(--theme-soft)",
-            "borderColor": "transparent",
-            "borderRadius": "1.25rem",
-            "boxShadow": "8px 8px 16px var(--theme-shadow-dark), -8px -8px 16px var(--theme-shadow-light)"
-          }
-        }
-      },
-      "button": {
-        "root": {
-          "style": {
-            "backgroundColor": "var(--theme-soft)",
-            "color": "var(--theme-text)",
-            "borderRadius": "0.9rem",
-            "boxShadow": "5px 5px 10px var(--theme-shadow-dark), -5px -5px 10px var(--theme-shadow-light)"
-          }
-        }
-      },
-      "input": {
-        "label": {
-          "style": {
-            "color": "var(--theme-text)"
-          }
-        },
-        "field": {
-          "style": {
-            "backgroundColor": "var(--theme-soft)",
-            "borderColor": "transparent",
-            "borderRadius": "0.9rem",
-            "boxShadow": "inset 4px 4px 8px var(--theme-shadow-dark), inset -4px -4px 8px var(--theme-shadow-light)",
-            "color": "var(--theme-text)"
-          }
-        }
-      },
-      "header": {
-        "root": {
-          "style": {
-            "backgroundColor": "var(--theme-soft)",
-            "boxShadow": "0 6px 14px var(--theme-shadow-dark)",
-            "borderBottomColor": "transparent"
-          }
-        }
-      },
-      "modal": {
-        "backdrop": {
-          "style": {
-            "backgroundColor": "color-mix(in srgb, var(--theme-soft) 70%, transparent)"
-          }
-        }
-      },
-      "alertDialog": {
-        "backdrop": {
-          "style": {
-            "backgroundColor": "color-mix(in srgb, var(--theme-soft) 70%, transparent)"
-          }
-        }
-      },
-      "alert": {
-        "root": {
-          "style": {
-            "borderColor": "transparent",
-            "borderRadius": "0.9rem",
-            "boxShadow": "4px 4px 8px var(--theme-shadow-dark), -4px -4px 8px var(--theme-shadow-light)"
-          }
-        }
-      },
-      "toast": {
-        "root": {
-          "style": {
-            "borderColor": "transparent",
-            "borderRadius": "0.9rem",
-            "boxShadow": "5px 5px 10px var(--theme-shadow-dark), -5px -5px 10px var(--theme-shadow-light)"
-          }
-        }
-      },
-      "tooltip": {
-        "root": {
-          "style": {
-            "backgroundColor": "var(--theme-soft)",
-            "borderColor": "transparent",
-            "borderRadius": "0.75rem",
-            "boxShadow": "3px 3px 6px var(--theme-shadow-dark), -3px -3px 6px var(--theme-shadow-light)"
-          }
-        },
-        "arrow": {
-          "style": {
-            "backgroundColor": "var(--theme-soft)"
-          }
-        }
-      },
-      "tab": {
-        "root": {
-          "style": {
-            "borderRadius": "0.75rem"
-          }
-        }
-      },
-      "dropdown": {
-        "root": {
-          "style": {
-            "backgroundColor": "var(--theme-soft)",
-            "borderColor": "transparent",
-            "borderRadius": "1.25rem",
-            "boxShadow": "8px 8px 16px var(--theme-shadow-dark), -8px -8px 16px var(--theme-shadow-light)"
-          }
-        }
-      },
-      "switch": {
-        "track": {
-          "style": {
-            "boxShadow": "inset 3px 3px 6px var(--theme-shadow-dark), inset -3px -3px 6px var(--theme-shadow-light)"
-          }
-        },
-        "thumb": {
-          "style": {
-            "backgroundColor": "var(--theme-soft)",
-            "boxShadow": "2px 2px 4px var(--theme-shadow-dark), -2px -2px 4px var(--theme-shadow-light)"
-          }
-        }
-      },
-      "spinner": {
-        "button": {
-          "style": {
-            "backgroundColor": "var(--theme-soft)",
-            "boxShadow": "3px 3px 6px var(--theme-shadow-dark), -3px -3px 6px var(--theme-shadow-light)"
-          }
-        }
-      },
-      "slider": {
-        "track": {
-          "style": {
-            "boxShadow": "inset 2px 2px 4px var(--theme-shadow-dark), inset -2px -2px 4px var(--theme-shadow-light)"
-          }
-        },
-        "thumb": {
-          "style": {
-            "backgroundColor": "var(--theme-soft)",
-            "borderColor": "transparent",
-            "boxShadow": "3px 3px 6px var(--theme-shadow-dark), -3px -3px 6px var(--theme-shadow-light)"
-          }
-        }
-      },
-      "radio": {
-        "control": {
-          "style": {
-            "backgroundColor": "var(--theme-soft)",
-            "borderColor": "transparent",
-            "boxShadow": "3px 3px 6px var(--theme-shadow-dark), -3px -3px 6px var(--theme-shadow-light)"
-          }
-        }
-      },
-      "progressBar": {
-        "track": {
-          "style": {
-            "boxShadow": "inset 3px 3px 6px var(--theme-shadow-dark), inset -3px -3px 6px var(--theme-shadow-light)"
-          }
-        },
-        "bar": {
-          "style": {
-            "boxShadow": "1px 1px 3px var(--theme-shadow-dark)"
-          }
-        }
-      },
-      "imageInput": {
-        "area": {
-          "style": {
-            "backgroundColor": "var(--theme-soft)",
-            "borderColor": "transparent",
-            "boxShadow": "inset 5px 5px 10px var(--theme-shadow-dark), inset -5px -5px 10px var(--theme-shadow-light)"
-          }
-        }
-      }
-    },
-    "clay": {
-      "surface": {
-        "root": {
-          "style": {
-            "backgroundColor": "color-mix(in srgb, var(--theme-primary) 6%, var(--theme-background))",
-            "borderColor": "transparent",
-            "borderRadius": "1.75rem",
-            "boxShadow": "inset -6px -6px 12px color-mix(in srgb, var(--theme-primary) 30%, transparent), inset 6px 6px 12px rgba(255, 255, 255, 0.55), 10px 12px 18px color-mix(in srgb, var(--theme-primary) 28%, transparent)"
-          }
-        }
-      },
-      "button": {
-        "root": {
-          "style": {
-            "backgroundImage": "linear-gradient(145deg, rgba(255, 255, 255, 0.35), transparent 60%)",
-            "borderRadius": "1.25rem",
-            "boxShadow": "inset -4px -4px 8px color-mix(in srgb, var(--theme-primary) 30%, transparent), inset 4px 4px 8px rgba(255, 255, 255, 0.55), 8px 10px 12px color-mix(in srgb, var(--theme-primary) 28%, transparent)"
-          }
-        }
-      },
-      "input": {
-        "label": {
-          "style": {
-            "color": "var(--theme-text)"
-          }
-        },
-        "field": {
-          "style": {
-            "backgroundColor": "color-mix(in srgb, var(--theme-primary) 3%, var(--theme-background))",
-            "borderColor": "transparent",
+            "backgroundColor": "color-mix(in srgb, var(--theme-background) 30%, transparent)",
+            "borderColor": "color-mix(in srgb, white 70%, transparent)",
             "borderRadius": "1rem",
-            "color": "var(--theme-text)",
-            "boxShadow": "inset 4px 4px 8px color-mix(in srgb, var(--theme-primary) 25%, transparent), inset -4px -4px 8px rgba(255, 255, 255, 0.5)"
-          }
-        }
-      },
-      "header": {
-        "root": {
-          "style": {
-            "backgroundColor": "color-mix(in srgb, var(--theme-primary) 6%, var(--theme-background))",
-            "borderRadius": "0 0 1.75rem 1.75rem",
-            "boxShadow": "inset -4px -4px 8px color-mix(in srgb, var(--theme-primary) 30%, transparent), inset 4px 4px 8px rgba(255, 255, 255, 0.55), 8px 10px 12px color-mix(in srgb, var(--theme-primary) 28%, transparent)",
-            "borderBottomColor": "transparent"
-          }
-        }
-      },
-      "modal": {
-        "backdrop": {
-          "style": {
-            "backgroundColor": "color-mix(in srgb, var(--theme-primary) 25%, transparent)"
-          }
-        }
-      },
-      "alertDialog": {
-        "backdrop": {
-          "style": {
-            "backgroundColor": "color-mix(in srgb, var(--theme-primary) 25%, transparent)"
-          }
-        }
-      },
-      "alert": {
-        "root": {
-          "style": {
-            "borderColor": "transparent",
-            "borderRadius": "1.25rem",
-            "boxShadow": "inset -3px -3px 6px color-mix(in srgb, var(--alert-color) 30%, transparent), inset 3px 3px 6px rgba(255, 255, 255, 0.55), 7px 9px 9px color-mix(in srgb, var(--alert-color) 28%, transparent)"
-          }
-        }
-      },
-      "toast": {
-        "root": {
-          "style": {
-            "borderColor": "transparent",
-            "borderRadius": "1.25rem",
-            "boxShadow": "inset -4px -4px 8px color-mix(in srgb, var(--alert-color) 30%, transparent), inset 4px 4px 8px rgba(255, 255, 255, 0.55), 8px 10px 12px color-mix(in srgb, var(--alert-color) 28%, transparent)"
-          }
-        }
-      },
-      "tooltip": {
-        "root": {
-          "style": {
-            "backgroundColor": "color-mix(in srgb, var(--theme-primary) 6%, var(--theme-background))",
-            "borderColor": "transparent",
-            "borderRadius": "1rem",
-            "boxShadow": "inset -3px -3px 6px color-mix(in srgb, var(--theme-primary) 30%, transparent), inset 3px 3px 6px rgba(255, 255, 255, 0.55), 7px 9px 9px color-mix(in srgb, var(--theme-primary) 28%, transparent)"
-          }
-        },
-        "arrow": {
-          "style": {
-            "backgroundColor": "color-mix(in srgb, var(--theme-primary) 6%, var(--theme-background))"
-          }
-        }
-      },
-      "tab": {
-        "root": {
-          "style": {
-            "borderRadius": "1rem"
-          }
-        }
-      },
-      "dropdown": {
-        "root": {
-          "style": {
-            "backgroundColor": "color-mix(in srgb, var(--theme-primary) 6%, var(--theme-background))",
-            "borderColor": "transparent",
-            "borderRadius": "1.75rem",
-            "boxShadow": "inset -6px -6px 12px color-mix(in srgb, var(--theme-primary) 30%, transparent), inset 6px 6px 12px rgba(255, 255, 255, 0.55), 10px 12px 18px color-mix(in srgb, var(--theme-primary) 28%, transparent)"
-          }
-        }
-      },
-      "switch": {
-        "track": {
-          "style": {
-            "boxShadow": "inset 3px 3px 6px color-mix(in srgb, var(--theme-primary) 25%, transparent), inset -3px -3px 6px rgba(255, 255, 255, 0.5)"
-          }
-        },
-        "thumb": {
-          "style": {
-            "boxShadow": "inset -2px -2px 4px color-mix(in srgb, var(--theme-primary) 30%, transparent), inset 2px 2px 4px rgba(255, 255, 255, 0.55), 6px 8px 6px color-mix(in srgb, var(--theme-primary) 28%, transparent)"
-          }
-        }
-      },
-      "spinner": {
-        "button": {
-          "style": {
-            "backgroundColor": "color-mix(in srgb, var(--theme-primary) 10%, var(--theme-background))",
-            "boxShadow": "inset -2px -2px 4px color-mix(in srgb, var(--theme-primary) 30%, transparent), inset 2px 2px 4px rgba(255, 255, 255, 0.55), 6px 8px 6px color-mix(in srgb, var(--theme-primary) 28%, transparent)"
-          }
-        }
-      },
-      "slider": {
-        "track": {
-          "style": {
-            "boxShadow": "inset 2px 2px 4px color-mix(in srgb, var(--theme-primary) 25%, transparent), inset -2px -2px 4px rgba(255, 255, 255, 0.5)"
-          }
-        },
-        "thumb": {
-          "style": {
-            "boxShadow": "inset -2px -2px 4px color-mix(in srgb, var(--theme-primary) 30%, transparent), inset 2px 2px 4px rgba(255, 255, 255, 0.55), 6px 8px 6px color-mix(in srgb, var(--theme-primary) 28%, transparent)"
-          }
-        }
-      },
-      "radio": {
-        "control": {
-          "style": {
-            "backgroundColor": "color-mix(in srgb, var(--theme-primary) 10%, var(--theme-background))",
-            "boxShadow": "inset -2px -2px 4px color-mix(in srgb, var(--theme-primary) 30%, transparent), inset 2px 2px 4px rgba(255, 255, 255, 0.55), 6px 8px 6px color-mix(in srgb, var(--theme-primary) 28%, transparent)"
-          }
-        }
-      },
-      "progressBar": {
-        "track": {
-          "style": {
-            "boxShadow": "inset 3px 3px 6px color-mix(in srgb, var(--theme-primary) 25%, transparent), inset -3px -3px 6px rgba(255, 255, 255, 0.5)"
-          }
-        },
-        "bar": {
-          "style": {
-            "backgroundImage": "linear-gradient(180deg, rgba(255, 255, 255, 0.35), transparent 70%)",
-            "boxShadow": "inset -2px -2px 4px color-mix(in srgb, var(--theme-primary) 30%, transparent), inset 2px 2px 4px rgba(255, 255, 255, 0.55), 6px 8px 6px color-mix(in srgb, var(--theme-primary) 28%, transparent)"
-          }
-        }
-      },
-      "imageInput": {
-        "area": {
-          "style": {
-            "backgroundColor": "color-mix(in srgb, var(--theme-primary) 6%, var(--theme-background))",
-            "boxShadow": "inset 5px 5px 10px color-mix(in srgb, var(--theme-primary) 25%, transparent), inset -5px -5px 10px rgba(255, 255, 255, 0.5)",
-            "borderRadius": "1.5rem"
+            "backdropFilter": "blur(10px) saturate(180%)",
+            "WebkitBackdropFilter": "blur(10px) saturate(180%)"
           }
         }
       }

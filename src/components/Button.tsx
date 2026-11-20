@@ -9,7 +9,7 @@ type Size = "sm" | "md" | "lg";
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: Variant;
   size?: Size;
-  /** Name of a variant defined in the theme config (variants[name].button.root). */
+  /** Name of a variant defined in the theme config (variants[name].button.{root,primary,secondary,outline,ghost}); root applies to all, the variant part only to that variant. */
   themeVariant?: string;
 }
 
@@ -33,7 +33,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
   ref,
 ) {
   const theme = useTheme();
-  const themed = useVariant("button", themeVariant)("root");
+  const getThemed = useVariant("button", themeVariant);
+  const themedRoot = getThemed("root");
+  const themedVariant = getThemed(variant);
 
   const themeStyle = useMemo<React.CSSProperties | undefined>(() => {
     if (!theme.enabled) return undefined;
@@ -94,10 +96,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
         variantClasses[variant],
         sizeClasses[size],
         themeHoverClass,
-        themed.className,
+        themedRoot.className,
+        themedVariant.className,
         className,
       )}
-      style={{ ...themeStyle, ...themed.style, ...style }}
+      style={{ ...themeStyle, ...themedRoot.style, ...themedVariant.style, ...style }}
       {...props}
     />
   );
