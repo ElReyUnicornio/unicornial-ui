@@ -18,6 +18,23 @@
   --theme-shadow-dark: rgba(0, 0, 0, 0.18);
 }
 
+/* Knobs of the "glass" variant (src/theme/glass.ts): strength of its light edges and glows, panel and dialog opacity, and shadow tint. */
+:root {
+  --glass-strength: 1;
+  --glass-fill-strength: 1;
+  --glass-dialog-fill: 78%;
+  --glass-shadow: #6366f1;
+  --glass-shadow-strength: 1;
+}
+
+.dark {
+  --glass-strength: 0.14;
+  --glass-fill-strength: 2;
+  --glass-dialog-fill: 60%;
+  --glass-shadow: #000;
+  --glass-shadow-strength: 2;
+}
+
 /* Utility colors (bg-accent, border-border, text-text-h...) follow the active theme. */
 @theme inline {
   --color-text: var(--theme-text);

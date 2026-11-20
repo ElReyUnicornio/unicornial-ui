@@ -2,10 +2,19 @@ import type { CSSProperties } from "react";
 import type { ThemeVariant } from "./types";
 
 // Building blocks of the "glass" look, so each component only states what is different. ------
+//
+// Light and dark share the same variant: the --glass-* variables (index.css) scale the light
+// edges and glows and pick the shadow color, so in dark mode they become subtle.
 
-const white = (percent: number) => `color-mix(in srgb, white ${percent}%, transparent)`;
-const fill = (percent: number) => `color-mix(in srgb, var(--theme-background) ${percent}%, transparent)`;
-const indigo = (alpha: number) => `rgba(99, 102, 241, ${alpha})`;
+/** Light edge or glow; `percent` is its strength in light mode. */
+const white = (percent: number) =>
+  `color-mix(in srgb, white calc(${percent}% * var(--glass-strength)), transparent)`;
+/** Translucent theme background; `percent` is its opacity in light mode (denser in dark mode). */
+const fill = (percent: number) =>
+  `color-mix(in srgb, var(--theme-background) min(100%, calc(${percent}% * var(--glass-fill-strength))), transparent)`;
+/** Shadow tint (indigo in light mode, black in dark mode); `alpha` is its opacity in light mode. */
+const indigo = (alpha: number) =>
+  `color-mix(in srgb, var(--glass-shadow) calc(${Math.round(alpha * 100)}% * var(--glass-shadow-strength)), transparent)`;
 
 /** Blur + saturation of what is behind the element (prefixed too, for older Safari). */
 const blur = (px: number): CSSProperties => {
@@ -53,7 +62,11 @@ const dimmedBackdrop = {
   ...blur(8),
 } satisfies CSSProperties;
 
-const dialogContainer = { backgroundColor: fill(78), ...blur(24) } satisfies CSSProperties;
+// Dialogs sit over a dimmed backdrop, so they get their own (lighter in dark mode) opacity.
+const dialogContainer = {
+  backgroundColor: "color-mix(in srgb, var(--theme-background) var(--glass-dialog-fill), transparent)",
+  ...blur(24),
+} satisfies CSSProperties;
 
 /** Same look for Modal, AlertDialog and Drawer. */
 const dialog = {
@@ -72,7 +85,16 @@ const notice = {
 
 export const glass: ThemeVariant = {
   surface: { root: { style: panel(18, PANEL_SHADOW, "1.5rem") } },
-  button: { root: { style: { borderRadius: "0.875rem" } } },
+  button: {
+    root: { style: { borderRadius: "0.875rem" } },
+    // A translucent chip that follows the text color, instead of a solid light button.
+    secondary: {
+      style: {
+        backgroundColor: "color-mix(in srgb, var(--theme-text) 7%, transparent)",
+        color: "var(--theme-text)",
+      },
+    },
+  },
   input: {
     label: { style: { color: "var(--theme-text)", fontWeight: 600 } },
     field: {
