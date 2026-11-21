@@ -124,7 +124,7 @@ function Item({
           strokeLinecap="round"
           strokeLinejoin="round"
           aria-hidden="true"
-          className="shrink-0 transition-transform duration-200"
+          className="shrink-0 transition-transform duration-200 motion-reduce:transition-none"
           style={{ transform: isOpen ? "rotate(180deg)" : "none" }}
         >
           <path d="m6 9 6 6 6-6" />
@@ -134,7 +134,7 @@ function Item({
         id={`${id}-body`}
         role="region"
         aria-labelledby={`${id}-header`}
-        className="grid transition-[grid-template-rows] duration-200"
+        className="grid transition-[grid-template-rows] duration-200 motion-reduce:transition-none"
         style={{ gridTemplateRows: isOpen ? "1fr" : "0fr" }}
       >
         <div className="overflow-hidden" inert={!isOpen}>

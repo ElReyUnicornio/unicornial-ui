@@ -1,8 +1,8 @@
-import type { ReactNode } from "react";
+import { useId, useRef, type ReactNode } from "react";
 import { Surface } from "./Surface";
 import { Button } from "./Button";
 import { AlertIcon, alertColors, type AlertVariant } from "./Alert";
-import { Backdrop, CloseButton, stopPropagation } from "./Overlay";
+import { Backdrop, CloseButton, stopPropagation, useFocusTrap } from "./Overlay";
 import { useTheme } from "../theme/ThemeProvider";
 import { cx, useVariant } from "../theme/variants";
 
@@ -36,6 +36,9 @@ export function AlertDialog({
   const container = themed("container");
   const icon = themed("icon");
   const messageStyle = themed("message");
+  const surfaceRef = useRef<HTMLDivElement>(null);
+  const messageId = useId();
+  useFocusTrap(surfaceRef);
 
   return (
     <Backdrop
@@ -44,8 +47,11 @@ export function AlertDialog({
       themed={themed("backdrop")}
     >
       <Surface
+        ref={surfaceRef}
         role="alertdialog"
         aria-modal="true"
+        aria-labelledby={messageId}
+        tabIndex={-1}
         themeVariant={themeVariant}
         className={cx(
           "relative w-full max-w-sm flex flex-col items-center gap-4 p-6 text-center shadow-float",
@@ -63,16 +69,16 @@ export function AlertDialog({
         >
           <AlertIcon variant={variant} size={32} />
         </div>
-        <p className={cx(text.paragraph, messageStyle.className)} style={messageStyle.style}>
+        <p id={messageId} className={cx(text.paragraph, messageStyle.className)} style={messageStyle.style}>
           {message}
         </p>
         <div className="flex gap-2">
           {buttons.reject && (
-            <Button type="button" variant="outline" themeVariant={themeVariant} onClick={onReject}>
+            <Button type="button" variant="outline" themeVariant={themeVariant} onClick={onReject} data-autofocus>
               {buttons.reject}
             </Button>
           )}
-          <Button type="button" themeVariant={themeVariant} onClick={onConfirm}>
+          <Button type="button" themeVariant={themeVariant} onClick={onConfirm} data-autofocus={!buttons.reject || undefined}>
             {buttons.confirm}
           </Button>
         </div>

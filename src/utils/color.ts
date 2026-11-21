@@ -146,3 +146,24 @@ export function channelsToCss(space: ColorSpace, [a, b, c]: Triple): string {
 export function formatColor(hex: string, format: ColorFormat): string {
   return format === "hex" ? hex : channelsToCss(format, hexToChannels(hex, format));
 }
+
+/** WCAG relative luminance of a hex color. */
+function luminance(hex: string): number {
+  const [r, g, b] = hexToRgb(hex).map((c) => toLinear(c / 255));
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+/** WCAG contrast ratio (1 to 21) between two hex colors. */
+export function contrastRatio(a: string, b: string): number {
+  const [light, dark] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+  return (light + 0.05) / (dark + 0.05);
+}
+
+/** Darkens `hex` until white text on it reaches `min` contrast (4.5 is WCAG AA for body text). */
+export function darkenForWhiteText(hex: string, min = 4.7): string {
+  let result = normalizeHex(hex) ?? "#000000";
+  for (let amount = 1; contrastRatio("#ffffff", result) < min && amount <= 100; amount++) {
+    result = getDarkerGradientColor(hex, amount);
+  }
+  return result;
+}

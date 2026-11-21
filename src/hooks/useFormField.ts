@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { useForm } from "../components/Form";
 import type { Validate } from "../utils/validation";
 import { useDebounce } from "./useDebounce";
@@ -14,7 +14,8 @@ export function useFormField<T>(
   fallback: T,
   debounce = 0,
 ) {
-  const { values, setValues, isSubmitting, setValidators } = useForm();
+  const { values, setValues, isSubmitting, submitCount, setValidators } = useForm();
+  const errorId = useId();
   const [message, setMessage] = useState("");
 
   useEffect(() => {
@@ -42,10 +43,23 @@ export function useFormField<T>(
   };
   const validateDebounced = useDebounce(validate, debounce || 1);
 
+  // On submit every field shows its own error, not only the ones the user touched.
+  useEffect(() => {
+    if (submitCount > 0) validate(value);
+    // Only when a submit happens.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [submitCount]);
+
   return {
     value,
     disabled: isSubmitting,
     message,
+    /** Props that tie the control to its error message for assistive technology. */
+    errorProps: {
+      "aria-invalid": message ? (true as const) : undefined,
+      "aria-describedby": message ? errorId : undefined,
+    },
+    errorId,
     /** Stores the new value in the form and validates it. */
     onChange: (next: T) => {
       if (name) setValues((prev) => ({ ...prev, [name]: next }));

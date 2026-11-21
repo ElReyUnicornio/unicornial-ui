@@ -85,7 +85,7 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(function Sidebar(
         ref={ref}
         {...props}
         className={cx(
-          "h-full flex flex-col gap-1 p-2 shrink-0 overflow-hidden transition-[width] duration-200",
+          "h-full flex flex-col gap-1 p-2 shrink-0 overflow-hidden transition-[width] duration-200 motion-reduce:transition-none",
           isCollapsed ? "w-16" : "w-60",
           themed.className,
           className,
@@ -161,7 +161,8 @@ const SidebarButton = forwardRef<HTMLButtonElement, SidebarButtonProps>(function
 
   const themeStyle = enabled
     ? {
-        color: active ? currentColors.primary : currentColors.text,
+        // Mixed with the text color so the active label keeps AA contrast on its tint.
+        color: active ? "color-mix(in srgb, var(--theme-primary) 80%, var(--theme-text))" : currentColors.text,
         backgroundColor: active ? `${currentColors.primary}1a` : undefined,
         "--tw-ring-color": `${currentColors.primary}80`,
       }

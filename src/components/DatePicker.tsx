@@ -99,6 +99,11 @@ export function DatePicker({
     ...Array.from({ length: daysInMonth(view.year, view.month) }, (_, i) => i + 1),
   ];
 
+  // Rows of 7 so the grid has real `row`s (screen readers read it as a table of days).
+  const weeks = Array.from({ length: Math.ceil(cells.length / 7) }, (_, i) =>
+    Array.from({ length: 7 }, (_, j) => cells[i * 7 + j] ?? null),
+  );
+
   const isDisabled = (iso: string) => (min !== undefined && iso < min) || (max !== undefined && iso > max);
 
   return (
@@ -120,7 +125,7 @@ export function DatePicker({
           )}
           style={styles.fieldStyle}
         >
-          <span className={selected ? "" : "opacity-50"}>
+          <span className={selected ? "" : "opacity-60"}>
             {selected ? formatDate(date, format, locale) : placeholder}
           </span>
           <CalendarIcon />
@@ -156,49 +161,59 @@ export function DatePicker({
             </button>
           </div>
           <div role="grid" className="grid grid-cols-7 gap-1 text-center text-sm">
-            {weekdays.map((weekday) => (
-              <span key={weekday} className="py-1 text-xs font-bold opacity-60">
-                {weekday}
-              </span>
-            ))}
-            {cells.map((day, index) => {
-              if (day === null) return <span key={`empty-${index}`} />;
-              const iso = toIso(view.year, view.month, day);
-              const isSelected = iso === date;
-              const isToday = iso === today;
-              return (
-                <button
-                  key={iso}
-                  type="button"
-                  role="gridcell"
-                  aria-selected={isSelected}
-                  aria-current={isToday ? "date" : undefined}
-                  disabled={isDisabled(iso)}
-                  onClick={() => {
-                    setDate(iso);
-                    setOpen(false);
-                    triggerRef.current?.focus();
-                  }}
-                  className={cx(
-                    "w-8 h-8 rounded-md cursor-pointer disabled:opacity-30 disabled:pointer-events-none",
-                    !isSelected && "hover:bg-hover",
-                    dayVariant.className,
-                    isSelected && selectedVariant.className,
-                  )}
-                  style={{
-                    backgroundColor: isSelected ? currentColors.primary : undefined,
-                    color: isSelected ? "#fff" : undefined,
-                    fontWeight: isSelected || isToday ? 700 : undefined,
-                    boxShadow:
-                      isToday && !isSelected ? `inset 0 0 0 1px ${currentColors.primary}` : undefined,
-                    ...dayVariant.style,
-                    ...(isSelected ? selectedVariant.style : undefined),
-                  }}
+            <div role="row" className="contents">
+              {weekdays.map((weekday) => (
+                <span
+                  key={weekday}
+                  role="columnheader"
+                  className="py-1 text-xs font-bold opacity-60"
                 >
-                  {day}
-                </button>
-              );
-            })}
+                  {weekday}
+                </span>
+              ))}
+            </div>
+            {weeks.map((week, weekIndex) => (
+              <div key={weekIndex} role="row" className="contents">
+                {week.map((day, index) => {
+                  if (day === null) return <span key={`empty-${index}`} role="gridcell" />;
+                  const iso = toIso(view.year, view.month, day);
+                  const isSelected = iso === date;
+                  const isToday = iso === today;
+                  return (
+                    <button
+                      key={iso}
+                      type="button"
+                      role="gridcell"
+                      aria-selected={isSelected}
+                      aria-current={isToday ? "date" : undefined}
+                      disabled={isDisabled(iso)}
+                      onClick={() => {
+                        setDate(iso);
+                        setOpen(false);
+                        triggerRef.current?.focus();
+                      }}
+                      className={cx(
+                        "w-8 h-8 rounded-md cursor-pointer disabled:opacity-30 disabled:pointer-events-none",
+                        !isSelected && "hover:bg-hover",
+                        dayVariant.className,
+                        isSelected && selectedVariant.className,
+                      )}
+                      style={{
+                        backgroundColor: isSelected ? currentColors.primary : undefined,
+                        color: isSelected ? "#fff" : undefined,
+                        fontWeight: isSelected || isToday ? 700 : undefined,
+                        boxShadow:
+                          isToday && !isSelected ? `inset 0 0 0 1px ${currentColors.primary}` : undefined,
+                        ...dayVariant.style,
+                        ...(isSelected ? selectedVariant.style : undefined),
+                      }}
+                    >
+                      {day}
+                    </button>
+                  );
+                })}
+              </div>
+            ))}
           </div>
         </Dropdown>
       </div>

@@ -61,14 +61,19 @@ export function ProgressBar({
         style={{ backgroundColor: currentColors.border, ...track.style, ...style }}
       >
         <div
-          className={cx("h-full rounded-full", bar.className)}
+          className={cx(
+            "h-full rounded-full",
+            // Looping bar; with reduced motion it stays still, parked in the middle.
+            indeterminate &&
+              "motion-safe:animate-[progress-indeterminate_1.2s_ease-in-out_infinite] motion-reduce:left-[30%]",
+            bar.className,
+          )}
           style={
             indeterminate
               ? {
                   position: "absolute",
                   width: "40%",
                   background: gradient,
-                  animation: "progress-indeterminate 1.2s ease-in-out infinite",
                   ...bar.style,
                 }
               : {

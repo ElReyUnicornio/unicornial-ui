@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, useState, type DragEvent } from "react";
 import { useTheme } from "../theme/ThemeProvider";
 import { Field } from "./Field";
+import { alertColors } from "./Alert";
 import { CloseIcon, UploadIcon } from "./icons";
 import { cx, useVariant } from "../theme/variants";
 
@@ -155,7 +156,7 @@ export function ImageInput({
           )}
         </div>
         {error && (
-          <p role="alert" className="mt-1 text-sm" style={{ color: "#ef4444" }}>
+          <p role="alert" className="mt-1 text-sm" style={{ color: alertColors.error.color }}>
             {error}
           </p>
         )}

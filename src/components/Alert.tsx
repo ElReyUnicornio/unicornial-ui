@@ -31,7 +31,7 @@ const severityHue: Record<AlertVariant, string> = {
 };
 
 const severityColors = (hue: string) => ({
-  color: `color-mix(in srgb, ${hue} 65%, var(--theme-text))`,
+  color: `color-mix(in srgb, ${hue} 50%, var(--theme-text))`,
   background: `linear-gradient(0deg, color-mix(in srgb, ${hue} 30%, var(--theme-background)), color-mix(in srgb, ${getLighterGradientColor(hue)} 30%, var(--theme-background)))`,
   border: `color-mix(in srgb, ${hue} 35%, var(--theme-background))`,
 });

@@ -4,6 +4,7 @@ import { Field, FOCUS_RING, useFieldStyles, type FieldVariant } from "./Field";
 import { Slider } from "./Slider";
 import Tabs from "./Tab";
 import { useControllable } from "../hooks/useControllable";
+import { useTheme } from "../theme/ThemeProvider";
 import { cx, useVariant } from "../theme/variants";
 import {
   channelsOf,
@@ -42,7 +43,7 @@ type Triple = [number, number, number];
 
 export function ColorPicker({
   value,
-  defaultValue = "#aa3bff",
+  defaultValue,
   onChange,
   format = "hex",
   label,
@@ -58,7 +59,12 @@ export function ColorPicker({
   const styles = useFieldStyles(themeVariant, variant);
   const swatch = useVariant("colorPicker", themeVariant)("swatch");
   const triggerRef = useRef<HTMLButtonElement>(null);
-  const [color, setColor] = useControllable(value, normalizeHex(defaultValue) ?? "#000000", onChange);
+  const { currentColors } = useTheme();
+  const [color, setColor] = useControllable(
+    value,
+    normalizeHex(defaultValue ?? currentColors.primary) ?? "#000000",
+    onChange,
+  );
   const [open, setOpen] = useState(false);
   const [spaceIndex, setSpaceIndex] = useState(0);
   const [hexDraft, setHexDraft] = useState<string | null>(null);

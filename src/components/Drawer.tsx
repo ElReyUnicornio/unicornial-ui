@@ -1,6 +1,6 @@
-import type { HTMLAttributes, ReactNode } from "react";
+import { useId, useRef, type HTMLAttributes, type ReactNode } from "react";
 import { Surface } from "./Surface";
-import { Backdrop, OverlayHeader, stopPropagation } from "./Overlay";
+import { Backdrop, OverlayHeader, stopPropagation, useFocusTrap } from "./Overlay";
 import { useTheme } from "../theme/ThemeProvider";
 import { cx, useVariant } from "../theme/variants";
 
@@ -51,16 +51,22 @@ export function Drawer({
   const themed = useVariant("drawer", themeVariant);
   const container = themed("container");
   const body = themed("body");
+  const surfaceRef = useRef<HTMLDivElement>(null);
+  const titleId = useId();
+  useFocusTrap(surfaceRef);
 
   return (
     <Backdrop onDismiss={onClose} className={cx("flex", backdropClasses[side])} themed={themed("backdrop")}>
       <Surface
+        ref={surfaceRef}
         role="dialog"
         aria-modal="true"
+        aria-labelledby={titleId}
+        tabIndex={-1}
         themeVariant={themeVariant}
         {...props}
         className={cx(
-          "flex flex-col p-0 shadow-float transition-transform duration-300 ease-out",
+          "flex flex-col p-0 shadow-float transition-transform duration-300 ease-out motion-reduce:transition-none",
           panelClasses[side],
           startingClasses[side],
           container.className,
@@ -71,6 +77,7 @@ export function Drawer({
       >
         <OverlayHeader
           title={title}
+          titleId={titleId}
           onClose={onClose}
           className="shrink-0"
           themedHeader={themed("header")}

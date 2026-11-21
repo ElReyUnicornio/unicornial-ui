@@ -10,6 +10,8 @@ interface FormContextType {
   values: Record<string, unknown>;
   setValues: React.Dispatch<React.SetStateAction<Record<string, unknown>>>;
   isSubmitting: boolean;
+  /** How many times the form was submitted; fields validate themselves when it changes. */
+  submitCount: number;
   validators: ValidatorList | null;
   setValidators: React.Dispatch<React.SetStateAction<ValidatorList | null>>;
   setIsSubmitting: (isSubmitting: boolean) => void;
@@ -29,9 +31,11 @@ export function Form({ initialValues, onSubmit, children }: FormProviderProps) {
   const [values, setValues] = useState(initialValues);
   const [validators, setValidators] = useState<ValidatorList | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitCount, setSubmitCount] = useState(0);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setSubmitCount((count) => count + 1);
     if (validators) {
       const hasErrors = Object.keys(validators).some((key) => {
         const validator = validators[key];
@@ -51,6 +55,7 @@ export function Form({ initialValues, onSubmit, children }: FormProviderProps) {
         values,
         setValues,
         isSubmitting,
+        submitCount,
         validators,
         setValidators,
         setIsSubmitting,

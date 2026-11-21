@@ -99,7 +99,7 @@ export const validators: Record<string, (...args: any[]) => Validator> = {
       const re = /^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/;
       return re.test(str)
         ? { valid: true, message: "" }
-        : { valid: false, message: message || "Correo invalido" };
+        : { valid: false, message: message || "Correo inválido" };
     },
   minLength:
     (n: number, message: string) =>

@@ -1,4 +1,4 @@
-import { useEffect, type MouseEvent, type ReactNode } from "react";
+import { useEffect, type MouseEvent, type ReactNode, type RefObject } from "react";
 import { CloseIcon } from "./icons";
 import { cx } from "../theme/variants";
 import type { StyleDef } from "../theme/types";
@@ -26,6 +26,47 @@ export function useEscape(onEscape?: () => void) {
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [onEscape]);
+}
+
+const FOCUSABLE =
+  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+/**
+ * Focus handling for a modal surface: moves focus inside on open (to the `data-autofocus`
+ * element, else the first control), keeps Tab inside, and gives focus back on close.
+ */
+export function useFocusTrap(ref: RefObject<HTMLElement | null>) {
+  useEffect(() => {
+    const surface = ref.current;
+    if (!surface) return;
+    const previous = document.activeElement as HTMLElement | null;
+    const controls = () => Array.from(surface.querySelectorAll<HTMLElement>(FOCUSABLE));
+
+    (surface.querySelector<HTMLElement>("[data-autofocus]") ?? controls()[0] ?? surface).focus();
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Tab") return;
+      const items = controls();
+      if (items.length === 0) {
+        event.preventDefault();
+        return;
+      }
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    surface.addEventListener("keydown", handleKeyDown);
+    return () => {
+      surface.removeEventListener("keydown", handleKeyDown);
+      previous?.focus?.();
+    };
+  }, [ref]);
 }
 
 interface BackdropProps {
@@ -63,6 +104,7 @@ export function OverlayHeader({
   themedHeader,
   themedTitle,
   titleClass,
+  titleId,
 }: {
   title: ReactNode;
   onClose?: () => void;
@@ -70,6 +112,8 @@ export function OverlayHeader({
   themedHeader: StyleDef;
   themedTitle: StyleDef;
   titleClass: string;
+  /** Lets the dialog point at its title with `aria-labelledby`. */
+  titleId?: string;
 }) {
   return (
     <div
@@ -80,7 +124,7 @@ export function OverlayHeader({
       )}
       style={themedHeader.style}
     >
-      <h2 className={cx(titleClass, themedTitle.className)} style={themedTitle.style}>
+      <h2 id={titleId} className={cx(titleClass, themedTitle.className)} style={themedTitle.style}>
         {title}
       </h2>
       <CloseButton onClick={onClose} />

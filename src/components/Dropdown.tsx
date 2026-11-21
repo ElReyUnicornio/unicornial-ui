@@ -47,7 +47,6 @@ export function Dropdown({
     position,
     gap: 4,
     align,
-    content: children,
   });
 
   useEffect(() => {

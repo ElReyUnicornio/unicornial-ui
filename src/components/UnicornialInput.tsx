@@ -27,6 +27,7 @@ export const UnicornialInput = forwardRef<HTMLInputElement, InputProps>(function
     <div>
       <Component
         {...props}
+        {...field.errorProps}
         ref={ref}
         name={name}
         themeVariant={themeVariant}
@@ -42,7 +43,7 @@ export const UnicornialInput = forwardRef<HTMLInputElement, InputProps>(function
           onBlur?.(event);
         }}
       />
-      <FieldError message={field.message} themeVariant={themeVariant} />
+      <FieldError message={field.message} themeVariant={themeVariant} id={field.errorId} />
     </div>
   );
 });

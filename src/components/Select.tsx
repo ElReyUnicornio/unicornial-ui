@@ -18,6 +18,8 @@ export interface SelectProps {
   onChange?: (value: string) => void;
   placeholder?: string;
   label?: string;
+  /** Accessible name when there is no visible `label`. */
+  "aria-label"?: string;
   name?: string;
   id?: string;
   disabled?: boolean;
@@ -35,6 +37,7 @@ export function Select({
   onChange,
   placeholder = "Select...",
   label,
+  "aria-label": ariaLabel,
   name,
   id,
   disabled,
@@ -127,9 +130,11 @@ export function Select({
           id={triggerId}
           type="button"
           role="combobox"
+          aria-label={label ? undefined : ariaLabel}
           aria-haspopup="listbox"
           aria-expanded={open}
           aria-controls={listId}
+          aria-activedescendant={open && active >= 0 ? `${listId}-${active}` : undefined}
           disabled={disabled}
           onClick={() => (open ? setOpen(false) : openList())}
           onKeyDown={handleKeyDown}
@@ -141,7 +146,7 @@ export function Select({
           )}
           style={styles.fieldStyle}
         >
-          <span className={selectedOption ? "" : "opacity-50"}>
+          <span className={selectedOption ? "" : "opacity-60"}>
             {selectedOption ? selectedOption.label : placeholder}
           </span>
           <ChevronDown
@@ -169,6 +174,7 @@ export function Select({
               return (
                 <li
                   key={option.value}
+                  id={`${listId}-${index}`}
                   role="option"
                   aria-selected={option.value === selected}
                   aria-disabled={option.disabled}

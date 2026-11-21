@@ -1,4 +1,4 @@
-import { useRef, type ReactNode, type RefObject } from "react";
+import { useEffect, useId, useRef, type ReactNode, type RefObject } from "react";
 import { createPortal } from "react-dom";
 import { useTheme } from "../theme/ThemeProvider";
 import { cx, useVariant } from "../theme/variants";
@@ -47,8 +47,16 @@ export function Tooltip({
     open,
     position,
     gap: arrow ? ARROW_SIZE + 4 : 6,
-    content: children,
   });
+  const id = useId();
+
+  // Describe the anchor with the tooltip while it is open, so screen readers read it.
+  useEffect(() => {
+    const anchor = anchorRef.current;
+    if (!open || !anchor) return;
+    anchor.setAttribute("aria-describedby", id);
+    return () => anchor.removeAttribute("aria-describedby");
+  }, [open, anchorRef, id]);
 
   if (!open || typeof document === "undefined") return null;
 
@@ -79,6 +87,7 @@ export function Tooltip({
   return createPortal(
     <div
       ref={tooltipRef}
+      id={id}
       role="tooltip"
       className={cx("fixed px-2 py-1 text-sm rounded-md border shadow-float", root.className, className)}
       style={{

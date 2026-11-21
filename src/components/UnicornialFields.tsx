@@ -1,4 +1,5 @@
 import type { ChangeEvent, ComponentType, FocusEvent } from "react";
+import { unicornialConfig } from "../config/unicornial.config";
 import { useFormField } from "../hooks/useFormField";
 import type { Validate } from "../utils/validation";
 import { ColorPicker, type ColorPickerProps } from "./ColorPicker";
@@ -58,7 +59,7 @@ function bindToForm<P extends FormFieldProps & BaseFieldProps<V>, V>(
             onChange?.(value);
           }}
         />
-        <FieldError message={field.message} themeVariant={themeVariant} />
+        <FieldError message={field.message} themeVariant={themeVariant} id={field.errorId} />
       </div>
     );
   };
@@ -96,6 +97,7 @@ export function UnicornialTextArea({
     <div>
       <TextArea
         {...props}
+        {...field.errorProps}
         name={name}
         themeVariant={themeVariant}
         value={field.value}
@@ -109,7 +111,7 @@ export function UnicornialTextArea({
           onBlur?.(event);
         }}
       />
-      <FieldError message={field.message} themeVariant={themeVariant} />
+      <FieldError message={field.message} themeVariant={themeVariant} id={field.errorId} />
     </div>
   );
 }
@@ -155,7 +157,7 @@ export type UnicornialColorPickerProps = Omit<ColorPickerProps, "name" | "value"
 export const UnicornialColorPicker = bindToForm<UnicornialColorPickerProps, string>(
   ColorPicker,
   "value",
-  (p) => p.defaultValue ?? "#aa3bff",
+  (p) => p.defaultValue ?? unicornialConfig.theme.colors.primary,
 );
 
 export type UnicornialDatePickerProps = Omit<DatePickerProps, "name" | "value"> & FormFieldProps;

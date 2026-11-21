@@ -128,9 +128,11 @@ const HeaderLogo = forwardRef<HTMLImageElement, HeaderLogoProps>(function Header
           src={src}
         />
       )}
-      <h1 className="ml-2 text-lg font-bold" title={title}>
-        {title}
-      </h1>
+      {title && (
+        <h1 className="ml-2 text-lg font-bold" title={title}>
+          {title}
+        </h1>
+      )}
     </div>
   );
 });

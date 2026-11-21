@@ -52,7 +52,7 @@ export function Switch({
           setOn(!isOn);
         }}
         className={cx(
-          "relative w-11 h-6 rounded-full shrink-0 transition-colors duration-200 cursor-pointer",
+          "relative w-11 h-6 rounded-full shrink-0 transition-colors duration-200 cursor-pointer motion-reduce:transition-none",
           "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-accent/50",
           track.className,
         )}
@@ -65,7 +65,7 @@ export function Switch({
         <span
           aria-hidden="true"
           className={cx(
-            "absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform duration-200",
+            "absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform duration-200 motion-reduce:transition-none",
             thumb.className,
           )}
           style={{ transform: isOn ? "translateX(20px)" : "translateX(0)", ...thumb.style }}

@@ -15,11 +15,11 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<Variant, string> = {
   primary:
-    "bg-linear-to-bl to-(--theme-primary) from-(--theme-primary-gradient) hover:bg-linear-to-tr text-white focus-visible:ring-focus/40",
+    "bg-linear-to-bl from-(--theme-primary-from) to-(--theme-primary-to) hover:bg-linear-to-tr text-white focus-visible:ring-focus/40",
   secondary: "bg-code-bg text-text-h hover:bg-code-bg/80 focus-visible:ring-focus/40",
   outline:
     "border border-border bg-transparent text-text-h hover:bg-hover hover:border-accent-border focus-visible:ring-focus/40",
-  ghost: "bg-transparent text-text-h hover:font-bold focus-visible:ring-focus/40",
+  ghost: "bg-transparent text-text-h hover:bg-hover focus-visible:ring-focus/40",
 };
 
 const sizeClasses: Record<Size, string> = {

@@ -82,7 +82,7 @@ export function FileInput({
             <FileIcon size={16} />
             {buttonText}
           </span>
-          <span className={cx("truncate", files.length === 0 && "opacity-50")}>{text}</span>
+          <span className={cx("truncate", files.length === 0 && "opacity-60")}>{text}</span>
         </button>
       </div>
     </Field>

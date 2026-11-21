@@ -100,8 +100,6 @@ interface FloatingOptions {
   position: Side;
   gap: number;
   align?: Align;
-  /** Changing this value re-measures (e.g. the floating content). */
-  content?: unknown;
 }
 
 /** Measures the anchor and floating elements and keeps the placement up to date. */
@@ -112,7 +110,6 @@ export function useFloatingPlacement({
   position,
   gap,
   align = "center",
-  content,
 }: FloatingOptions) {
   const [placement, setPlacement] = useState<Placement | null>(null);
 
@@ -144,11 +141,16 @@ export function useFloatingPlacement({
     update();
     window.addEventListener("resize", update);
     window.addEventListener("scroll", update, true);
+    // Re-measure when the floating content or the anchor change size, instead of on every render.
+    const observer = new ResizeObserver(update);
+    if (floatingRef.current) observer.observe(floatingRef.current);
+    if (anchorRef.current) observer.observe(anchorRef.current);
     return () => {
       window.removeEventListener("resize", update);
       window.removeEventListener("scroll", update, true);
+      observer.disconnect();
     };
-  }, [open, update, content]);
+  }, [open, update, anchorRef, floatingRef]);
 
   return open ? placement : null;
 }

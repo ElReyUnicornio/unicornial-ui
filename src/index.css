@@ -7,6 +7,8 @@
 :root {
   --theme-primary: #7642ef;
   --theme-primary-gradient: #9f7af4;
+  --theme-primary-from: #7642ef;
+  --theme-primary-to: #5b1cec;
   --theme-secondary: #f4f4f5;
   --theme-text: #000000;
   --theme-background: #ffffff;
@@ -33,6 +35,13 @@
   --glass-dialog-fill: 60%;
   --glass-shadow: #000;
   --glass-shadow-strength: 2;
+}
+
+/* Placeholder text at 60% (the Tailwind default, 50%, is below WCAG AA contrast). */
+input::placeholder,
+textarea::placeholder {
+  color: color-mix(in srgb, currentColor 60%, transparent);
+  opacity: 1;
 }
 
 /* Utility colors (bg-accent, border-border, text-text-h...) follow the active theme. */

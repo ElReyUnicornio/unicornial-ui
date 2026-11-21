@@ -1,6 +1,6 @@
-import type { HTMLAttributes, ReactNode } from "react";
+import { useId, useRef, type HTMLAttributes, type ReactNode } from "react";
 import { Surface } from "./Surface";
-import { Backdrop, OverlayHeader, stopPropagation } from "./Overlay";
+import { Backdrop, OverlayHeader, stopPropagation, useFocusTrap } from "./Overlay";
 import { useTheme } from "../theme/ThemeProvider";
 import { cx, useVariant } from "../theme/variants";
 
@@ -25,6 +25,9 @@ export function Modal({
   const themed = useVariant("modal", themeVariant);
   const container = themed("container");
   const body = themed("body");
+  const surfaceRef = useRef<HTMLDivElement>(null);
+  const titleId = useId();
+  useFocusTrap(surfaceRef);
 
   return (
     <Backdrop
@@ -33,8 +36,11 @@ export function Modal({
       themed={themed("backdrop")}
     >
       <Surface
+        ref={surfaceRef}
         role="dialog"
         aria-modal="true"
+        aria-labelledby={titleId}
+        tabIndex={-1}
         themeVariant={themeVariant}
         {...props}
         className={cx("w-full max-w-md p-0 shadow-float", container.className, className)}
@@ -43,6 +49,7 @@ export function Modal({
       >
         <OverlayHeader
           title={title}
+          titleId={titleId}
           onClose={onClose}
           themedHeader={themed("header")}
           themedTitle={themed("title")}

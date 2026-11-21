@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { unicornialConfig } from "../config/unicornial.config";
 import { PortalHost } from "../utils/portal";
 import { setApiUrl } from "../utils/http";
-import { getLighterGradientColor } from "../utils/color";
+import { darkenForWhiteText, getDarkerGradientColor, getLighterGradientColor } from "../utils/color";
 import type {
   ThemeConfig,
   ThemeContextValue,
@@ -69,6 +69,9 @@ export function ThemeProvider({ children, config }: ThemeProviderProps) {
     const vars: Record<string, string> = {
       "--theme-primary": currentColors.primary,
       "--theme-primary-gradient": getLighterGradientColor(currentColors.primary),
+      // Ends of the primary button gradient: white text keeps AA contrast on both.
+      "--theme-primary-from": darkenForWhiteText(currentColors.primary),
+      "--theme-primary-to": getDarkerGradientColor(darkenForWhiteText(currentColors.primary), 8),
       "--theme-secondary": currentColors.secondary,
       "--theme-text": currentColors.text,
       "--theme-background": currentColors.background,

@@ -77,10 +77,18 @@ export function LabelWithValue({ label, children }: { label: ReactNode; children
 }
 
 /** Validation message shown under a form-connected field; renders nothing when empty. */
-export function FieldError({ message, themeVariant }: { message: string; themeVariant?: string }) {
+export function FieldError({
+  message,
+  themeVariant,
+  id,
+}: {
+  message: string;
+  themeVariant?: string;
+  id?: string;
+}) {
   if (!message) return null;
   return (
-    <Alert variant="error" themeVariant={themeVariant} className="mt-2">
+    <Alert id={id} variant="error" themeVariant={themeVariant} className="mt-2">
       {message}
     </Alert>
   );

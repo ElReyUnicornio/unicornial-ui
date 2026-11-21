@@ -122,15 +122,22 @@ showToast("Guardado", "success", () => console.log("click"));
 La posición de los toasts se configura en el tema (`notifications.position`): top-left, top, top-right, bottom-left, bottom, bottom-right. Por defecto: top-right.
 
 ```tsx
-<ThemeProvider config={{ notifications: { position: "bottom" } }}>
+<ThemeProvider config={{ theme: { notifications: { position: "bottom" } } }}>
 ```
 
 ### Tema
-`ThemeProvider` acepta un `config` parcial que se mezcla con `themeConfig` (ver `src/theme/theme.config.json`):
+`ThemeProvider` acepta un `config` parcial que se mezcla con `unicornialConfig` (ver `src/config/unicornial.config.ts`). El config tiene dos partes: `theme` (todo lo visual) y `env` (valores de ejecución).
 
 ```tsx
-<ThemeProvider config={{ colors: { primary: "#0ea5e9" }, dark: { enabled: true } }}>
+<ThemeProvider
+  config={{
+    theme: { colors: { primary: "#0ea5e9" }, dark: { enabled: true } },
+    env: { apiUrl: "https://api.example.com" },
+  }}
+>
 ```
+
+Claves de `theme`:
 
 | Clave | Contenido |
 |---|---|
@@ -139,18 +146,21 @@ La posición de los toasts se configura en el tema (`notifications.position`): t
 | `text` | clases Tailwind para `title`, `subtitle`, `paragraph` |
 | `notifications` | `position` de los toasts |
 | `variants` | estilos personalizados por componente (ver abajo) |
-| `env` | reservado para variables de `.env` (vacío por ahora) |
 
-`useTheme()` devuelve la configuración, `currentColors` (colores del modo activo) y los setters `setColors`, `setDark`, `setDarkMode`, `setText`, `setNotifications`, `setVariant` y `setTheme`.
+Claves de `env`: `apiUrl` (url base de los wrappers `get`, `post`, etc.).
+
+`useTheme()` devuelve la parte `theme`, `env`, `currentColors` (colores del modo activo) y los setters `setColors`, `setDark`, `setDarkMode`, `setText`, `setNotifications`, `setVariant`, `setTheme` y `setEnv`.
 
 #### Variantes
-`variants[nombre][componente][parte]` es `{ className?, style? }` (clases Tailwind y/o CSS). Vienen `glass`, `neumorph` y `clay`; puedes añadir las tuyas o sobrescribir partes de las existentes:
+`variants[nombre][componente][parte]` es `{ className?, style? }` (clases Tailwind y/o CSS). Viene `glass`, que adapta su intensidad al modo claro y al oscuro; puedes añadir las tuyas o sobrescribir partes de las existentes. Los nombres de componente y de parte están tipados (`ComponentParts`), así que una parte mal escrita es un error de TypeScript:
 
 ```tsx
 <ThemeProvider
   config={{
-    variants: {
-      flat: { input: { label: { className: "uppercase" }, field: { style: { borderRadius: 0 } } } },
+    theme: {
+      variants: {
+        flat: { input: { label: { className: "uppercase" }, field: { style: { borderRadius: 0 } } } },
+      },
     },
   }}
 >
@@ -160,12 +170,12 @@ La posición de los toasts se configura en el tema (`notifications.position`): t
 ```
 
 - Se activan con la prop `themeVariant` (también como último argumento de `showModal`, `showAlert` y `showToast`). Orden de prioridad: estilos base < variante < props `className`/`style`.
-- Componentes y partes: `surface.root`, `button.root`, `input.{root,label,field}`, `header.{root,navButton}`, `modal.{backdrop,container,header,title,body}`, `alertDialog.{backdrop,container,icon,message}`, `alert.root`, `toast.root`, `tooltip.{root,arrow}`, `tab.{root,selected}`, `separator.root`, `dropdown.root`, `select.{option,optionActive}`, `switch.{track,thumb}`, `spinner.button`, `slider.{track,fill,thumb}`, `radio.{control,dot}`, `progressBar.{track,bar}`, `imageInput.area`, `datePicker.{day,daySelected}`, `colorPicker.swatch`.
+- Componentes y partes: `surface.root`, `button.root`, `input.{root,label,field}`, `header.{root,navButton}`, `modal.{backdrop,container,header,title,body}`, `alertDialog.{backdrop,container,icon,message}`, `alert.root`, `toast.root`, `tooltip.{root,arrow}`, `tab.{root,selected}`, `separator.root`, `dropdown.root`, `select.{option,optionActive}`, `switch.{track,thumb}`, `spinner.button`, `slider.{track,fill,thumb}`, `radio.{control,dot}`, `progressBar.{track,bar}`, `imageInput.area`, `datePicker.{day,daySelected}`, `colorPicker.swatch`, `drawer.{backdrop,container,header,title,body}`, `accordion.{root,item,header,body}`, `sidebar.{root,header,button}`.
 - Los estilos pueden usar las variables CSS del tema: `--theme-primary`, `--theme-secondary`, `--theme-text`, `--theme-background`, `--theme-border`, `--theme-soft`, `--theme-shadow-light`, `--theme-shadow-dark`; y `--alert-color`, `--alert-bg`, `--alert-border` en `alert` y `toast`.
 - Si usas clases Tailwind en la configuración, los estilos en línea (`style`) ganan sobre las clases; para sobrescribir una clase base usa `style` o el modificador `!`.
 
 ### Utilidades
-- `ThemeProvider` / `useTheme` / `themeConfig` — configuración del tema
+- `ThemeProvider` / `useTheme` / `unicornialConfig` / `themeConfig` — configuración (`themeConfig` es la parte `theme` de `unicornialConfig`)
 - `MobileOnly` / `DesktopOnly` — renderizado condicional por tamaño de pantalla
 - `Validate` / `validators` — constructor de validaciones encadenables
 - `useDebounce` — hook de debounce
@@ -175,4 +185,4 @@ La posición de los toasts se configura en el tema (`notifications.position`): t
 - `Accordion` / `Accordion.Item` — secciones desplegables | props: `type` (single, multiple), `value`, `defaultValue`, `onValueChange`; en el item: `value`, `title`, `disabled`
 - `Sidebar` / `Sidebar.Header` / `Sidebar.Button` — barra lateral colapsable | props: `collapsed`, `defaultCollapsed`, `onCollapsedChange`; botón: `icon`, `active`
 - `Gestures` — detecta gestos dentro de su área | props: `onTap`, `onDoubleTap`, `onSwipeLeft/Right/Up/Down`, `swipeThreshold`, `doubleTapDelay`, `tapMaxMove`
-- `get`, `post`, `put`, `patch`, `del` — wrappers de `fetch` `(route, data?, requireAuth?)`. Usan `env.apiUrl` del theme config; con `requireAuth` envían `Authorization: Bearer <localStorage.token>`; lanzan `HttpError` si la respuesta no es 2xx
+- `get`, `post`, `put`, `patch`, `del` — wrappers de `fetch` `(route, data?, requireAuth?)`. Usan `env.apiUrl` del config (`unicornialConfig.env`); con `requireAuth` envían `Authorization: Bearer <localStorage.token>`; lanzan `HttpError` si la respuesta no es 2xx
