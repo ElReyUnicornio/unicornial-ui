@@ -43,7 +43,7 @@ export function useFieldStyles(themeVariant?: string, variant: FieldVariant = "d
   };
 }
 
-interface FieldProps {
+export interface FieldProps {
   label?: ReactNode;
   htmlFor?: string;
   themeVariant?: string;

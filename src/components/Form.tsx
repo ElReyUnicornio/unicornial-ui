@@ -19,7 +19,7 @@ interface FormContextType {
   reset: () => void;
 }
 
-interface FormProviderProps {
+export interface FormProviderProps {
   initialValues: Record<string, unknown>;
   onSubmit: (values: Record<string, unknown>, hasErrors: boolean) => void;
   children: React.ReactNode;

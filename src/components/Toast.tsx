@@ -5,7 +5,7 @@ import { CloseButton } from "./Overlay";
 
 export type ToastColor = AlertVariant;
 
-interface ToastProps extends Omit<HTMLAttributes<HTMLDivElement>, "color"> {
+export interface ToastProps extends Omit<HTMLAttributes<HTMLDivElement>, "color"> {
   color?: ToastColor;
   message: ReactNode;
   onClose?: () => void;

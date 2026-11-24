@@ -1,4 +1,4 @@
-import { useId, useRef, type HTMLAttributes, type ReactNode } from "react";
+import { useId, useRef, type CSSProperties, type HTMLAttributes, type ReactNode } from "react";
 import { Surface } from "./Surface";
 import { Backdrop, OverlayHeader, stopPropagation, useFocusTrap } from "./Overlay";
 import { useTheme } from "../theme/ThemeProvider";
@@ -6,7 +6,7 @@ import { cx, useVariant } from "../theme/variants";
 
 export type DrawerSide = "left" | "right" | "top" | "bottom";
 
-interface DrawerProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
+export interface DrawerProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
   title?: ReactNode;
   side?: DrawerSide;
   onClose?: () => void;
@@ -27,6 +27,14 @@ const panelClasses: Record<DrawerSide, string> = {
   right: "h-full w-full max-w-sm rounded-none",
   top: "w-full max-h-[80%] rounded-none",
   bottom: "w-full max-h-[80%] rounded-none",
+};
+
+// The corners touching the screen edge stay square, even when a variant rounds the Surface.
+const squareCorners: Record<DrawerSide, CSSProperties> = {
+  left: { borderTopLeftRadius: 0, borderBottomLeftRadius: 0 },
+  right: { borderTopRightRadius: 0, borderBottomRightRadius: 0 },
+  top: { borderTopLeftRadius: 0, borderTopRightRadius: 0 },
+  bottom: { borderBottomLeftRadius: 0, borderBottomRightRadius: 0 },
 };
 
 // Slide in from the side on mount (@starting-style), no state or effect needed.
@@ -72,7 +80,7 @@ export function Drawer({
           container.className,
           className,
         )}
-        style={{ ...container.style, ...style }}
+        style={{ ...squareCorners[side], ...container.style, ...style }}
         onClick={stopPropagation}
       >
         <OverlayHeader

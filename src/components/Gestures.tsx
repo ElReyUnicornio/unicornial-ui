@@ -5,7 +5,7 @@ import {
   type PointerEvent as ReactPointerEvent,
 } from "react";
 
-interface GesturesProps extends HTMLAttributes<HTMLDivElement> {
+export interface GesturesProps extends HTMLAttributes<HTMLDivElement> {
   onTap?: () => void;
   onDoubleTap?: () => void;
   onSwipeLeft?: () => void;

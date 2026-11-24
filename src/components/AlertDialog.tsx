@@ -6,7 +6,7 @@ import { Backdrop, CloseButton, stopPropagation, useFocusTrap } from "./Overlay"
 import { useTheme } from "../theme/ThemeProvider";
 import { cx, useVariant } from "../theme/variants";
 
-interface AlertDialogProps {
+export interface AlertDialogProps {
   variant?: AlertVariant;
   message: ReactNode;
   onConfirm?: () => void;

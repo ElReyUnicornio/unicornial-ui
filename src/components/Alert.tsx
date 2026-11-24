@@ -5,7 +5,7 @@ import { getLighterGradientColor } from "../utils/color";
 
 export type AlertVariant = "warning" | "info" | "error" | "success";
 
-interface AlertProps extends HTMLAttributes<HTMLDivElement> {
+export interface AlertProps extends HTMLAttributes<HTMLDivElement> {
   variant?: AlertVariant;
   /** Name of a variant defined in the theme config (variants[name].alert.root). */
   themeVariant?: string;

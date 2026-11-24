@@ -24,6 +24,8 @@ function App() {
 
 ### Layout
 - `Surface` — contenedor con borde, sombra y colores del tema
+- `Footer` — pie de página con `Footer.Brand` (`logo`, `title`), `Footer.Column` (`title`) y `Footer.Link` (`as` para usar el `Link` de un router)
+- `Wireframe` — boceto de una interfaz con `Wireframe.Row` y `Wireframe.Block` (`shape`: text, box, pill; `tone`: outline, fill; `width`, `height`); oculto a lectores de pantalla
 - `Header` — barra superior con `Header.Logo` | comportamiento: default, sticky, hide | variantes: default, blur
 - `Background` — fondo decorativo | variantes: dots-grid, dots-isometric, grid, diamond, grid-45, lines | máscara: none, fade-in, fade-out
 - `Separator` — divisor | variantes: line, point | orientación: horizontal, vertical
@@ -186,3 +188,7 @@ Claves de `env`: `apiUrl` (url base de los wrappers `get`, `post`, etc.).
 - `Sidebar` / `Sidebar.Header` / `Sidebar.Button` — barra lateral colapsable | props: `collapsed`, `defaultCollapsed`, `onCollapsedChange`; botón: `icon`, `active`
 - `Gestures` — detecta gestos dentro de su área | props: `onTap`, `onDoubleTap`, `onSwipeLeft/Right/Up/Down`, `swipeThreshold`, `doubleTapDelay`, `tapMaxMove`
 - `get`, `post`, `put`, `patch`, `del` — wrappers de `fetch` `(route, data?, requireAuth?)`. Usan `env.apiUrl` del config (`unicornialConfig.env`); con `requireAuth` envían `Authorization: Bearer <localStorage.token>`; lanzan `HttpError` si la respuesta no es 2xx
+
+## Licencia
+
+[Apache 2.0](LICENSE)

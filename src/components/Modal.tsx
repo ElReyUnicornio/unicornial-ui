@@ -4,7 +4,7 @@ import { Backdrop, OverlayHeader, stopPropagation, useFocusTrap } from "./Overla
 import { useTheme } from "../theme/ThemeProvider";
 import { cx, useVariant } from "../theme/variants";
 
-interface ModalProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
+export interface ModalProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
   title?: ReactNode;
   onClose?: () => void;
   /** Name of a variant defined in the theme config (variants[name].modal.{backdrop,container,header,title,body}). */

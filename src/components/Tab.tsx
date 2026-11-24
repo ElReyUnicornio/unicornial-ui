@@ -4,7 +4,7 @@ import { Children, useRef, useState, type HTMLAttributes, type KeyboardEvent } f
 import { useTheme } from "../theme/ThemeProvider";
 import { cx, useVariant } from "../theme/variants";
 
-interface TabsContainerProps {
+export interface TabsContainerProps {
   orientation?: "horizontal" | "vertical";
   variant?: "underline" | "pills";
   className?: string;

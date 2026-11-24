@@ -6,7 +6,7 @@ import { useFloatingPlacement, type Side } from "../utils/placement";
 
 export type TooltipPosition = Side;
 
-interface TooltipProps {
+export interface TooltipProps {
   anchorRef: RefObject<HTMLElement | null>;
   position?: TooltipPosition;
   arrow?: boolean;

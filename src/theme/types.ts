@@ -54,6 +54,8 @@ export interface ComponentParts {
   button: "root" | "primary" | "secondary" | "outline" | "ghost";
   input: "root" | "label" | "field";
   header: "root" | "navButton";
+  footer: "root" | "column" | "title" | "link";
+  wireframe: "root" | "block";
   modal: DialogParts;
   drawer: DialogParts;
   alertDialog: "backdrop" | "container" | "icon" | "message";

@@ -124,6 +124,10 @@ export const glass: ThemeVariant = {
       },
     },
   },
+  footer: {
+    root: { style: { ...panel(18, PANEL_SHADOW, "1.75rem"), borderWidth: 1, borderStyle: "solid" } },
+  },
+  wireframe: { root: { style: { ...field(14, 30), borderRadius: "1.25rem" } } },
   sidebar: {
     root: { style: { ...sidebarPanel, borderRightColor: white(70) } },
     button: { style: { borderRadius: "9999px" } },
