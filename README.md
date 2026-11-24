@@ -26,7 +26,7 @@ function App() {
 - `Surface` — contenedor con borde, sombra y colores del tema
 - `Footer` — pie de página con `Footer.Brand` (`logo`, `title`), `Footer.Column` (`title`) y `Footer.Link` (`as` para usar el `Link` de un router)
 - `Wireframe` — boceto de una interfaz con `Wireframe.Row` y `Wireframe.Block` (`shape`: text, box, pill; `tone`: outline, fill; `width`, `height`); oculto a lectores de pantalla
-- `Header` — barra superior con `Header.Logo` | comportamiento: default, sticky, hide | variantes: default, blur
+- `Header` — barra superior con `Header.Logo` (el `title` es un `<span>`; usa `titleAs="h1"` si es el encabezado de la página) y `Header.NavButton` (acepta `as` y `to`, p. ej. el `Link` de un router) | comportamiento: default, sticky, hide | variantes: default, blur
 - `Background` — fondo decorativo | variantes: dots-grid, dots-isometric, grid, diamond, grid-45, lines | máscara: none, fade-in, fade-out
 - `Separator` — divisor | variantes: line, point | orientación: horizontal, vertical
 - `Tabs` — pestañas con `Tabs.Item` y callback `onChange` | variantes: underline, pills | orientación: horizontal, vertical

@@ -7,7 +7,7 @@ Every prop type is exported as `<Name>Props` from the package root. `themeVarian
 | Component | Key props | Variant parts |
 |---|---|---|
 | `Surface` | div props | `surface.root` |
-| `Header` (+ `Header.Logo`, `Header.NavButton`) | `behaviour`: default \| sticky \| hide, `variant`: default \| blur; Logo: `src`, `darkSrc`, `alt`, `title` | `header.{root,navButton}` |
+| `Header` (+ `Header.Logo`, `Header.NavButton`) | `behaviour`: default \| sticky \| hide, `variant`: default \| blur; Logo: `src`, `darkSrc`, `alt`, `title`, `titleAs` (default `span`); NavButton: `as`, `to` (router links, like `Footer.Link`) | `header.{root,navButton}` |
 | `Background` | `variant`: dots-grid \| dots-isometric \| grid \| diamond \| grid-45 \| lines, `mask`: none \| fade-in \| fade-out, `color`, `size` | none |
 | `Separator` | `variant`: line \| point, `orientation`, `color`, `thickness`, `spacing` | `separator.root` |
 | `Tabs` (+ `Tabs.Item`) | `variant`: underline \| pills, `orientation`, `onChange(index)` | `tab.{root,selected}` |

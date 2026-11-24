@@ -1,5 +1,6 @@
 import {
   type AnchorHTMLAttributes,
+  type ElementType,
   type HTMLAttributes,
   type ImgHTMLAttributes,
   useEffect,
@@ -26,9 +27,15 @@ export interface HeaderLogoProps extends ImgHTMLAttributes<HTMLImageElement> {
   darkSrc?: string;
   alt?: string;
   title?: string;
+  /** Element that wraps the title. Pass "h1" only if it is the page's main heading. */
+  titleAs?: ElementType;
 }
 
 export interface HeaderNavButtonProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
+  /** Element or component to render instead of `<a>`, such as a router `Link`. */
+  as?: ElementType;
+  /** Passed through to the component given in `as`. */
+  to?: string;
   /** Name of a variant defined in the theme config (variants[name].header.navButton). */
   themeVariant?: string;
 }
@@ -109,7 +116,7 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header(
 });
 
 const HeaderLogo = forwardRef<HTMLImageElement, HeaderLogoProps>(function HeaderLogo(
-  { className = "", style, alt = "", title = "", darkSrc, ...props },
+  { className = "", style, alt = "", title = "", titleAs: Title = "span", darkSrc, ...props },
   ref,
 ) {
   const theme = useTheme();
@@ -129,16 +136,17 @@ const HeaderLogo = forwardRef<HTMLImageElement, HeaderLogoProps>(function Header
         />
       )}
       {title && (
-        <h1 className="ml-2 text-lg font-bold" title={title}>
+        <Title className="ml-2 text-lg font-bold" title={title}>
           {title}
-        </h1>
+        </Title>
       )}
     </div>
   );
 });
 
 const HeaderNavButton = forwardRef<HTMLAnchorElement, HeaderNavButtonProps>(
-  function HeaderNavButton({ className = "", style, children, themeVariant, ...props }, ref) {
+  function HeaderNavButton({ as, className = "", style, children, themeVariant, ...props }, ref) {
+    const Component: ElementType = as ?? "a";
     const theme = useTheme();
     const themed = useVariant("header", themeVariant)("navButton");
 
@@ -158,7 +166,7 @@ const HeaderNavButton = forwardRef<HTMLAnchorElement, HeaderNavButtonProps>(
     const originalRing = theme.enabled ? "" : "focus-visible:ring-accent/50";
 
     return (
-      <a
+      <Component
         ref={ref}
         className={cx(
           "inline-flex items-center justify-center",
@@ -176,7 +184,7 @@ const HeaderNavButton = forwardRef<HTMLAnchorElement, HeaderNavButtonProps>(
         {...props}
       >
         {children}
-      </a>
+      </Component>
     );
   },
 );
